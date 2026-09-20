@@ -16,8 +16,11 @@ Clone, then start any static file server from the repo root:
 git clone https://github.com/KarimMaoui/Daily-Drill---AWS-Certification-Prep-App.git
 cd Daily-Drill---AWS-Certification-Prep-App
 
-# Python 3 (already installed on most machines)
-python -m http.server 8000
+# Windows: use the py launcher, it is always on PATH when Python is installed
+py -m http.server 8000
+
+# macOS / Linux
+python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
@@ -25,14 +28,28 @@ Then open <http://localhost:8000>.
 Other equivalent options:
 
 ```bash
-npx serve .          # Node
+npx serve .                 # Node
 npx http-server -p 8000
 php -S localhost:8000
+```
+
+Troubleshooting `python: command not found` on Windows: `python` is often absent
+from PATH even though Python is installed (and `python3` may resolve to the
+Microsoft Store stub, which does nothing). Use `py -m http.server 8000`, or call
+the interpreter by full path:
+
+```bash
+"/c/Program Files/Python313/python" -m http.server 8000   # Git Bash
+"C:\Program Files\Python313\python.exe" -m http.server 8000   # PowerShell / cmd
 ```
 
 On first load you should see the decks listed in the left sidebar and a "Due" count.
 If the sidebar is empty, check the browser console — it usually means the server is
 not rooted at the folder containing `index.html`.
+
+Any port works; `8000` is only a convention. Keep in mind that progress is stored
+per origin, so switching port later starts you from an empty history (see
+[Progress data](#progress-data)).
 
 ### Running from `file://`
 
