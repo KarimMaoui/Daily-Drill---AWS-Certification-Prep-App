@@ -1,0 +1,2882 @@
+{
+  "id": "cheatcode-saa",
+  "name": "Cheatcode for SAA. Service to trigger words",
+  "version": "0.5",
+  "language": "en",
+  "source": "Hand-curated cheatcode deck. Each card is one AWS service with 3-5 abstract, distinctive trigger keywords that signal this service in an SAA-C03 question stem. Built for last-minute spot-the-service drilling.",
+  "official_domains": [
+    {
+      "name": "Cheatcode",
+      "weight": 100
+    }
+  ],
+  "topics": [
+    {
+      "id": "cheatcode",
+      "name": "All cheatcodes",
+      "domain": "Cheatcode",
+      "count": 150
+    }
+  ],
+  "cards": [
+    {
+      "id": "cheat-0001",
+      "q": "Amazon EC2",
+      "a": "• full OS control\n• long-running compute\n• lift-and-shift VM workloads",
+      "explanation": "",
+      "tricks": [
+        "full OS control",
+        "long-running compute",
+        "lift-and-shift VM workloads"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0002",
+      "q": "EC2 Spot Instances",
+      "a": "• fault-tolerant\n• interruptible\n• up to 90% cheaper\n• stateless batch",
+      "explanation": "'Stateless batch' = a job that doesn't depend on prior runs and can restart anywhere (image processing, ML training, CI/CD). Spot can be reclaimed with a 2-minute notice.",
+      "tricks": [
+        "fault-tolerant",
+        "interruptible",
+        "up to 90% cheaper",
+        "stateless batch"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0003",
+      "q": "EC2 Reserved Instances",
+      "a": "• 1 or 3 year commitment\n• steady predictable workload\n• specific instance family",
+      "explanation": "",
+      "tricks": [
+        "1 or 3 year commitment",
+        "steady predictable workload",
+        "specific instance family"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0004",
+      "q": "Compute Savings Plans",
+      "a": "• 1 or 3 year commitment\n• flexible across families and Regions\n• best across Lambda/Fargate/EC2",
+      "explanation": "Commit to $X/hour of compute spend for 1 or 3 years; AWS automatically applies the discount to EC2, Fargate, and Lambda usage across families and Regions. Most flexible commitment.",
+      "tricks": [
+        "1 or 3 year commitment",
+        "flexible across families and Regions",
+        "best across Lambda/Fargate/EC2"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0005",
+      "q": "EC2 Capacity Reservation",
+      "a": "• guaranteed capacity in a Region/AZ\n• no commitment\n• DR failover Region",
+      "explanation": "",
+      "tricks": [
+        "guaranteed capacity in a Region/AZ",
+        "no commitment",
+        "DR failover Region"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0006",
+      "q": "EC2 Hibernation",
+      "a": "• preserve RAM state\n• long boot apps\n• warm pool",
+      "explanation": "",
+      "tricks": [
+        "preserve RAM state",
+        "long boot apps",
+        "warm pool"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0007",
+      "q": "EC2 cluster placement group",
+      "a": "• low-latency between instances\n• HPC\n• tight network coupling",
+      "explanation": "Instances are packed close in the same AZ for high-throughput, low-latency networking, ideal for HPC and tightly-coupled workloads.",
+      "tricks": [
+        "low-latency between instances",
+        "HPC",
+        "tight network coupling"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0008",
+      "q": "EC2 spread placement group",
+      "a": "• instances on different hardware\n• small fleet HA\n• avoid single hardware failure",
+      "explanation": "Each instance is on distinct underlying hardware (rack), so a single hardware failure can take down at most one instance in the group. Limited to 7 instances per AZ.",
+      "tricks": [
+        "instances on different hardware",
+        "small fleet HA",
+        "avoid single hardware failure"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0009",
+      "q": "EC2 partition placement group",
+      "a": "• large distributed workloads\n• Hadoop/Cassandra\n• fault isolation per partition",
+      "explanation": "Instances are split into logical partitions, each on separate hardware. Made for distributed/replicated systems like Hadoop, Cassandra, Kafka where each partition tolerates a hardware failure.",
+      "tricks": [
+        "large distributed workloads",
+        "Hadoop/Cassandra",
+        "fault isolation per partition"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0010",
+      "q": "AWS Local Zones",
+      "a": "• single-digit ms latency to a metro area\n• extend VPC to a city\n• compliance forces local hosting",
+      "explanation": "Extension of an AWS Region into a metropolitan area for single-digit-ms latency to local users. The VPC is stretched. Use when compliance forces local hosting but you still want managed AWS services.",
+      "tricks": [
+        "single-digit ms latency to a metro area",
+        "extend VPC to a city",
+        "compliance forces local hosting"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0011",
+      "q": "AWS Wavelength",
+      "a": "• 5G mobile carrier\n• ultra-low latency to mobile users\n• telco edge",
+      "explanation": "AWS infrastructure deployed inside 5G telecom carrier networks. Used for ultra-low-latency mobile apps (gaming, AR/VR, autonomous vehicles).",
+      "tricks": [
+        "5G mobile carrier",
+        "ultra-low latency to mobile users",
+        "telco edge"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0012",
+      "q": "AWS Outposts",
+      "a": "• AWS hardware on-prem\n• compliance keeps data local\n• consistent AWS services on-prem",
+      "explanation": "Physical AWS-managed rack installed in the customer's data center. Customer is responsible for power, network, and physical security; AWS owns the hardware lifecycle.",
+      "tricks": [
+        "AWS hardware on-prem",
+        "compliance keeps data local",
+        "consistent AWS services on-prem"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0013",
+      "q": "Lambda",
+      "a": "• short stateless code\n• event-driven\n• scales to thousands instantly\n• per-request billing",
+      "explanation": "",
+      "tricks": [
+        "short stateless code",
+        "event-driven",
+        "scales to thousands instantly",
+        "per-request billing"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0014",
+      "q": "Lambda Function URL",
+      "a": "• expose Lambda as HTTPS\n• no API Gateway needed\n• simple webhook",
+      "explanation": "",
+      "tricks": [
+        "expose Lambda as HTTPS",
+        "no API Gateway needed",
+        "simple webhook"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0015",
+      "q": "Lambda SnapStart",
+      "a": "• reduce Java cold starts\n• free\n• JVM snapshot resume",
+      "explanation": "Snapshots the JVM right after init and resumes from the snapshot at invocation, killing most of the cold-start latency for Java. Free, only available for Java for now.",
+      "tricks": [
+        "reduce Java cold starts",
+        "free",
+        "JVM snapshot resume"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0016",
+      "q": "Lambda Provisioned Concurrency",
+      "a": "• pre-warmed Lambda\n• predictable low latency\n• scheduled scaling for known peaks",
+      "explanation": "Pre-warmed Lambda containers always ready to serve, eliminating cold starts. Costs extra (you pay for the warm instances). Use for predictable peaks (e.g. business hours).",
+      "tricks": [
+        "pre-warmed Lambda",
+        "predictable low latency",
+        "scheduled scaling for known peaks"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0017",
+      "q": "ECS on Fargate",
+      "a": "• containers without managing servers\n• no EC2 patching\n• pay per task",
+      "explanation": "Run containers without managing EC2 nodes. AWS handles the host. You pay per task (vCPU and memory), no patching needed.",
+      "tricks": [
+        "containers without managing servers",
+        "no EC2 patching",
+        "pay per task"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0018",
+      "q": "EKS",
+      "a": "• managed Kubernetes\n• K8s API compatibility\n• hybrid Kubernetes via EKS Anywhere",
+      "explanation": "",
+      "tricks": [
+        "managed Kubernetes",
+        "K8s API compatibility",
+        "hybrid Kubernetes via EKS Anywhere"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0019",
+      "q": "AWS App Runner",
+      "a": "• push container, get URL\n• auto-scale web app\n• no infra config",
+      "explanation": "",
+      "tricks": [
+        "push container, get URL",
+        "auto-scale web app",
+        "no infra config"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0020",
+      "q": "Step Functions",
+      "a": "• orchestrate multi-step workflow\n• visual state machine\n• error/retry/parallel built in",
+      "explanation": "",
+      "tricks": [
+        "orchestrate multi-step workflow",
+        "visual state machine",
+        "error/retry/parallel built in"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0021",
+      "q": "Step Functions Distributed Map",
+      "a": "• parallel process thousands of S3 items\n• serverless\n• no orchestration code",
+      "explanation": "The Map state in 'Distributed' mode can fan-out thousands of S3 objects in parallel, far beyond Inline Map's 40-iteration cap. Use for parallel batch processing of large datasets without writing orchestration code.",
+      "tricks": [
+        "parallel process thousands of S3 items",
+        "serverless",
+        "no orchestration code"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0022",
+      "q": "EBS",
+      "a": "• single-instance block storage\n• persistent\n• SSD or HDD volume",
+      "explanation": "",
+      "tricks": [
+        "single-instance block storage",
+        "persistent",
+        "SSD or HDD volume"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0023",
+      "q": "EBS gp3",
+      "a": "• default block storage\n• decouple IOPS from size\n• cheaper than gp2",
+      "explanation": "General purpose SSD with IOPS and throughput priced separately from size. Default since 2021, cheaper than gp2 for most workloads.",
+      "tricks": [
+        "default block storage",
+        "decouple IOPS from size",
+        "cheaper than gp2"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0024",
+      "q": "EBS io1/io2 Provisioned IOPS",
+      "a": "• latency-sensitive databases\n• consistent high IOPS\n• mission-critical workloads",
+      "explanation": "SSD where you provision IOPS independently and get sub-millisecond latency with 99.999% durability for io2 Block Express. Use for the most demanding databases.",
+      "tricks": [
+        "latency-sensitive databases",
+        "consistent high IOPS",
+        "mission-critical workloads"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0025",
+      "q": "EBS Multi-Attach",
+      "a": "• one volume to multiple EC2\n• io1/io2 only\n• same AZ",
+      "explanation": "Same EBS volume attached to multiple EC2 in the same AZ at the same time. Limited to io1/io2 SSDs. App must handle concurrent writes (cluster-aware filesystem).",
+      "tricks": [
+        "one volume to multiple EC2",
+        "io1/io2 only",
+        "same AZ"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0026",
+      "q": "EC2 Instance Store",
+      "a": "• lowest latency block\n• ephemeral\n• data lost on stop",
+      "explanation": "NVMe SSD physically attached to the host. Lowest latency you can get on AWS, but data is lost when the instance stops or terminates. Pure scratch space.",
+      "tricks": [
+        "lowest latency block",
+        "ephemeral",
+        "data lost on stop"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0027",
+      "q": "EFS",
+      "a": "• NFS shared file system\n• multiple Linux EC2 across AZs\n• elastic capacity",
+      "explanation": "Fully-managed NFS v4 shared filesystem. Mounted simultaneously from many Linux EC2s across AZs. Storage is elastic (no capacity planning).",
+      "tricks": [
+        "NFS shared file system",
+        "multiple Linux EC2 across AZs",
+        "elastic capacity"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0028",
+      "q": "FSx for Windows File Server",
+      "a": "• SMB share\n• Active Directory integration\n• Windows file workloads",
+      "explanation": "",
+      "tricks": [
+        "SMB share",
+        "Active Directory integration",
+        "Windows file workloads"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0029",
+      "q": "FSx for Lustre",
+      "a": "• HPC parallel file system\n• sub-millisecond\n• S3 link",
+      "explanation": "Parallel filesystem optimized for HPC and ML training. Sub-ms latency, hundreds of GB/s throughput. Can sync to/from an S3 bucket so you process data with Lustre and persist to S3.",
+      "tricks": [
+        "HPC parallel file system",
+        "sub-millisecond",
+        "S3 link"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0030",
+      "q": "FSx for NetApp ONTAP",
+      "a": "• multi-protocol NFS + SMB\n• SnapMirror replication\n• ONTAP features",
+      "explanation": "Multi-protocol filesystem (NFS, SMB, iSCSI) with NetApp ONTAP features (snapshots, SnapMirror replication, dedup). Used to lift-and-shift NetApp workloads to AWS.",
+      "tricks": [
+        "multi-protocol NFS + SMB",
+        "SnapMirror replication",
+        "ONTAP features"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0031",
+      "q": "Amazon S3",
+      "a": "• object storage\n• 11 nines durability\n• static website hosting\n• data lake",
+      "explanation": "",
+      "tricks": [
+        "object storage",
+        "11 nines durability",
+        "static website hosting",
+        "data lake"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0032",
+      "q": "S3 Standard-IA",
+      "a": "• infrequent access\n• multi-AZ resilient\n• retrieval fee",
+      "explanation": "Same durability and AZ-resilience as Standard but cheaper per-GB. Charged a small retrieval fee per request, so worth it only if access frequency is below ~1/month.",
+      "tricks": [
+        "infrequent access",
+        "multi-AZ resilient",
+        "retrieval fee"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0033",
+      "q": "S3 One Zone-IA",
+      "a": "• single AZ\n• re-creatable data\n• cheaper than Standard-IA",
+      "explanation": "Stored in a single AZ. Cheapest non-archive class but data is lost if that AZ is destroyed. Only for re-creatable data (thumbnails, secondary copies).",
+      "tricks": [
+        "single AZ",
+        "re-creatable data",
+        "cheaper than Standard-IA"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0034",
+      "q": "S3 Intelligent-Tiering",
+      "a": "• unpredictable access pattern\n• auto-tier\n• no retrieval fee",
+      "explanation": "S3 monitors access patterns per object and moves it between frequent and infrequent tiers automatically. No retrieval fee. Use when access patterns are unpredictable.",
+      "tricks": [
+        "unpredictable access pattern",
+        "auto-tier",
+        "no retrieval fee"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0035",
+      "q": "S3 Glacier Instant Retrieval",
+      "a": "• archive but retrieved instantly\n• ms latency\n• rarely accessed",
+      "explanation": "",
+      "tricks": [
+        "archive but retrieved instantly",
+        "ms latency",
+        "rarely accessed"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0036",
+      "q": "S3 Glacier Flexible Retrieval",
+      "a": "• minutes to hours retrieval\n• cheap archive\n• tape replacement",
+      "explanation": "",
+      "tricks": [
+        "minutes to hours retrieval",
+        "cheap archive",
+        "tape replacement"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0037",
+      "q": "S3 Glacier Deep Archive",
+      "a": "• 12+ hour retrieval\n• cheapest archive\n• long-term compliance",
+      "explanation": "Cheapest AWS storage class. Retrieval takes 12+ hours. Use for compliance archive kept for years and almost never read.",
+      "tricks": [
+        "12+ hour retrieval",
+        "cheapest archive",
+        "long-term compliance"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0038",
+      "q": "S3 Transfer Acceleration",
+      "a": "• global users uploading to one bucket\n• CloudFront edge upload\n• long-distance transfer",
+      "explanation": "Uploads go to the closest CloudFront edge location and ride the AWS backbone to the destination bucket. Speeds up long-distance uploads to a single bucket from global users.",
+      "tricks": [
+        "global users uploading to one bucket",
+        "CloudFront edge upload",
+        "long-distance transfer"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0039",
+      "q": "S3 Cross-Region Replication (CRR)",
+      "a": "• auto-copy new objects to another Region\n• compliance\n• DR",
+      "explanation": "",
+      "tricks": [
+        "auto-copy new objects to another Region",
+        "compliance",
+        "DR"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0040",
+      "q": "S3 Lifecycle",
+      "a": "• transition between storage classes\n• expire old objects\n• automate tiering",
+      "explanation": "",
+      "tricks": [
+        "transition between storage classes",
+        "expire old objects",
+        "automate tiering"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0041",
+      "q": "S3 Object Lock",
+      "a": "• WORM\n• prevent deletion or modification\n• regulatory compliance",
+      "explanation": "WORM = Write Once Read Many. Once written, an object cannot be deleted or overwritten for the retention period. Required for SEC 17a-4 / FINRA / HIPAA compliance use cases.",
+      "tricks": [
+        "WORM",
+        "prevent deletion or modification",
+        "regulatory compliance"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0042",
+      "q": "S3 Object Lock (compliance mode)",
+      "a": "• nobody can delete (not even root)\n• fixed retention\n• strict immutability",
+      "explanation": "Strictest WORM mode: not even the AWS root user can shorten retention or delete the object. Used when regulators require provable immutability.",
+      "tricks": [
+        "nobody can delete (not even root)",
+        "fixed retention",
+        "strict immutability"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0043",
+      "q": "S3 Versioning + MFA Delete",
+      "a": "• protect against accidental deletion\n• MFA required to delete versions\n• rollback to old versions",
+      "explanation": "Versioning keeps every version of each object. MFA Delete forces a hardware MFA token to permanently delete a version. Together they protect against accidental or malicious deletes.",
+      "tricks": [
+        "protect against accidental deletion",
+        "MFA required to delete versions",
+        "rollback to old versions"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0044",
+      "q": "S3 Presigned URL",
+      "a": "• temporary upload/download permission\n• browser direct to S3\n• time-limited access",
+      "explanation": "",
+      "tricks": [
+        "temporary upload/download permission",
+        "browser direct to S3",
+        "time-limited access"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0045",
+      "q": "S3 File Gateway",
+      "a": "• on-prem NFS/SMB to S3\n• local cache for hot files\n• extend on-prem storage",
+      "explanation": "",
+      "tricks": [
+        "on-prem NFS/SMB to S3",
+        "local cache for hot files",
+        "extend on-prem storage"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0046",
+      "q": "S3 Storage Lens",
+      "a": "• org-wide S3 visibility\n• incomplete multipart upload report\n• storage analytics",
+      "explanation": "",
+      "tricks": [
+        "org-wide S3 visibility",
+        "incomplete multipart upload report",
+        "storage analytics"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0047",
+      "q": "Storage Gateway Volume Gateway",
+      "a": "• replace on-prem iSCSI block storage\n• cached or stored mode\n• S3-backed",
+      "explanation": "Exposes iSCSI block volumes to on-prem servers, backed by S3. 'Cached' mode keeps frequently used data on-prem; 'Stored' mode keeps the full dataset on-prem and async backs it up to S3.",
+      "tricks": [
+        "replace on-prem iSCSI block storage",
+        "cached or stored mode",
+        "S3-backed"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0048",
+      "q": "Storage Gateway VTL (Tape Gateway)",
+      "a": "• replace physical tape backups\n• iSCSI VTL\n• existing backup software",
+      "explanation": "Emulates a Virtual Tape Library over iSCSI. Existing on-prem backup software (Veeam, Veritas, Commvault) sees it as physical tape. Tapes are stored on S3 and Glacier.",
+      "tricks": [
+        "replace physical tape backups",
+        "iSCSI VTL",
+        "existing backup software"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0049",
+      "q": "RDS",
+      "a": "• managed relational DB\n• MySQL/Postgres/Oracle/SQL Server\n• patching/backup automated",
+      "explanation": "",
+      "tricks": [
+        "managed relational DB",
+        "MySQL/Postgres/Oracle/SQL Server",
+        "patching/backup automated"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0050",
+      "q": "RDS Multi-AZ",
+      "a": "• synchronous standby in another AZ\n• automatic failover\n• high availability for RDS",
+      "explanation": "Synchronous standby in a different AZ. Automatic failover (~60-120s) on primary failure. Standby is NOT readable in instance deployment (use Multi-AZ DB cluster for readable standbys).",
+      "tricks": [
+        "synchronous standby in another AZ",
+        "automatic failover",
+        "high availability for RDS"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0051",
+      "q": "RDS Multi-AZ DB cluster",
+      "a": "• 1 writer + 2 readable standbys\n• faster failover\n• read scaling + HA",
+      "explanation": "Newer Multi-AZ flavor: 1 writer + 2 standby readers across 3 AZs. Failover in seconds, and the standbys are readable so you get HA + read scaling.",
+      "tricks": [
+        "1 writer + 2 readable standbys",
+        "faster failover",
+        "read scaling + HA"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0052",
+      "q": "RDS Proxy",
+      "a": "• connection pooling for RDS/Aurora\n• Lambda connection storms\n• reduce failover downtime",
+      "explanation": "Connection pool in front of RDS/Aurora. Solves Lambda 'connection storms' and reduces failover downtime perceived by the app.",
+      "tricks": [
+        "connection pooling for RDS/Aurora",
+        "Lambda connection storms",
+        "reduce failover downtime"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0053",
+      "q": "RDS Blue/Green Deployment",
+      "a": "• test new version safely\n• near-zero downtime upgrade\n• auto-rollback",
+      "explanation": "Spin up a parallel green environment at the new version, test, then atomically switch traffic. Near-zero downtime upgrade with rollback if it goes wrong.",
+      "tricks": [
+        "test new version safely",
+        "near-zero downtime upgrade",
+        "auto-rollback"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0054",
+      "q": "Read Replicas",
+      "a": "• offload read queries\n• async replication\n• scale reads only",
+      "explanation": "Asynchronous replica used to offload read queries from the primary. Eventual consistency. Can be promoted to standalone DB if needed.",
+      "tricks": [
+        "offload read queries",
+        "async replication",
+        "scale reads only"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0055",
+      "q": "Aurora",
+      "a": "• MySQL/Postgres compatible\n• 5x faster than RDS\n• auto-scaling storage",
+      "explanation": "",
+      "tricks": [
+        "MySQL/Postgres compatible",
+        "5x faster than RDS",
+        "auto-scaling storage"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0056",
+      "q": "Aurora Replicas",
+      "a": "• sub-10ms reader replication\n• shared storage\n• auto-scale readers",
+      "explanation": "",
+      "tricks": [
+        "sub-10ms reader replication",
+        "shared storage",
+        "auto-scale readers"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0057",
+      "q": "Aurora Global Database",
+      "a": "• multi-Region writer + replicas\n• sub-second cross-Region replication\n• DR with promote",
+      "explanation": "Single Aurora cluster with one writer Region and up to 5 reader Regions. Sub-second cross-Region replication, RPO close to zero. Used for global apps and multi-Region DR.",
+      "tricks": [
+        "multi-Region writer + replicas",
+        "sub-second cross-Region replication",
+        "DR with promote"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0058",
+      "q": "Aurora Serverless v2",
+      "a": "• auto-scale capacity in seconds\n• intermittent or unpredictable load\n• scale near zero when idle",
+      "explanation": "Aurora capacity (ACUs) auto-scales in seconds based on load, can scale near zero when idle. Use for unpredictable or intermittent workloads (dev environments, end-of-month batch).",
+      "tricks": [
+        "auto-scale capacity in seconds",
+        "intermittent or unpredictable load",
+        "scale near zero when idle"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0059",
+      "q": "DynamoDB",
+      "a": "• NoSQL key-value\n• single-digit ms latency\n• any scale",
+      "explanation": "",
+      "tricks": [
+        "NoSQL key-value",
+        "single-digit ms latency",
+        "any scale"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0060",
+      "q": "DynamoDB On-Demand",
+      "a": "• unpredictable traffic\n• pay per request\n• no capacity planning",
+      "explanation": "Pay per request, no capacity to plan. Best when traffic is unpredictable, spiky, or you don't know the load yet. More expensive than Provisioned at high steady throughput.",
+      "tricks": [
+        "unpredictable traffic",
+        "pay per request",
+        "no capacity planning"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0061",
+      "q": "DynamoDB Provisioned",
+      "a": "• known steady throughput\n• cheaper at high RCU/WCU\n• auto-scaling",
+      "explanation": "",
+      "tricks": [
+        "known steady throughput",
+        "cheaper at high RCU/WCU",
+        "auto-scaling"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0062",
+      "q": "DynamoDB Global Tables",
+      "a": "• multi-Region active-active writes\n• eventual consistency\n• multi-master",
+      "explanation": "Multi-Region active-active replication. Each Region has a writer; conflicts resolved by last-writer-wins. Eventual consistency across Regions.",
+      "tricks": [
+        "multi-Region active-active writes",
+        "eventual consistency",
+        "multi-master"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0063",
+      "q": "DynamoDB Streams",
+      "a": "• change data capture\n• trigger Lambda on item change\n• downstream replication",
+      "explanation": "CDC = Change Data Capture. Every item change emits an event you can consume from Lambda or Kinesis. Used for cross-Region replication, search index sync, audit log.",
+      "tricks": [
+        "change data capture",
+        "trigger Lambda on item change",
+        "downstream replication"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0064",
+      "q": "DAX",
+      "a": "• DynamoDB cache\n• ms to microsecond latency\n• transparent client\n• no app code change",
+      "explanation": "DynamoDB Accelerator. In-memory cache that talks the DynamoDB API. Drops read latency from ms to microseconds. Transparent to the app: same SDK, no code change.",
+      "tricks": [
+        "DynamoDB cache",
+        "ms to microsecond latency",
+        "transparent client",
+        "no app code change"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0065",
+      "q": "ElastiCache for Redis",
+      "a": "• distributed session state\n• persistence + replication\n• Multi-AZ",
+      "explanation": "In-memory store with replication, persistence (AOF/RDB), and Multi-AZ failover. Used for session state, leaderboards, caches that must survive node failure.",
+      "tricks": [
+        "distributed session state",
+        "persistence + replication",
+        "Multi-AZ"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0066",
+      "q": "ElastiCache for Memcached",
+      "a": "• simple in-memory cache\n• no persistence\n• horizontal scaling",
+      "explanation": "Pure in-memory cache. No replication, no persistence, no failover. Lost on node failure. Use only when cached data is recomputable.",
+      "tricks": [
+        "simple in-memory cache",
+        "no persistence",
+        "horizontal scaling"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0067",
+      "q": "Amazon Neptune",
+      "a": "• graph database\n• social network / fraud / recommendations\n• Gremlin or SPARQL",
+      "explanation": "Managed graph database. Stores nodes and edges. Used for social graphs, fraud detection, recommendations, knowledge graphs.",
+      "tricks": [
+        "graph database",
+        "social network / fraud / recommendations",
+        "Gremlin or SPARQL"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0068",
+      "q": "Redshift",
+      "a": "• data warehouse\n• petabyte SQL analytics\n• columnar storage",
+      "explanation": "",
+      "tricks": [
+        "data warehouse",
+        "petabyte SQL analytics",
+        "columnar storage"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0069",
+      "q": "OpenSearch",
+      "a": "• search and log analytics\n• near real-time indexing\n• Kibana dashboards",
+      "explanation": "",
+      "tricks": [
+        "search and log analytics",
+        "near real-time indexing",
+        "Kibana dashboards"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0070",
+      "q": "VPC peering",
+      "a": "• 1:1 between two VPCs\n• free same-Region\n• no overlapping CIDRs",
+      "explanation": "",
+      "tricks": [
+        "1:1 between two VPCs",
+        "free same-Region",
+        "no overlapping CIDRs"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0071",
+      "q": "Transit Gateway",
+      "a": "• hub-and-spoke\n• hundreds of VPCs\n• central routing",
+      "explanation": "",
+      "tricks": [
+        "hub-and-spoke",
+        "hundreds of VPCs",
+        "central routing"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0072",
+      "q": "AWS Direct Connect",
+      "a": "• dedicated private line\n• consistent low latency\n• high bandwidth hybrid",
+      "explanation": "",
+      "tricks": [
+        "dedicated private line",
+        "consistent low latency",
+        "high bandwidth hybrid"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0073",
+      "q": "Site-to-Site VPN",
+      "a": "• IPsec over internet\n• quick to set up\n• DC backup",
+      "explanation": "",
+      "tricks": [
+        "IPsec over internet",
+        "quick to set up",
+        "DC backup"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0074",
+      "q": "AWS PrivateLink",
+      "a": "• private access to AWS or 3rd-party services\n• no internet/NAT/peering\n• interface endpoint",
+      "explanation": "Private connectivity from your VPC to AWS or third-party services without going over the internet. Implemented as Interface VPC Endpoints (one ENI per AZ).",
+      "tricks": [
+        "private access to AWS or 3rd-party services",
+        "no internet/NAT/peering",
+        "interface endpoint"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0075",
+      "q": "Gateway VPC Endpoint",
+      "a": "• private access to S3 or DynamoDB\n• free\n• route table entry only",
+      "explanation": "Free private route from VPC to S3 or DynamoDB only (no other AWS service). Implemented via the VPC route table, not an ENI. Use this to remove S3/DynamoDB traffic from the NAT.",
+      "tricks": [
+        "private access to S3 or DynamoDB",
+        "free",
+        "route table entry only"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0076",
+      "q": "Interface VPC Endpoint (PrivateLink)",
+      "a": "• private access to AWS services other than S3/DynamoDB\n• ENI per AZ\n• DNS in VPC",
+      "explanation": "Private access to most AWS services other than S3/DynamoDB, via an ENI in your subnets. You pay per AZ-hour and per GB processed.",
+      "tricks": [
+        "private access to AWS services other than S3/DynamoDB",
+        "ENI per AZ",
+        "DNS in VPC"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0077",
+      "q": "NAT Gateway",
+      "a": "• private subnet outbound to internet\n• managed\n• per-GB processing fee",
+      "explanation": "Managed outbound internet for private subnets. Auto-scaled, HA per AZ. Costs both per-hour and per-GB processed (S3/DynamoDB traffic via NAT is wasteful, use a Gateway Endpoint instead).",
+      "tricks": [
+        "private subnet outbound to internet",
+        "managed",
+        "per-GB processing fee"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0078",
+      "q": "Application Load Balancer (ALB)",
+      "a": "• HTTP/HTTPS\n• path/host-based routing\n• WebSocket and HTTP/2\n• Layer 7",
+      "explanation": "",
+      "tricks": [
+        "HTTP/HTTPS",
+        "path/host-based routing",
+        "WebSocket and HTTP/2",
+        "Layer 7"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0079",
+      "q": "Network Load Balancer (NLB)",
+      "a": "• TCP/UDP\n• ultra-low latency\n• millions of connections\n• Layer 4",
+      "explanation": "Layer 4 (TCP/UDP). Lowest latency, handles millions of connections per second. Use for TCP/UDP non-HTTP workloads, gaming, IoT.",
+      "tricks": [
+        "TCP/UDP",
+        "ultra-low latency",
+        "millions of connections",
+        "Layer 4"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0080",
+      "q": "Gateway Load Balancer (GWLB)",
+      "a": "• transparent inline traffic inspection\n• third-party firewall/IPS\n• GWLB endpoint",
+      "explanation": "Transparent traffic insertion: incoming traffic is routed through third-party network appliances (firewall, IPS, DPI) before reaching the destination. Uses GWLB endpoints in your VPCs.",
+      "tricks": [
+        "transparent inline traffic inspection",
+        "third-party firewall/IPS",
+        "GWLB endpoint"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0081",
+      "q": "CloudFront",
+      "a": "• CDN edge cache\n• HTTPS for global users\n• DDoS protection\n• S3 origin",
+      "explanation": "",
+      "tricks": [
+        "CDN edge cache",
+        "HTTPS for global users",
+        "DDoS protection",
+        "S3 origin"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0082",
+      "q": "CloudFront Signed URL",
+      "a": "• per-user access to one file\n• movie rental / song download\n• time-limited",
+      "explanation": "Per-user URL granting access to one specific object for a limited time. Used for movie rentals, paywalled downloads, time-boxed access.",
+      "tricks": [
+        "per-user access to one file",
+        "movie rental / song download",
+        "time-limited"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0083",
+      "q": "CloudFront geo restriction",
+      "a": "• allow or block by country\n• content licensing rights\n• edge enforcement",
+      "explanation": "",
+      "tricks": [
+        "allow or block by country",
+        "content licensing rights",
+        "edge enforcement"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0084",
+      "q": "Route 53 failover routing",
+      "a": "• primary/secondary endpoints\n• health-check based\n• active-passive",
+      "explanation": "",
+      "tricks": [
+        "primary/secondary endpoints",
+        "health-check based",
+        "active-passive"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0085",
+      "q": "Route 53 geolocation routing",
+      "a": "• route by user country\n• regional content rights\n• data residency",
+      "explanation": "",
+      "tricks": [
+        "route by user country",
+        "regional content rights",
+        "data residency"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0086",
+      "q": "Route 53 latency-based routing",
+      "a": "• closest Region by latency\n• global users\n• no health-check failover",
+      "explanation": "Each user is routed to the Region with lowest network latency from their location. Pure performance optimization, not health-aware (combine with health checks for failover).",
+      "tricks": [
+        "closest Region by latency",
+        "global users",
+        "no health-check failover"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0087",
+      "q": "Route 53 weighted routing",
+      "a": "• A/B testing\n• blue/green deployment\n• traffic split by weight",
+      "explanation": "",
+      "tricks": [
+        "A/B testing",
+        "blue/green deployment",
+        "traffic split by weight"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0088",
+      "q": "Global Accelerator",
+      "a": "• UDP and TCP non-HTTP traffic\n• anycast IPs\n• fast multi-Region failover\n• AWS backbone",
+      "explanation": "Anycast IPs (2 static IPs). Traffic enters the AWS backbone at the closest edge location, then takes the AWS internal network to the healthy Region. Cross-Region failover in seconds, beats Route 53 DNS-based failover for live UDP/TCP traffic.",
+      "tricks": [
+        "UDP and TCP non-HTTP traffic",
+        "anycast IPs",
+        "fast multi-Region failover",
+        "AWS backbone"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0089",
+      "q": "API Gateway",
+      "a": "• REST/HTTP/WebSocket APIs\n• authorizers\n• throttling\n• fully managed",
+      "explanation": "",
+      "tricks": [
+        "REST/HTTP/WebSocket APIs",
+        "authorizers",
+        "throttling",
+        "fully managed"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 4
+    },
+    {
+      "id": "cheat-0090",
+      "q": "Amazon SQS",
+      "a": "• decouple producer and consumer\n• buffer spikes\n• at-least-once delivery",
+      "explanation": "",
+      "tricks": [
+        "decouple producer and consumer",
+        "buffer spikes",
+        "at-least-once delivery"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0091",
+      "q": "SQS FIFO queue",
+      "a": "• exactly-once\n• preserve order\n• 300 messages/s default",
+      "explanation": "Exactly-once processing and strict ordering within a message group. Lower throughput than Standard (300 msg/s without batching). Use when order or deduplication matters.",
+      "tricks": [
+        "exactly-once",
+        "preserve order",
+        "300 messages/s default"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0092",
+      "q": "Amazon SNS",
+      "a": "• pub/sub topic\n• fan-out to many subscribers\n• push to email/SMS/HTTP",
+      "explanation": "",
+      "tricks": [
+        "pub/sub topic",
+        "fan-out to many subscribers",
+        "push to email/SMS/HTTP"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0093",
+      "q": "SNS fan-out (to SQS)",
+      "a": "• one event, many independent consumers\n• durable per-consumer queue\n• decoupled processing rate",
+      "explanation": "Common pattern: one SNS topic publishes once, multiple SQS queues subscribe. Each consumer reads its own queue at its own pace, with retries and DLQ. Decouples one producer from many consumers.",
+      "tricks": [
+        "one event, many independent consumers",
+        "durable per-consumer queue",
+        "decoupled processing rate"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0094",
+      "q": "Amazon EventBridge",
+      "a": "• event bus\n• SaaS event integration\n• rule-based routing",
+      "explanation": "Serverless event bus. Receives events from AWS services, your apps, and 100+ SaaS partners. Rules route events to targets (Lambda, SQS, Step Functions, etc.).",
+      "tricks": [
+        "event bus",
+        "SaaS event integration",
+        "rule-based routing"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0095",
+      "q": "AWS Snowball Edge",
+      "a": "• TB to PB offline transfer\n• low bandwidth or no internet\n• physical device shipped",
+      "explanation": "",
+      "tricks": [
+        "TB to PB offline transfer",
+        "low bandwidth or no internet",
+        "physical device shipped"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0096",
+      "q": "AWS Snowcone",
+      "a": "• small site / edge\n• 8-14 TB\n• rugged portable device",
+      "explanation": "",
+      "tricks": [
+        "small site / edge",
+        "8-14 TB",
+        "rugged portable device"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0097",
+      "q": "AWS DataSync",
+      "a": "• one-time or scheduled file copy\n• auto integrity check\n• on-prem NFS/SMB to AWS",
+      "explanation": "",
+      "tricks": [
+        "one-time or scheduled file copy",
+        "auto integrity check",
+        "on-prem NFS/SMB to AWS"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0098",
+      "q": "AWS DMS (Database Migration Service)",
+      "a": "• heterogeneous DB migration\n• ongoing CDC replication\n• SCT for schema conversion",
+      "explanation": "Migrates databases between heterogeneous engines (Oracle to Aurora, SQL Server to RDS, etc.). Supports continuous CDC replication for near-zero-downtime migrations. Combine with Schema Conversion Tool (SCT) for schema changes.",
+      "tricks": [
+        "heterogeneous DB migration",
+        "ongoing CDC replication",
+        "SCT for schema conversion"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0099",
+      "q": "AWS Transfer Family",
+      "a": "• managed SFTP/FTPS/FTP\n• users land files in S3 or EFS\n• no servers to manage",
+      "explanation": "",
+      "tricks": [
+        "managed SFTP/FTPS/FTP",
+        "users land files in S3 or EFS",
+        "no servers to manage"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0100",
+      "q": "AWS Elastic Disaster Recovery",
+      "a": "• block-level replication from on-prem\n• pilot light DR to AWS\n• RPO seconds",
+      "explanation": "Block-level replication of on-prem servers (or another cloud) to AWS. RPO measured in seconds. Used as a pilot-light DR target: replication is continuous, recovery instances are not running until needed.",
+      "tricks": [
+        "block-level replication from on-prem",
+        "pilot light DR to AWS",
+        "RPO seconds"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0101",
+      "q": "AWS Backup",
+      "a": "• central backup across services\n• tag-based plans\n• cross-Region copy",
+      "explanation": "",
+      "tricks": [
+        "central backup across services",
+        "tag-based plans",
+        "cross-Region copy"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0102",
+      "q": "AWS Backup Vault Lock",
+      "a": "• immutable backups\n• WORM\n• compliance retention",
+      "explanation": "WORM = backups cannot be deleted or modified for the lock duration, not even by the AWS root user. Required for compliance retention (HIPAA, SEC, FINRA).",
+      "tricks": [
+        "immutable backups",
+        "WORM",
+        "compliance retention"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0103",
+      "q": "AWS KMS",
+      "a": "• managed encryption keys\n• envelope encryption\n• integrated with most AWS services",
+      "explanation": "Managed encryption key service. Implements envelope encryption: KMS encrypts data keys, and the data keys encrypt the actual data. Integrated with most AWS services (S3 SSE-KMS, EBS, RDS, etc.).",
+      "tricks": [
+        "managed encryption keys",
+        "envelope encryption",
+        "integrated with most AWS services"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0104",
+      "q": "KMS customer managed key (CMK)",
+      "a": "• full control over rotation/disable\n• audit via CloudTrail\n• you own the key policy",
+      "explanation": "You own the key policy: who can use the key, which actions, automatic rotation cadence. Required when you need full audit and rotation control (vs AWS-managed keys, which are simpler but opaque).",
+      "tricks": [
+        "full control over rotation/disable",
+        "audit via CloudTrail",
+        "you own the key policy"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0105",
+      "q": "AWS KMS External Key Store (XKS)",
+      "a": "• keys held outside AWS\n• external key manager\n• regulatory data sovereignty",
+      "explanation": "KMS keys backed by an external HSM you operate (third-party vendor, on-prem). The key material never enters AWS. Used when regulation forces key sovereignty.",
+      "tricks": [
+        "keys held outside AWS",
+        "external key manager",
+        "regulatory data sovereignty"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0106",
+      "q": "AWS Secrets Manager",
+      "a": "• DB credentials with auto-rotation\n• Lambda rotation function\n• native RDS integration",
+      "explanation": "Stores DB credentials and other secrets, with built-in automatic rotation via Lambda function. Native integration with RDS rotates the password without app changes.",
+      "tricks": [
+        "DB credentials with auto-rotation",
+        "Lambda rotation function",
+        "native RDS integration"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0107",
+      "q": "Systems Manager Parameter Store",
+      "a": "• app config\n• secure strings\n• no built-in rotation",
+      "explanation": "Stores app configuration values (and SecureStrings encrypted with KMS). No built-in rotation, simpler and cheaper than Secrets Manager. Use for config; use Secrets Manager for credentials.",
+      "tricks": [
+        "app config",
+        "secure strings",
+        "no built-in rotation"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0108",
+      "q": "IAM role",
+      "a": "• temporary credentials\n• EC2/Lambda/ECS access AWS APIs\n• cross-account via assume role",
+      "explanation": "Grants temporary credentials to a principal (EC2, Lambda, ECS task, another account). Replaces long-lived access keys. Cross-account access is done by assuming a role with sts:AssumeRole.",
+      "tricks": [
+        "temporary credentials",
+        "EC2/Lambda/ECS access AWS APIs",
+        "cross-account via assume role"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0109",
+      "q": "Service Control Policy (SCP)",
+      "a": "• constrain root user in member accounts\n• OU-level allow/deny\n• Organizations governance",
+      "explanation": "Organization-level policy that constrains what any principal in a member account can do, including the root user. The only AWS control that can block actions on the root user of a member account.",
+      "tricks": [
+        "constrain root user in member accounts",
+        "OU-level allow/deny",
+        "Organizations governance"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0110",
+      "q": "AWS Organizations",
+      "a": "• multi-account hierarchy\n• consolidated billing\n• OUs and SCPs",
+      "explanation": "Hierarchy of AWS accounts under a management account. Provides consolidated billing, Organizational Units (OUs), and governance via SCPs.",
+      "tricks": [
+        "multi-account hierarchy",
+        "consolidated billing",
+        "OUs and SCPs"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0111",
+      "q": "AWS IAM Identity Center",
+      "a": "• single sign-on across accounts\n• SAML/OIDC federation\n• permission sets",
+      "explanation": "Single sign-on across all your AWS accounts via SAML or OIDC, with permission sets attached to user groups. Replaces the older AWS SSO.",
+      "tricks": [
+        "single sign-on across accounts",
+        "SAML/OIDC federation",
+        "permission sets"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0112",
+      "q": "Amazon Cognito",
+      "a": "• app user sign-up/sign-in\n• user pools and identity pools\n• social/SAML federation",
+      "explanation": "",
+      "tricks": [
+        "app user sign-up/sign-in",
+        "user pools and identity pools",
+        "social/SAML federation"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0113",
+      "q": "AWS WAF",
+      "a": "• SQL injection / XSS protection\n• Layer 7 rules\n• attached to ALB/CloudFront/API Gateway",
+      "explanation": "Web Application Firewall. Layer 7 rules against SQL injection, XSS, bot traffic. Attached to ALB, CloudFront, API Gateway, AppSync.",
+      "tricks": [
+        "SQL injection / XSS protection",
+        "Layer 7 rules",
+        "attached to ALB/CloudFront/API Gateway"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0114",
+      "q": "AWS Shield",
+      "a": "• DDoS protection\n• Standard auto-on\n• Advanced for 24/7 DRT",
+      "explanation": "DDoS protection. Standard is on by default and free. Advanced ($3k/mo per org) adds 24/7 access to the DDoS Response Team and cost protection during attacks.",
+      "tricks": [
+        "DDoS protection",
+        "Standard auto-on",
+        "Advanced for 24/7 DRT"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0115",
+      "q": "AWS Network Firewall",
+      "a": "• VPC traffic inspection and filtering\n• stateful and stateless rules\n• managed firewall",
+      "explanation": "Managed stateful and stateless firewall for VPC traffic. Replaces legacy on-prem inspection appliances. Suricata-compatible rules.",
+      "tricks": [
+        "VPC traffic inspection and filtering",
+        "stateful and stateless rules",
+        "managed firewall"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0116",
+      "q": "AWS Firewall Manager",
+      "a": "• central WAF/Shield/Network Firewall policies\n• across Organizations\n• central enforcement",
+      "explanation": "Central policy management for WAF rules, Shield Advanced, Network Firewall, Security Groups across accounts in an Organization. Enforces consistent rules everywhere.",
+      "tricks": [
+        "central WAF/Shield/Network Firewall policies",
+        "across Organizations",
+        "central enforcement"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0117",
+      "q": "Amazon GuardDuty",
+      "a": "• continuous threat detection\n• VPC Flow / DNS / CloudTrail logs\n• ML-based",
+      "explanation": "Threat detection on VPC Flow Logs, DNS logs, CloudTrail, S3 data events, EKS audit logs. ML detects unusual API calls, port scans, malware C2.",
+      "tricks": [
+        "continuous threat detection",
+        "VPC Flow / DNS / CloudTrail logs",
+        "ML-based"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0118",
+      "q": "Amazon Macie",
+      "a": "• discover PII in S3\n• managed identifiers\n• data privacy compliance",
+      "explanation": "Discovers PII, financial data, and credentials in S3 buckets. Uses ML and managed identifiers (credit card, passport, SSN, etc.). Findings flow to EventBridge or Security Hub.",
+      "tricks": [
+        "discover PII in S3",
+        "managed identifiers",
+        "data privacy compliance"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0119",
+      "q": "Amazon Inspector",
+      "a": "• EC2/ECR vulnerability scan\n• CVE detection\n• automated",
+      "explanation": "Vulnerability scanner for EC2 instances, ECR images, and Lambda functions. Detects CVEs and unintended network exposure.",
+      "tricks": [
+        "EC2/ECR vulnerability scan",
+        "CVE detection",
+        "automated"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0120",
+      "q": "AWS CloudTrail",
+      "a": "• API call audit log\n• who did what when\n• org-wide trail",
+      "explanation": "",
+      "tricks": [
+        "API call audit log",
+        "who did what when",
+        "org-wide trail"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0121",
+      "q": "AWS Config",
+      "a": "• resource configuration history\n• compliance rules\n• drift detection",
+      "explanation": "Records the configuration of every AWS resource over time. Managed rules detect non-compliance (e.g. unencrypted EBS, public S3 bucket). Auto-remediation via SSM.",
+      "tricks": [
+        "resource configuration history",
+        "compliance rules",
+        "drift detection"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0122",
+      "q": "AWS Certificate Manager (ACM)",
+      "a": "• public TLS certificates\n• auto-renewal\n• DNS validation",
+      "explanation": "Issues and renews public TLS certificates for free, attached to ALB/CloudFront/API Gateway. DNS validation auto-renews indefinitely. Can also import certs from external CAs.",
+      "tricks": [
+        "public TLS certificates",
+        "auto-renewal",
+        "DNS validation"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0123",
+      "q": "EC2 Auto Scaling Group",
+      "a": "• maintain N healthy instances\n• across multiple AZs\n• self-healing",
+      "explanation": "Maintains a target number of healthy EC2 instances across multiple AZs. Replaces failed instances automatically. Combined with scaling policies for elasticity.",
+      "tricks": [
+        "maintain N healthy instances",
+        "across multiple AZs",
+        "self-healing"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0124",
+      "q": "Auto Scaling Scheduled Action",
+      "a": "• scale at known time\n• predictable peak/off hours\n• cron-style",
+      "explanation": "",
+      "tricks": [
+        "scale at known time",
+        "predictable peak/off hours",
+        "cron-style"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0125",
+      "q": "Auto Scaling Dynamic",
+      "a": "• scale on metrics (CPU, queue depth)\n• react to live load\n• target tracking",
+      "explanation": "",
+      "tricks": [
+        "scale on metrics (CPU, queue depth)",
+        "react to live load",
+        "target tracking"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0126",
+      "q": "Auto Scaling Predictive",
+      "a": "• forecast future load with ML\n• historical pattern\n• pre-scale before demand",
+      "explanation": "ML model trained on past CloudWatch metrics forecasts the next 48 hours of load and pre-scales the ASG before demand arrives. Best when load follows daily/weekly patterns.",
+      "tricks": [
+        "forecast future load with ML",
+        "historical pattern",
+        "pre-scale before demand"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0127",
+      "q": "Amazon CloudWatch",
+      "a": "• metrics, logs, alarms\n• operational visibility\n• EventBridge integration",
+      "explanation": "",
+      "tricks": [
+        "metrics, logs, alarms",
+        "operational visibility",
+        "EventBridge integration"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0128",
+      "q": "CloudWatch Container Insights",
+      "a": "• EKS/ECS metrics + logs\n• preconfigured dashboards\n• container-aware",
+      "explanation": "",
+      "tricks": [
+        "EKS/ECS metrics + logs",
+        "preconfigured dashboards",
+        "container-aware"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0129",
+      "q": "AWS Cost Explorer",
+      "a": "• analyze cost by service/tag\n• 12-month forecast\n• filter and granularity",
+      "explanation": "",
+      "tricks": [
+        "analyze cost by service/tag",
+        "12-month forecast",
+        "filter and granularity"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0130",
+      "q": "AWS Budgets",
+      "a": "• alert on cost or usage threshold\n• monthly/quarterly\n• actions on breach",
+      "explanation": "",
+      "tricks": [
+        "alert on cost or usage threshold",
+        "monthly/quarterly",
+        "actions on breach"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0131",
+      "q": "AWS Cost Anomaly Detection",
+      "a": "• ML detects unusual spend\n• auto-alert stakeholders\n• no rules to write",
+      "explanation": "ML monitors your AWS spend and alerts on unusual deviations (a service that suddenly costs 10x more, an unexpected workload). No rules to write.",
+      "tricks": [
+        "ML detects unusual spend",
+        "auto-alert stakeholders",
+        "no rules to write"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0132",
+      "q": "AWS Compute Optimizer",
+      "a": "• right-size EC2/EBS/Lambda\n• ML recommendations\n• cost reduction",
+      "explanation": "",
+      "tricks": [
+        "right-size EC2/EBS/Lambda",
+        "ML recommendations",
+        "cost reduction"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0133",
+      "q": "AWS Instance Scheduler",
+      "a": "• start/stop EC2 and RDS on schedule\n• off-hours cost savings\n• tag-based",
+      "explanation": "",
+      "tricks": [
+        "start/stop EC2 and RDS on schedule",
+        "off-hours cost savings",
+        "tag-based"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0134",
+      "q": "Amazon Athena",
+      "a": "• SQL on S3 directly\n• serverless pay-per-query\n• ad-hoc analytics",
+      "explanation": "Serverless SQL query engine that reads data directly from S3. No infrastructure to manage. Pay per TB scanned. Use Glue Data Catalog for schemas.",
+      "tricks": [
+        "SQL on S3 directly",
+        "serverless pay-per-query",
+        "ad-hoc analytics"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0135",
+      "q": "AWS Glue",
+      "a": "• serverless ETL\n• Spark jobs\n• data catalog",
+      "explanation": "",
+      "tricks": [
+        "serverless ETL",
+        "Spark jobs",
+        "data catalog"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0136",
+      "q": "AWS Glue Crawler",
+      "a": "• auto-discover schema in S3\n• create Glue tables\n• feed Athena/Redshift Spectrum",
+      "explanation": "Automatically detects schemas of files in S3 (CSV, JSON, Parquet) and creates table definitions in the Glue Data Catalog. Athena and Redshift Spectrum then query the tables with SQL.",
+      "tricks": [
+        "auto-discover schema in S3",
+        "create Glue tables",
+        "feed Athena/Redshift Spectrum"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0137",
+      "q": "Amazon EMR",
+      "a": "• managed Hadoop/Spark cluster\n• big data parallel processing\n• Spot for task nodes",
+      "explanation": "",
+      "tricks": [
+        "managed Hadoop/Spark cluster",
+        "big data parallel processing",
+        "Spot for task nodes"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0138",
+      "q": "Kinesis Data Streams",
+      "a": "• real-time ingest with shards\n• millisecond latency\n• custom consumers",
+      "explanation": "Real-time stream with shards. Each shard handles 1 MB/s write, 2 MB/s read. You manage shards, you write your own consumers.",
+      "tricks": [
+        "real-time ingest with shards",
+        "millisecond latency",
+        "custom consumers"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0139",
+      "q": "Kinesis Data Firehose",
+      "a": "• managed streaming to S3/Redshift/OpenSearch\n• buffering and compression\n• no shards",
+      "explanation": "Fully managed delivery stream that takes data, optionally transforms with Lambda, and writes to S3, Redshift, OpenSearch, or Splunk. No shards to manage.",
+      "tricks": [
+        "managed streaming to S3/Redshift/OpenSearch",
+        "buffering and compression",
+        "no shards"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0140",
+      "q": "Kinesis Data Analytics",
+      "a": "• SQL on streaming data\n• real-time analytics\n• Apache Flink",
+      "explanation": "Run SQL or Apache Flink jobs over streaming data from Kinesis Data Streams or Firehose. Used for real-time aggregations, anomaly detection, windowed analytics.",
+      "tricks": [
+        "SQL on streaming data",
+        "real-time analytics",
+        "Apache Flink"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0141",
+      "q": "Amazon QuickSight",
+      "a": "• BI dashboards\n• QuickSight users/groups\n• ML insights",
+      "explanation": "",
+      "tricks": [
+        "BI dashboards",
+        "QuickSight users/groups",
+        "ML insights"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0142",
+      "q": "AWS Lake Formation",
+      "a": "• data lake governance\n• row/cell-level security\n• centralized data permissions",
+      "explanation": "Data lake governance on top of S3 + Glue. Centralizes permissions, supports row-level and cell-level security, audits access. Replaces ad-hoc IAM policies on data.",
+      "tricks": [
+        "data lake governance",
+        "row/cell-level security",
+        "centralized data permissions"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0143",
+      "q": "Amazon SageMaker",
+      "a": "• build/train/deploy ML\n• managed Jupyter\n• model hosting",
+      "explanation": "",
+      "tricks": [
+        "build/train/deploy ML",
+        "managed Jupyter",
+        "model hosting"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0144",
+      "q": "Amazon Bedrock",
+      "a": "• foundation models as API\n• no model training\n• GenAI app development",
+      "explanation": "Access foundation models (Anthropic Claude, Meta Llama, Mistral, Amazon Titan) via API. No model training, no GPU management. Used to build GenAI applications.",
+      "tricks": [
+        "foundation models as API",
+        "no model training",
+        "GenAI app development"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0145",
+      "q": "Amazon Comprehend",
+      "a": "• NLP: sentiment, entities, language\n• PII detection\n• trained model not required",
+      "explanation": "Pre-trained NLP API: sentiment, key phrase extraction, named entities, language detection, PII detection. No model training needed.",
+      "tricks": [
+        "NLP: sentiment, entities, language",
+        "PII detection",
+        "trained model not required"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0146",
+      "q": "Amazon Comprehend Medical",
+      "a": "• medical text NLP\n• PHI extraction\n• ICD-10/RxNorm",
+      "explanation": "NLP for medical text. Extracts PHI (Protected Health Information), ICD-10 medical codes, RxNorm drug codes from unstructured clinical notes.",
+      "tricks": [
+        "medical text NLP",
+        "PHI extraction",
+        "ICD-10/RxNorm"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0147",
+      "q": "Amazon Transcribe",
+      "a": "• speech to text\n• multi-language\n• speaker labels",
+      "explanation": "",
+      "tricks": [
+        "speech to text",
+        "multi-language",
+        "speaker labels"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0148",
+      "q": "Amazon Translate",
+      "a": "• language translation\n• 75+ languages\n• real-time API",
+      "explanation": "",
+      "tricks": [
+        "language translation",
+        "75+ languages",
+        "real-time API"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0149",
+      "q": "Amazon Textract",
+      "a": "• extract text from documents\n• forms and tables\n• PDF/scanned images",
+      "explanation": "",
+      "tricks": [
+        "extract text from documents",
+        "forms and tables",
+        "PDF/scanned images"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    },
+    {
+      "id": "cheat-0150",
+      "q": "Amazon Rekognition",
+      "a": "• image and video analysis\n• face/object/inappropriate content\n• moderation",
+      "explanation": "Pre-trained computer vision API. Detects faces, objects, text, inappropriate content in images and videos. Used for content moderation, identity verification, video analysis.",
+      "tricks": [
+        "image and video analysis",
+        "face/object/inappropriate content",
+        "moderation"
+      ],
+      "topic": "cheatcode",
+      "domain": "Cheatcode",
+      "tags": [
+        "cheatcode",
+        "service-spotting",
+        "saa"
+      ],
+      "trigger_count": 3
+    }
+  ]
+}

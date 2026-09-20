@@ -1,0 +1,1449 @@
+{
+  "id": "ccaf-mock3",
+  "name": "Claude Architect Foundations (CCA-F) - Mock 3",
+  "version": "1.0",
+  "language": "en",
+  "source": "Community-authored full-length practice exam for the Anthropic Claude Certified Architect Foundations (CCA-F) exam. 60 single-answer questions across 4 scenarios, each with an explanation. These are practice questions, not real exam items.",
+  "cards": [
+    {
+      "id": "ccaf-m3-0001",
+      "source_num": 1,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nProduction logs show that 8% of refunds skip validate_refund_eligibility and call process_refund directly, resulting in compliance violations. The system prompt already states: \"Always call validate_refund_eligibility before processing any refund.\" What change most effectively eliminates these violations?",
+      "options": [
+        "Strengthen the system prompt: \"Skipping eligibility validation is a critical compliance violation that must never occur.\"",
+        "Add few-shot examples demonstrating the correct validate-then-refund sequence across multiple scenarios",
+        "Add a PreToolUse hook on process_refund that blocks execution unless validate_refund_eligibility has returned a verified result for that order",
+        "Rename validate_refund_eligibility to mandatory_pre_refund_check to make the dependency obvious in the tool name"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Add a PreToolUse hook on process_refund that blocks execution unless validate_refund_eligibility has returned a verified result for that order",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.4"
+      ],
+      "explanation": "An 8% failure rate means a probabilistic mechanism is already losing. Financial compliance requires deterministic enforcement. A PreToolUse hook on process_refund places the check outside Claude's decision-making, the tool simply cannot run until the precondition is met.\n\nTrap pattern: A and B are both probabilistic (Trap 6, more of what's already failing). D is Trap 2, a more descriptive name hints but cannot enforce. Firm language in a system prompt never reaches 0% failure."
+    },
+    {
+      "id": "ccaf-m3-0002",
+      "source_num": 2,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA PostToolUse hook is added to process_refund. It checks the refund amount and sends an alert if it exceeds $500. Despite this, a $650 refund completes successfully without escalation. What is the root cause?",
+      "options": [
+        "The hook is inspecting the tool result object rather than the tool input arguments, it should check the amount parameter before the call",
+        "The alert threshold should trigger a block, not just a notification, change the hook to reject the tool call",
+        "PostToolUse fires after the tool has already executed; the refund has already completed by the time the hook runs, so it cannot prevent anything",
+        "The hook should be attached to validate_refund_eligibility instead, where the amount is first confirmed"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. PostToolUse fires after the tool has already executed; the refund has already completed by the time the hook runs, so it cannot prevent anything",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.5"
+      ],
+      "explanation": "PostToolUse fires after execution. By the time it runs, the money has already moved. To prevent a transaction, the enforcement must be PreToolUse, which fires before the tool runs. PostToolUse's job is normalising data on the way back to the model, not blocking operations.\n\nTrap pattern: A describes a real design mistake but is not the root cause. D is Trap 9, switching timing (Pre to Post or vice versa) without recognising that only PreToolUse can block."
+    },
+    {
+      "id": "ccaf-m3-0003",
+      "source_num": 3,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nget_customer has the description: \"Gets customer data.\" After the system prompt was updated to include \"review all customer records before processing any transaction,\" the agent began calling get_customer for order lookups that don't require customer data at all. Tool descriptions are unchanged. What is the most likely cause and fix?",
+      "options": [
+        "The get_customer description is too vague; rewrite it with explicit use cases, example inputs, and boundaries",
+        "The system prompt phrase 'customer records' keyword-matches the get_customer tool name; rephrase the system prompt to avoid the accidental association",
+        "Add few-shot examples showing correct tool selection between get_customer and lookup_order",
+        "Merge get_customer and lookup_order into a single get_customer_with_order composite tool"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The system prompt phrase 'customer records' keyword-matches the get_customer tool name; rephrase the system prompt to avoid the accidental association",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.1"
+      ],
+      "explanation": "The stem provides two eliminating facts: descriptions are unchanged AND the problem started after the system prompt update. This means the update is the cause. The phrase 'customer records' in the system prompt accidentally keyword-matches the get_customer tool name.\n\nTrap pattern: A, C, and D are all eliminated by Trap 4, the stem rules them out by stating descriptions are unchanged and identifying when the problem began. 'After X, Y started happening' means X is the cause."
+    },
+    {
+      "id": "ccaf-m3-0004",
+      "source_num": 4,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nprocess_refund calls a payment API. When the API key expires, the tool returns {\"success\": true, \"refunds\": [], \"status\": \"Authentication failed\"}. The agent responds \"No refunds found for this customer\" and closes the case. What is the root cause?",
+      "options": [
+        "Instruct the agent via system prompt to treat empty refund arrays as potential errors requiring additional verification steps",
+        "The tool cannot distinguish an authentication failure from a valid empty result; it should return isError: true with errorCategory: 'permission' on auth failure",
+        "The third-party payment API is returning a misleading success flag; this is a vendor problem requiring an API contract fix",
+        "A PostToolUse hook should parse the status field and convert 'Authentication failed' into a structured error signal"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The tool cannot distinguish an authentication failure from a valid empty result; it should return isError: true with errorCategory: 'permission' on auth failure",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.2"
+      ],
+      "explanation": "'Found nothing' is not the same as 'couldn't look.' The tool masks an access failure as a successful empty result. The fix is at the tool layer: return isError: true with the appropriate errorCategory. The agent is behaving correctly given the information it received.\n\nTrap pattern: A is Trap 6, a prompt instruction cannot distinguish the two cases structurally. C is Trap 7, you control the tool layer and must handle upstream misbehaviour there. D is Trap 2, prose parsing in hooks is fragile; the tool design is the right fix."
+    },
+    {
+      "id": "ccaf-m3-0005",
+      "source_num": 5,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nprocess_refund returns HTTP 503 on server overload (transient) and HTTP 404 when an order ID doesn't exist in the system (permanent). The agent retries both identically. After exhausting retries on 404s, the server recovers but the retry budget is spent. What structural change to the error response fixes this?",
+      "options": [
+        "Include the raw HTTP status code in the error message text so the agent can read and branch on it",
+        "Return a structured errorCategory field ('transient' vs 'business') with an isRetryable boolean flag",
+        "Increase the retry limit from 3 to 10 to give transient errors more opportunities to succeed",
+        "Add a system prompt rule: 'Do not retry requests that return a 404 status code'"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Return a structured errorCategory field ('transient' vs 'business') with an isRetryable boolean flag",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.2"
+      ],
+      "explanation": "Structured error categories allow the agent to apply correct retry logic without parsing prose. A 503-overload is transient (retry as-is). A 404-missing-order is a permanent business error (never retry). The distinction must be in the response structure, not inferred from a status code embedded in text.\n\nTrap pattern: A is Trap 7, more information but still requires fragile string parsing. C is Trap 6, more retries don't fix misclassification. D is Trap 6, a prompt instruction is probabilistic."
+    },
+    {
+      "id": "ccaf-m3-0006",
+      "source_num": 6,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nIncoming documents are standard refund requests, chargeback disputes, or warranty claims, each with a different extraction schema implemented as a separate tool. Documents arrive in all three types mixed together. The agent must always produce structured output and never return plain text. The document type is determined by reading the document. Which tool_choice setting is correct?",
+      "options": [
+        "{\"type\": \"auto\"} - Claude decides whether to call a tool based on document content",
+        "{\"type\": \"any\"} - Claude must call a tool but selects which schema fits the document",
+        "{\"type\": \"tool\", \"name\": \"extract_standard_refund\"} - ensures consistent structured output regardless of type",
+        "Omit tool_choice; a system prompt instruction tells Claude to always call the appropriate extraction tool"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. {\"type\": \"any\"} - Claude must call a tool but selects which schema fits the document",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.3"
+      ],
+      "explanation": "The document type is UNKNOWN until Claude reads it, Claude must choose the schema. 'any' guarantees a tool call while leaving schema selection to the model. This is the right setting whenever the choice is genuinely the model's to make.\n\nTrap pattern: C welds every document to the standard-refund schema regardless of type, it produces structured output but always the wrong structure for chargebacks and warranty claims. A allows a prose response (no guarantee). D is probabilistic."
+    },
+    {
+      "id": "ccaf-m3-0007",
+      "source_num": 7,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA customer disputes a 45-day-old charge of $4,200. The agent confirms the charge is legitimate and has explained the 30-day refund policy twice. The customer repeats their dissatisfaction but has not explicitly asked to speak with a manager. Company policy is silent on any accommodation outside the 30-day window. What most justifies escalation at this moment?",
+      "options": [
+        "The customer's repeated frustration indicates a need for human empathy the agent cannot adequately provide",
+        "The $4,200 transaction value exceeds a threshold that warrants human review by default",
+        "Company policy is silent on out-of-window accommodations; a human must make that judgement call",
+        "The 45-day transaction age creates potential legal complexity outside the agent's area of expertise"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Company policy is silent on out-of-window accommodations; a human must make that judgement call",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.2"
+      ],
+      "explanation": "Escalate on authority, not on discomfort and not on size. The policy is silent on this case, the agent has no authority to decide. That policy gap is a valid escalation trigger. The customer hasn't explicitly requested a human, so that trigger isn't available; the gap in authority is.\n\nTrap pattern: A is escalating on emotional discomfort (invalid trigger). B is escalating on transaction value or size (invalid trigger). D is Trap 7, speculated complexity is not a trigger. Only three triggers are valid: explicit human request, policy gap, genuine inability to progress."
+    },
+    {
+      "id": "ccaf-m3-0008",
+      "source_num": 8,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nThe escalate_to_human tool is called with {\"customer_id\": \"C-7712\", \"issue\": \"Refund requested\"}. The human agent must call the customer back for more information, forcing the customer to re-explain from scratch. Which fields were missing from the handoff?",
+      "options": [
+        "The order ID, a summary of actions already taken, the root cause of the denial, and a recommended next action",
+        "The customer's full name, preferred contact method, and account tier",
+        "A verbatim transcript of the conversation so the human can review the full exchange",
+        "A confidence score indicating how certain the agent was about its refund decision"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. The order ID, a summary of actions already taken, the root cause of the denial, and a recommended next action",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.2"
+      ],
+      "explanation": "The human agent cannot see the conversation transcript. The handoff must be fully self-contained: customer ID, order ID, issue summary, actions taken, root cause, recommended next action. Every missing field forces the customer to re-explain something the agent already established.\n\nTrap pattern: B contains supplementary details but misses the operationally critical fields. C is wrong, 'humans don't get the transcript' is the entire reason the handoff format exists. D is Trap 3, confidence scores from models are unreliable and not a handoff requirement."
+    },
+    {
+      "id": "ccaf-m3-0009",
+      "source_num": 9,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA Pydantic model validates refund extractions. All required fields pass validation. However, 4% of processed refunds fail downstream because refund_amount doesn't equal the sum of the individual line_items. Pydantic reports no validation errors on these cases. What is the most effective fix?",
+      "options": [
+        "Add stricter per-field constraints to refund_amount: minimum value, maximum decimal places, and numeric type enforcement",
+        "Add a @model_validator that runs after Pydantic parsing and verifies refund_amount equals sum(line_items), producing a specific error message if they diverge",
+        "Make refund_amount an optional field to prevent the model from hallucinating values when amounts are unclear",
+        "Add few-shot examples in the extraction prompt showing correct refund calculations"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Add a @model_validator that runs after Pydantic parsing and verifies refund_amount equals sum(line_items), producing a specific error message if they diverge",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.4"
+      ],
+      "explanation": "Pydantic validates the shape and type of individual fields. It cannot express rules that span multiple fields, that requires a cross-field validator. The specific error message it produces ('stated total 500 but line items sum to 450') is the third ingredient of an effective retry.\n\nTrap pattern: A tightens per-field constraints but cannot check relationships between fields. C makes the problem worse by hiding the field entirely. D is Trap 3, examples reduce the frequency but cannot perform arithmetic validation."
+    },
+    {
+      "id": "ccaf-m3-0010",
+      "source_num": 10,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nCompliance requires that every refund is logged to an audit system before the transaction completes. This rule must hold 100% of the time, for every agent, in every session, with no exceptions. Currently it lives in the project .claude/CLAUDE.md. The rule is violated in 2% of sessions. What is the root cause and correct fix?",
+      "options": [
+        "Move the rule from project-level to user-level ~/.claude/CLAUDE.md for stronger personal enforcement",
+        "Add a PreToolUse hook on process_refund that invokes the audit logging tool before allowing the refund to execute",
+        "Strengthen the CLAUDE.md instruction with more explicit language: 'CRITICAL: audit logging is MANDATORY before every refund'",
+        "Create a /log-then-refund skill that developers invoke to ensure the correct sequence"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Add a PreToolUse hook on process_refund that invokes the audit logging tool before allowing the refund to execute",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.4"
+      ],
+      "explanation": "'100% of the time, no exceptions' means deterministic enforcement. CLAUDE.md is probabilistic, Claude reads it as guidance and weighs it alongside everything else in context. Contradictions may resolve arbitrarily. Only hooks and settings.json enforce deterministically. PreToolUse on process_refund cannot be bypassed by Claude's reasoning.\n\nTrap pattern: A is Trap 1 and makes things worse, user-level scope means team members never receive it. C is Trap 6, firmer language in a prompt moves the failure rate, never to zero. D is Trap 6, a skill is task-triggered and probabilistic."
+    },
+    {
+      "id": "ccaf-m3-0011",
+      "source_num": 11,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA new compliance requirement states that a risk classification must be logged before any subagent is created by the coordinator. Which hook and attachment point implement this deterministically?",
+      "options": [
+        "A SubagentStart hook that logs the classification when the subagent begins initialising",
+        "A PreToolUse hook on the Task tool that logs the risk classification before the subagent is spawned",
+        "A PostToolUse hook on the Task tool that records the classification after each subagent completes",
+        "A system prompt instruction to the coordinator: 'Always log risk classification before creating any subagent'"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. A PreToolUse hook on the Task tool that logs the risk classification before the subagent is spawned",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.5"
+      ],
+      "explanation": "The Task tool is how coordinators spawn subagents. PreToolUse on Task fires before the subagent is created, the earliest available enforcement point. This is deterministic: Claude cannot bypass it.\n\nTrap pattern: A is wrong, SubagentStart fires when the subagent initialises (after creation) and cannot block. C is wrong, PostToolUse fires after the subagent completes (too late for a 'before creation' requirement). D is Trap 6, probabilistic."
+    },
+    {
+      "id": "ccaf-m3-0012",
+      "source_num": 12,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nThree refund-processing subagents handle different categories. When the warranty_refund subagent times out, it returns {\"status\": \"unavailable\"}. The coordinator marks the entire batch failed and discards results already completed by the other two subagents. What anti-pattern does this represent?",
+      "options": [
+        "Silent suppression - the subagent is not distinguishing between a connection failure and a valid empty result",
+        "Workflow termination - aborting the entire pipeline on a single subagent failure and discarding completed work",
+        "Context degradation - the coordinator has lost track of which subagents completed successfully",
+        "Attention dilution - too many concurrent subagents are competing for coordinator attention"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Workflow termination - aborting the entire pipeline on a single subagent failure and discarding completed work",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.3"
+      ],
+      "explanation": "Workflow termination discards completed work when one specialist fails. The other two subagents finished successfully, their results are valuable and should be preserved. The correct pattern is for the coordinator to use partial results, log the timeout, and decide whether to retry only the failed specialist.\n\nTrap pattern: A is a different anti-pattern (returning empty as success when access failed). The returned 'unavailable' here is at least honest about failure. C and D are different context problems entirely."
+    },
+    {
+      "id": "ccaf-m3-0013",
+      "source_num": 13,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA CI pipeline runs daily: claude -p \"Verify all refund policy rules in src/policy/ are documented in docs/compliance/\". It consistently reports 100% compliance. Manual audits regularly find undocumented rules. What is the most likely cause?",
+      "options": [
+        "The -p flag restricts Claude's file access in CI, preventing it from reading all relevant policy files",
+        "Without explicit validation criteria defining what 'documented' means, Claude performs a shallow check and reports a confident but inaccurate result",
+        "--output-format json should be added so the CI environment can properly parse and evaluate the findings",
+        "A second independent Claude instance should verify the first instance's findings before reporting"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Without explicit validation criteria defining what 'documented' means, Claude performs a shallow check and reports a confident but inaccurate result",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.6"
+      ],
+      "explanation": "'Verify that rules are documented' is a vague instruction with no defined criteria. Claude has no explicit definition of what constitutes documentation coverage, so it performs a shallow scan and reports confidently. A check that never fails isn't checking, the instruction is the problem.\n\nTrap pattern: A is Trap 8, -p makes the session non-interactive, it does not restrict tool access. C is Trap 7, JSON format affects output structure, not analysis quality. D is Trap 5, a second instance reading the same vague prompt draws the same conclusion."
+    },
+    {
+      "id": "ccaf-m3-0014",
+      "source_num": 14,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nCode review findings show developer trust eroding. A survey reveals: 'We've stopped reading findings, too many false positives in style and naming categories make everything look noisy.' High-precision categories (security, logic errors) are now being ignored along with the noise. What is the best approach to restore trust?",
+      "options": [
+        "Temporarily disable high-false-positive categories (style, naming) and keep only high-precision categories while improving the disabled ones",
+        "Show a confidence score alongside each finding so developers can filter by confidence threshold",
+        "Add a second model pass to verify each finding before surfacing it to reduce false positives",
+        "Raise the severity threshold uniformly so only critical findings are reported across all categories"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Temporarily disable high-false-positive categories (style, naming) and keep only high-precision categories while improving the disabled ones",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.1"
+      ],
+      "explanation": "Trust is broken because developers have stopped reading entirely. Any solution that still requires reading (confidence scores, severity filters) fails the people who have already disengaged. Removing the noise source directly restores the signal. Cut coverage to restore credibility.\n\nTrap pattern: B is Trap 7, confidence scores require reading; developers have already stopped. C is Trap 5, a second pass on low-precision prompts still has low precision. D is Trap 10, raising the threshold hides valid medium-severity findings."
+    },
+    {
+      "id": "ccaf-m3-0015",
+      "source_num": 15,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 1: Meridian Bank - Refund Processing Agent",
+      "q": "Scenario 1: Meridian Bank - Refund Processing Agent\nMeridian Bank builds a customer refund agent with five tools: get_customer(customer_id), lookup_order(order_id), validate_refund_eligibility(order_id, customer_id), process_refund(order_id, amount), escalate_to_human(handoff_data). Policy requires eligibility verification before every refund. Refunds over $500 require manager approval.\n\nA coordinator delegates to three subagents: chargeback_specialist, warranty_specialist, fraud_specialist. The coordinator was loaded with Meridian's complete policy documents at session start. The fraud_specialist's reports consistently contain no policy references despite the policies being directly relevant. What is the root cause?",
+      "options": [
+        "The fraud_specialist subagent is not fine-tuned on Meridian Bank's specific policy content",
+        "The coordinator is not passing the relevant policy content into the fraud_specialist's task prompt; subagents do not inherit coordinator context",
+        "The subagents should run sequentially so the fraud_specialist can build on the other specialists' policy-referenced findings",
+        "Add a policy query tool to the fraud_specialist so it can retrieve policy content independently on demand"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The coordinator is not passing the relevant policy content into the fraud_specialist's task prompt; subagents do not inherit coordinator context",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.2"
+      ],
+      "explanation": "Subagent isolation. The fraud_specialist starts blank, it sees only what the coordinator writes into its task prompt. Policy documents loaded into the coordinator's context are not shared automatically. The coordinator must explicitly inject the relevant policy sections into each task prompt it writes.\n\nTrap pattern: A is false, subagents use the same model. C is wrong, sequencing doesn't transfer coordinator context to subagents. D is Trap 5, it works but adds a tool call for information the coordinator already holds and could inject directly."
+    },
+    {
+      "id": "ccaf-m3-0016",
+      "source_num": 16,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDevStream's team creates a /security-audit skill. Three requirements: (1) available to every developer on the project, (2) cannot modify any files, (3) produces extensive output that must not pollute the main conversation. Which configuration is correct?",
+      "options": [
+        "~/.claude/skills/security-audit/SKILL.md with allowed-tools: [\"Read\",\"Grep\",\"Glob\"] and context: fork",
+        ".claude/commands/security-audit.md with allowed-tools: [\"Read\",\"Grep\",\"Glob\"]",
+        ".claude/CLAUDE.md with a security scanning procedure written as an always-loaded instruction",
+        ".claude/skills/security-audit/SKILL.md with allowed-tools: [\"Read\",\"Grep\",\"Glob\"] and context: fork"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. .claude/skills/security-audit/SKILL.md with allowed-tools: [\"Read\",\"Grep\",\"Glob\"] and context: fork",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.2"
+      ],
+      "explanation": "Three requirements, three mechanisms. .claude/skills/ (not ~/.claude/) puts the file in the repo, shared on clone. allowed-tools: Read/Grep/Glob makes it read-only. context: fork isolates noisy output to a sub-session, keeping the main conversation clean.\n\nTrap pattern: A is Trap 1, identical to D except for the ~/ prefix, which makes it personal, not shared. B is Trap 10, right folder structure, no context: fork (meets two of three requirements). C uses CLAUDE.md for a task-specific procedure, wrong mechanism."
+    },
+    {
+      "id": "ccaf-m3-0017",
+      "source_num": 17,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA developer suspects their Claude Code session is not loading the project's CLAUDE.md conventions correctly, edits are being made with inconsistent standards. What is the fastest way to confirm which CLAUDE.md files the current session has actually loaded?",
+      "options": [
+        "Ask Claude to list the conventions it is currently following",
+        "Run /compact to reset the session state and force a configuration reload",
+        "Delete ~/.claude/CLAUDE.md to eliminate user-level configuration as a variable",
+        "Run /memory"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Run /memory",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.1"
+      ],
+      "explanation": "/memory is the diagnostic command. It shows which instruction files this session actually loaded. Asking Claude what conventions it follows produces plausible-sounding testimony, Claude can paraphrase conventions from training or partial context and sound completely confident, which proves nothing about what actually loaded.\n\nTrap pattern: A is testimony vs evidence, the exam uses the word 'actually' as a tell. B is Trap 8, /compact summarises context, it doesn't reload configuration. C is Trap 5, destructive and not diagnostic; also makes the problem worse."
+    },
+    {
+      "id": "ccaf-m3-0018",
+      "source_num": 18,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDevStream has TypeScript test files (*.test.ts) scattered across 50+ directories. All test files should follow the same import ordering and assertion conventions. Where should these conventions live?",
+      "options": [
+        "In the root CLAUDE.md, always loaded, applies to everything in the project",
+        "In a directory-level CLAUDE.md placed in each directory that contains tests",
+        "In .claude/rules/testing.md with paths: [\"**/*.test.ts\"] in the frontmatter",
+        "In a /testing skill that developers invoke when they begin working on tests"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. In .claude/rules/testing.md with paths: [\"**/*.test.ts\"] in the frontmatter",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.3"
+      ],
+      "explanation": "'One file type, scattered across many directories' is the exact use case for path-scoped rules. .claude/rules/ with a paths: glob loads only when a matching file is touched, Terraform rules stay out of context during React work, test rules load only during test edits.\n\nTrap pattern: A loads always, wasting tokens on every session regardless of whether tests are being touched. B requires creating 50+ separate files (not maintainable). D makes the convention task-triggered, developers must remember to invoke it."
+    },
+    {
+      "id": "ccaf-m3-0019",
+      "source_num": 19,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA CI pipeline runs: claude -p \"Verify API contracts haven't changed\" --output-format json. A senior engineer tells a junior that the -p flag restricts Claude's file access in CI as a security measure. Is this correct?",
+      "options": [
+        "Yes, -p enables a restricted security sandbox that limits file and tool access in non-interactive mode",
+        "No, -p makes the session non-interactive (print result and exit) but does not restrict tools or file access at all",
+        "Partially, -p restricts interactive tools like Bash but leaves read-only tools like Read and Grep available",
+        "Partially, -p is unrelated to file access; use --permission-mode to control actual restrictions"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. No, -p makes the session non-interactive (print result and exit) but does not restrict tools or file access at all",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.6"
+      ],
+      "explanation": "-p (--print) changes how the session starts and ends: it takes the instruction, does the work, prints to stdout, and exits without waiting for user input. Claude Code retains full access to all configured tools. To restrict tool access, use --allowedTools or --disallowedTools explicitly.\n\nTrap pattern: A is Trap 8, this restriction does not exist. C is Trap 8, same misconception, partially stated. D has a true fact about --permission-mode but incorrectly implies -p is unrelated to the question's premise."
+    },
+    {
+      "id": "ccaf-m3-0020",
+      "source_num": 20,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA developer uses plan mode to investigate a complex bug affecting five services. After 20 minutes, they identify the fix: a single configuration value in one file. What is the correct next step?",
+      "options": [
+        "Complete the entire session in plan mode to maintain investigation consistency",
+        "Start a new session in direct execution mode to apply the identified fix",
+        "Switch to direct execution mode within the current session and apply the fix",
+        "Stay in plan mode, fully document the fix, and hand off to a colleague to apply in a separate session"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Switch to direct execution mode within the current session and apply the fix",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.4"
+      ],
+      "explanation": "Plan mode is for ambiguity, not difficulty. Once the change is scoped to a single known fix, planning adds nothing. Switch to direct execution in the same session, starting a new session discards the investigation context that produced the fix.\n\nTrap pattern: A, 'consistency' is a fake virtue. B loses the 20 minutes of investigation that identified the fix. D is Trap 5, unnecessary overhead; the developer has all the context they need."
+    },
+    {
+      "id": "ccaf-m3-0021",
+      "source_num": 21,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA coordinator processes requests and delegates research to a research_subagent. The coordinator holds a comprehensive API documentation database at session start. The research_subagent's responses consistently miss API-specific constraints that were covered in the coordinator's context. What is the root cause?",
+      "options": [
+        "The research_subagent needs to be connected to the same MCP server as the coordinator to access the documentation",
+        "The coordinator is not injecting the relevant API documentation into the research_subagent's task prompt; subagents do not automatically inherit coordinator context",
+        "The coordinator should handle all research tasks itself rather than delegating, since context cannot be transferred between agents",
+        "Run the research_subagent after the coordinator's analysis phase so it can build on prior work"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The coordinator is not injecting the relevant API documentation into the research_subagent's task prompt; subagents do not automatically inherit coordinator context",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.3"
+      ],
+      "explanation": "Subagent isolation. The research_subagent's entire world is the task prompt the coordinator writes. Documentation held in the coordinator's context is not inherited. The coordinator must explicitly copy the relevant sections into the task string it passes.\n\nTrap pattern: A adds complexity for information the coordinator already holds. C defeats the purpose of delegation. D, sequencing doesn't transfer context; the subagent still starts blank regardless of when it runs."
+    },
+    {
+      "id": "ccaf-m3-0022",
+      "source_num": 22,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA developer wants a personal /refactor-imports skill applying their own formatting preferences. This skill should not affect any other developer on the team. Where should the skill file be placed?",
+      "options": [
+        ".claude/skills/refactor-imports/SKILL.md",
+        "~/.claude/skills/refactor-imports/SKILL.md",
+        ".claude/commands/refactor-imports.md",
+        "In the root CLAUDE.md under a personal preferences section"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. ~/.claude/skills/refactor-imports/SKILL.md",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.2"
+      ],
+      "explanation": "Personal skill goes to ~/.claude/ (home folder, not committed to git, not shared). Team skill goes to .claude/ (repo, shared on clone). The tilde is the entire answer.\n\nTrap pattern: A puts the skill in the repo, it is shared with every developer on clone (Trap 1). C is also in .claude/ and therefore shared. D is Trap 6, CLAUDE.md is loaded for everyone."
+    },
+    {
+      "id": "ccaf-m3-0023",
+      "source_num": 23,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDevStream wants to connect to: (1) a shared GitHub Enterprise instance for all 12 developers, (2) a patent search API for all developers, (3) an experimental personal data warehouse one developer is testing alone. Which MCP configuration is correct?",
+      "options": [
+        "All three servers in .mcp.json, project-level config covers all team resources",
+        "GitHub Enterprise and patent API in .mcp.json; personal data warehouse in ~/.claude.json",
+        "GitHub Enterprise in ~/.claude/mcp.json; patent API and data warehouse in .mcp.json",
+        "All three servers in ~/.claude.json, MCP configuration should always be personal to avoid conflicts"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. GitHub Enterprise and patent API in .mcp.json; personal data warehouse in ~/.claude.json",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.4"
+      ],
+      "explanation": ".mcp.json (project root) is shared with the team on clone. ~/.claude.json (home folder) is personal to the machine and not shared. Team-wide servers go in the project file; experimental personal servers go in the personal file.\n\nTrap pattern: A shares the experimental server with the whole team. C uses the path ~/.claude/mcp.json which does not exist, the personal file is ~/.claude.json (a file, not a folder). D puts team-wide servers in personal config."
+    },
+    {
+      "id": "ccaf-m3-0024",
+      "source_num": 24,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDevStream's code review agent generates PR feedback. Analysis shows non-obvious issues are only caught in human review. When the generator's reasoning is examined, it shows Claude explicitly considered and dismissed these exact cases during code generation. What change most effectively addresses this?",
+      "options": [
+        "Include the full test suite and documentation in the review agent's context so it has more information",
+        "Add few-shot examples of the non-obvious issue types that are currently being missed",
+        "Run a second review pass using the same agent instance with a higher temperature setting",
+        "Run an independent Claude instance for review without access to the generator's reasoning or prior decisions"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Run an independent Claude instance for review without access to the generator's reasoning or prior decisions",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.6"
+      ],
+      "explanation": "The stem makes the diagnosis explicit: 'Claude already considered and dismissed these cases.' More information is not the gap, independence is. A second instance that never saw the generation reasoning has no prior commitment to defend. It will challenge; the original instance will confirm.\n\nTrap pattern: A and B are Trap 6, the stem eliminates them by stating Claude already considered these cases. C uses the same instance; it retains its original reasoning regardless of temperature."
+    },
+    {
+      "id": "ccaf-m3-0025",
+      "source_num": 25,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA developer asks Claude to address three issues simultaneously: (1) fix a null pointer in the auth module, (2) update the test suite for that module, (3) update the API response schema that tests in issue 2 must conform to. What is the correct sequencing?",
+      "options": [
+        "Address all three in a single message for maximum efficiency",
+        "Fix issues 1 and 2 first (they are directly related), then address 3",
+        "Fix issue 3 first (the schema change defines what tests in issue 2 must look like), then 1 and 2",
+        "Fix issue 1 first (the original bug), then 2, then 3 in logical dependency order"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Fix issue 3 first (the schema change defines what tests in issue 2 must look like), then 1 and 2",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.5"
+      ],
+      "explanation": "Three-part sequencing rule: resolve dependencies first, batch what interacts, sequence what's independent. Issue 3 changes the output shape that issue 2 must conform to. Fixing tests before the schema change means rewriting them immediately after. Fix 3 first, then 1 and 2.\n\nTrap pattern: A is Trap 10, the three issues interfere with each other. B gets the dependency order backwards, tests written before the schema change immediately become stale. D is also the wrong order for the same reason."
+    },
+    {
+      "id": "ccaf-m3-0026",
+      "source_num": 26,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA synthesis subagent calls back to the coordinator for every fact verification, even simple routine lookups. Analysis: 82% of verifications match a clear, stable pattern; 18% require coordinator judgment. Each round-trip adds 400ms. What is the best architectural fix?",
+      "options": [
+        "Build a composite verify_and_synthesise tool that handles both routine and complex verifications in a single call",
+        "Give the synthesis subagent a scoped verify_fact tool for routine lookups (82%); route complex cases (18%) through the coordinator as before",
+        "Increase the coordinator's context window to handle more concurrent verification tasks efficiently",
+        "Spawn multiple synthesis subagents in parallel to amortise the round-trip overhead"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Give the synthesis subagent a scoped verify_fact tool for routine lookups (82%); route complex cases (18%) through the coordinator as before",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.3"
+      ],
+      "explanation": "An explicit 82/18 split signals: handle the common case locally with a scoped tool, escalate the exception. This is the tool distribution pattern. Adding the scoped tool eliminates 82% of round-trips without requiring coordinator judgment for them.\n\nTrap pattern: A is Trap 5, a single tool can't selectively apply coordinator judgment. C is Trap 6, context window doesn't fix architecture. D is Trap 5, parallelism reduces wall-clock time for the 18% but doesn't eliminate the per-call overhead."
+    },
+    {
+      "id": "ccaf-m3-0027",
+      "source_num": 27,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nThe CI pipeline needs to post inline PR comments for each security finding, with file, line number, severity, and rationale. Currently Claude returns findings as prose. What is the minimal change that produces machine-parseable output?",
+      "options": [
+        "Add 'respond only with valid JSON' to the system prompt",
+        "Add --output-format json --json-schema '{...}' with fields for file, line, severity, and rationale",
+        "Parse the prose output with a regex in the CI script to extract findings",
+        "Add a second Claude pass to convert findings to structured JSON after the initial analysis"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Add --output-format json --json-schema '{...}' with fields for file, line, severity, and rationale",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.6"
+      ],
+      "explanation": "--json-schema forces the final answer to match the schema exactly, the result lands in the structured_output field of the response envelope. 'Respond in JSON' asks probabilistically. This is the forcing vs asking distinction directly applied to CI.\n\nTrap pattern: A is Trap 6, asking Claude to format as JSON is probabilistic. C is Trap 6, fragile and breaks on edge cases. D is Trap 5, unnecessary overhead when the first pass can be forced directly."
+    },
+    {
+      "id": "ccaf-m3-0028",
+      "source_num": 28,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nA developer uses --resume to continue a debugging session from yesterday. During the resumed session, Claude makes recommendations based on a file structure that was significantly refactored this morning. What is the correct approach going forward?",
+      "options": [
+        "Use fork_session to create a branch from the resumed session that incorporates awareness of the refactored structure",
+        "Start a fresh session and inject a structured summary of yesterday's investigation findings as the opening context",
+        "Run /compact in the resumed session to refresh Claude's understanding of the current file structure",
+        "Update the system prompt in the resumed session to describe the new file structure explicitly"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Start a fresh session and inject a structured summary of yesterday's investigation findings as the opening context",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.7"
+      ],
+      "explanation": "After files change, neither --resume nor fork_session is appropriate, both carry stale tool results from before the refactor. Start fresh and inject a structured summary of prior findings. This preserves the investigation knowledge without the stale file references.\n\nTrap pattern: A is wrong, fork_session creates branches from existing context (stale context inherits). C is wrong, /compact summarises the conversation but doesn't refresh knowledge of external files. D is Trap 6, adding a system prompt description doesn't override stale tool results."
+    },
+    {
+      "id": "ccaf-m3-0029",
+      "source_num": 29,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDevStream runs three automated tasks: (1) PR style checks that block merging until complete, (2) weekly codebase security audits reviewed Monday morning, (3) nightly test generation for new code reviewed by developers next day. Which tasks should use the Message Batches API?",
+      "options": [
+        "All three, 50% cost reduction is valuable for all automated workloads",
+        "Weekly security audits only, nightly tasks are frequent enough to require synchronous handling",
+        "Weekly security audits and nightly test generation",
+        "None, the 24-hour processing window makes batching unsuitable for automated pipelines"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Weekly security audits and nightly test generation",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.5"
+      ],
+      "explanation": "The only question is whether a human is blocked waiting. PR checks: developers cannot merge until complete, so synchronous. Security audits: reviewed Monday morning, so batch. Nightly test gen: reviewed next day, so batch. Frequency is irrelevant, 'nightly' still has all night.\n\nTrap pattern: A includes PR checks in batching, developers are waiting (Trap 6). B incorrectly keeps nightly tasks synchronous because 'nightly sounds frequent.' D is Trap 8, batching is designed for exactly these automated, non-blocking pipelines."
+    },
+    {
+      "id": "ccaf-m3-0030",
+      "source_num": 30,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 2: DevStream Platform - Developer Tooling",
+      "q": "Scenario 2: DevStream Platform - Developer Tooling\nDevStream's 12-engineer team shares a monorepo. They use Claude Code for coding assistance and need consistent conventions, shared skills, CI integration, and personal developer customisations, all without stepping on each other.\n\nDuring a long codebase investigation, the developer notices the agent has started saying 'typical repository patterns' and 'standard implementations' instead of naming specific class names and file paths it identified earlier. What is the most effective fix?",
+      "options": [
+        "Switch to a model with a larger context window to prevent findings from being overwritten",
+        "Start a new session to reset the context degradation before it gets worse",
+        "Maintain a scratchpad file during the investigation where the agent records and can consult key findings",
+        "Run /compact to summarise and preserve the key findings before they are lost"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Maintain a scratchpad file during the investigation where the agent records and can consult key findings",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.4"
+      ],
+      "explanation": "Context degradation is a structural problem, not a capacity problem. A scratchpad file gives the agent a persistent, precise reference for specific findings regardless of how long the conversation runs. When the agent starts generalising, it reads the scratchpad rather than reconstructing from memory.\n\nTrap pattern: A is Trap 6, a larger window holds more tokens but doesn't fix attention drift from precision to vagueness. B loses all findings from the investigation. D is wrong, /compact loses exact detail, which is the specific problem here."
+    },
+    {
+      "id": "ccaf-m3-0031",
+      "source_num": 31,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI has three extraction tools: extract_invoice, extract_purchase_order, extract_contract. Documents arrive in all three types mixed. The agent must always produce structured output and never return plain text. The document type is determined by reading the document. Which tool_choice setting is correct?",
+      "options": [
+        "{\"type\": \"auto\"} - Claude decides whether a tool call is needed based on the document",
+        "{\"type\": \"any\"} - Claude must call a tool but selects which schema fits the document type",
+        "{\"type\": \"tool\", \"name\": \"extract_invoice\"} - guarantees consistent structured output",
+        "Omit tool_choice; the system prompt instructs Claude to always call the appropriate extraction tool"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. {\"type\": \"any\"} - Claude must call a tool but selects which schema fits the document type",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.3"
+      ],
+      "explanation": "Unknown type, multiple schemas, model must choose, so 'any' is correct. It guarantees a tool call (no prose response) while leaving the schema selection to the model. Force-by-name is correct only when you already know which tool applies.\n\nTrap pattern: C welds every document to the invoice schema, producing structured output but always the wrong structure for POs and contracts. A allows a prose response (no guarantee). D is probabilistic."
+    },
+    {
+      "id": "ccaf-m3-0032",
+      "source_num": 32,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI's extraction schema marks purchase_order_number as required. On invoices (which never have a PO number), the model frequently returns invented values like 'PO-UNAVAILABLE' or plausible-looking strings. What is the most effective fix?",
+      "options": [
+        "Add a validator that flags PO numbers not matching the format PO-XXXXXXX",
+        "Add few-shot examples showing invoices without PO numbers so the model learns to leave the field empty",
+        "Change purchase_order_number to nullable: {\"type\": [\"string\", \"null\"]}",
+        "Remove purchase_order_number from the schema entirely for the invoice extraction tool"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Change purchase_order_number to nullable: {\"type\": [\"string\", \"null\"]}",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.3"
+      ],
+      "explanation": "Required fields corner the model, it must produce something even when the source document doesn't have it. Making the field nullable allows the model to return an honest null. An honest null is always better than a plausible fabrication: nulls are visible downstream, fabrications are not.\n\nTrap pattern: A, format validation can't catch invented values that happen to look correct. B is Trap 3, examples reduce frequency but don't eliminate the pressure created by the 'required' constraint. D solves the issue for invoices but implies separate schemas, which may not match the question's architecture."
+    },
+    {
+      "id": "ccaf-m3-0033",
+      "source_num": 33,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI's pipeline: (1) extract raw text, (2) classify document type, (3) extract structured fields. Step 2 misclassifies invoices as purchase orders 6% of the time, causing step 3 to extract wrong fields. The product team proposes merging steps 2 and 3 into a single combined prompt. What is the better approach?",
+      "options": [
+        "Merge steps 2 and 3, fewer steps means fewer error propagation points in the pipeline",
+        "Keep the steps separate and add a validation check between steps 2 and 3 before extraction begins",
+        "Add more few-shot examples to step 2 to reduce the misclassification rate below 1%",
+        "Run step 2 three times using different temperatures and use majority voting for the final classification"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Keep the steps separate and add a validation check between steps 2 and 3 before extraction begins",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.4"
+      ],
+      "explanation": "The damage happens at the boundary between steps 2 and 3. Fix the boundary. Better examples in step 2 only lower the rate, whatever still slips through cascades into step 3 identically. An inter-step validation gate catches misclassifications before they reach extraction.\n\nTrap pattern: A is the proposal from the stem, planted as a wrong answer. C is Trap 3 and 6, examples reduce frequency but don't fix pipeline structure. D is Trap 5, 3x cost, and what slips through majority voting still cascades."
+    },
+    {
+      "id": "ccaf-m3-0034",
+      "source_num": 34,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI's Pydantic model validates extractions with no reported errors, yet 3% of invoices fail downstream because total_amount doesn't equal the sum of line_items. Both total_amount and line_items are required fields and pass individual validation. What is missing?",
+      "options": [
+        "Make total_amount a nullable field to reduce hallucination pressure on the model",
+        "Add a string enum 'unclear' to line_items entries for cases where amounts are ambiguous",
+        "Add a @model_validator that runs after Pydantic parsing, verifies total_amount equals sum(line_items), and produces a specific error message feeding the retry",
+        "Increase the retry count to give the model more attempts to produce a matching total"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Add a @model_validator that runs after Pydantic parsing, verifies total_amount equals sum(line_items), and produces a specific error message feeding the retry",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.4"
+      ],
+      "explanation": "Pydantic validates each field independently: types, presence, range. It cannot express relationships between two fields. A cross-field validator checks the sum after parsing and produces a specific, actionable error message. That error message is the third ingredient of an effective retry.\n\nTrap pattern: A makes the problem worse, nulling the field hides the mismatch. B is for ambiguous classification, unrelated. D is Trap 6, retrying without a specific error message doesn't help the model correct arithmetic."
+    },
+    {
+      "id": "ccaf-m3-0035",
+      "source_num": 35,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI's tool routing agent misroutes ambiguous queries like 'process this document' to the wrong extraction tool. It handles unambiguous cases well but struggles at type boundaries. What is the most effective few-shot improvement?",
+      "options": [
+        "Add 4-6 examples grouped by document type, covering diverse variants of each type",
+        "Add 4-6 examples specifically targeting boundary cases, each with rationale explaining why one tool was chosen over plausible alternatives",
+        "Add 10-15 diverse examples across all document types to improve general routing accuracy",
+        "Add negative examples showing which tool should NOT be used for each document type"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Add 4-6 examples specifically targeting boundary cases, each with rationale explaining why one tool was chosen over plausible alternatives",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.2"
+      ],
+      "explanation": "The failure is at the boundary, so examples must sit at the boundary. Examples grouped by type teach the model the categories, which it already knows. The rationale for why one tool was chosen over alternatives is what generalises to new boundary cases the model hasn't seen.\n\nTrap pattern: A teaches what the model already knows. C is Trap 5, volume doesn't fix boundary confusion. D is Trap 10, negative examples help but without rationale for the positive choice, they don't resolve boundary cases."
+    },
+    {
+      "id": "ccaf-m3-0036",
+      "source_num": 36,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI batches 10,000 documents per night. Morning review shows 200 failed extractions. The team needs to reprocess only those 200 without resubmitting all 10,000. What field in the Batches API enables this?",
+      "options": [
+        "The batch_id field in the batch response envelope, which identifies the specific batch run",
+        "The custom_id field set per request, which correlates each individual request to its response",
+        "A document_hash field computed from document content for deduplication",
+        "The error_code field in failed responses, which identifies the failure type for filtering"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The custom_id field set per request, which correlates each individual request to its response",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.5"
+      ],
+      "explanation": "custom_id is set by you on each request and appears in the corresponding response. Without it you cannot identify which of 10,000 documents failed. With it you identify the 200, fix what caused each, and resubmit only that subset.\n\nTrap pattern: A identifies the batch, not individual documents within it. C is Trap 8, this field doesn't exist in the Batch API. D identifies error type but doesn't link a response back to the original request."
+    },
+    {
+      "id": "ccaf-m3-0037",
+      "source_num": 37,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nextract_invoice connects to three invoice systems: SAP (dates: YYYY-MM-DD), Oracle (dates: DD/MM/YYYY), NetSuite (dates: MM-DD-YYYY). The agent frequently sends dates in the wrong format to each system. Where should the dialect guidance live?",
+      "options": [
+        "In the system prompt: 'When calling extract_invoice, use YYYY-MM-DD for SAP, DD/MM/YYYY for Oracle, and MM-DD-YYYY for NetSuite'",
+        "In the tool description for extract_invoice, specifying which date format each system variant requires",
+        "In a PostToolUse hook that normalises date formats in results before Claude sees them",
+        "In the input_schema for extract_invoice, using an enum of allowed format strings"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. In the tool description for extract_invoice, specifying which date format each system variant requires",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.1"
+      ],
+      "explanation": "Tool-specific guidance belongs in the tool description, not the system prompt. This distinction has been tested multiple times. The system prompt is for agent-wide behaviour; the tool description is for everything specific to that tool.\n\nTrap pattern: A is Trap 2, dialect and format guidance belongs in the tool description. C is Trap 9, PostToolUse handles results coming back, not input formats going out. D is Trap 10, enums constrain the value but the format guidance needs to be in the description."
+    },
+    {
+      "id": "ccaf-m3-0038",
+      "source_num": 38,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nA synthesis agent receives 80,000 tokens of extracted invoice data. It reliably cites data from the first 15,000 and last 10,000 tokens but misses patterns in the middle 55,000 tokens. What is the most effective fix?",
+      "options": [
+        "Switch to a model with a larger context window to avoid the truncation effect",
+        "Stream invoice data to the synthesis agent incrementally to avoid presenting all 80,000 tokens at once",
+        "Place a key-findings summary at the top of the input and organise detailed data under explicit section headings",
+        "Use /compact to compress the middle 55,000 tokens before passing to the synthesis agent"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Place a key-findings summary at the top of the input and organise detailed data under explicit section headings",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.1"
+      ],
+      "explanation": "Lost-in-the-middle is a structural attention problem, not a capacity problem. Critical findings at the top, section headings throughout, this creates navigation anchors that the model can attend to regardless of position.\n\nTrap pattern: A is Trap 6, a larger window holds more tokens but doesn't change attention distribution within them. B is Trap 2, streaming changes delivery order but still puts 55K tokens somewhere in the middle. D is Trap 8, /compact is a session command, not applicable to constructed prompt inputs."
+    },
+    {
+      "id": "ccaf-m3-0039",
+      "source_num": 39,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI's validation agent uses the instruction: 'Only flag invoices that seem problematic.' Post-launch, it flags 40% of invoices as 'potentially problematic' with vague rationale, creating reviewer fatigue. What is the root cause?",
+      "options": [
+        "The reporting threshold is set too low; raise it to surface only high-severity issues",
+        "The instruction is too vague, 'seems problematic' is not a criterion; replace with explicit categorical conditions such as: total doesn't match line items, vendor not on approved list, date outside current fiscal quarter",
+        "Add a confidence score to each flag so reviewers can prioritise their queue",
+        "Add few-shot examples of invoices that should and should not be flagged to calibrate the model's judgement"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The instruction is too vague, 'seems problematic' is not a criterion; replace with explicit categorical conditions such as: total doesn't match line items, vendor not on approved list, date outside current fiscal quarter",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.1"
+      ],
+      "explanation": "'Seems problematic' is not an actionable criterion. The model has no explicit definition of what to flag, so it flags anything uncertain, which is a large portion of invoices. Explicit categorical criteria tell the model exactly what constitutes a flag-worthy condition.\n\nTrap pattern: A is Trap 6, a probabilistic threshold change reduces the volume but doesn't make the remaining flags accurate. C is Trap 3, confidence scores require review; fatigued reviewers won't engage with them. D is Trap 3, examples help calibrate but don't define the standard."
+    },
+    {
+      "id": "ccaf-m3-0040",
+      "source_num": 40,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI processes 500 invoices daily: enterprise contracts (50, high financial risk), standard vendor invoices (350, low risk), expense reimbursements (100, moderate risk). The team can manually review 100 invoices per day. How should review capacity be allocated?",
+      "options": [
+        "Uniform random sample of 100 invoices across all categories proportional to neither risk nor volume",
+        "50 enterprise contracts (full coverage) + 30 expense reimbursements + 20 standard vendor invoices",
+        "100 invoices from whichever category showed the most unusual patterns this week",
+        "Proportional to document volume: 70 standard vendor + 20 expense + 10 enterprise"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. 50 enterprise contracts (full coverage) + 30 expense reimbursements + 20 standard vendor invoices",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.5"
+      ],
+      "explanation": "When the stem labels segments by risk, allocate by risk. Full coverage of the small, high-risk set. Moderate sampling of the mid-risk set. Lightest sampling of the high-volume low-risk set. A proportional-to-volume approach (D) gives the fewest reviews to the highest-risk documents.\n\nTrap pattern: A is Trap 3, random sampling sounds statistically principled but ignores the explicit risk labels. C is Trap 7, pattern-based weekly allocation ignores structural risk. D inverts the correct priority, volume and risk are not the same thing."
+    },
+    {
+      "id": "ccaf-m3-0041",
+      "source_num": 41,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nquery_vendor_database returns {\"vendors\": [], \"status\": \"ok\"} both when a vendor genuinely has no invoices AND when the database connection fails. Agents tell customers 'No invoices found' when the database is actually down. What change correctly addresses this?",
+      "options": [
+        "Add a system prompt instruction: 'If the vendor list is empty, verify database connectivity before reporting to the customer'",
+        "Add a database health-check tool that the agent calls before every vendor query",
+        "Return isError: true with errorCategory: 'transient' on connection failure; return isError: false with an empty list when the vendor genuinely has no invoices",
+        "Add a PostToolUse hook that calls a health endpoint whenever the vendor result is empty"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Return isError: true with errorCategory: 'transient' on connection failure; return isError: false with an empty list when the vendor genuinely has no invoices",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.2"
+      ],
+      "explanation": "The tool must distinguish 'found nothing' from 'couldn't look.' Structured isError with appropriate category communicates the distinction clearly and enables correct agent behaviour. This is the tool design fix, it belongs in the tool, not in wrappers around it.\n\nTrap pattern: A is Trap 6, the prompt can't structurally distinguish the two cases. B is Trap 5, redundant overhead on every query. D is Trap 2, PostToolUse can observe but the distinction should be surfaced by the tool itself."
+    },
+    {
+      "id": "ccaf-m3-0042",
+      "source_num": 42,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nAn invoice review agent processes 20 invoices in one pass. Quality analysis: detailed findings for invoices 1-6, missed issues in 7-18, one pattern identified in invoice 19 but the identical pattern approved in invoice 20. What architectural fix addresses all three problems?",
+      "options": [
+        "Switch to a model with a larger context window to process all 20 invoices with full attention",
+        "Process invoices in batches of 6 in three sequential passes rather than all 20 at once",
+        "Run individual per-invoice passes first, then a separate cross-invoice integration pass",
+        "Add more detailed instructions about what to look for in invoices 7 through 20"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Run individual per-invoice passes first, then a separate cross-invoice integration pass",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.6"
+      ],
+      "explanation": "Per-invoice passes eliminate attention dilution, each invoice gets full focus. The cross-invoice pass catches pattern inconsistencies (like the invoice-19/20 discrepancy). Both are required. Batching into groups of 6 (B) still has attention dilution within each group and no cross-invoice comparison.\n\nTrap pattern: A is Trap 6, attention dilution is not a capacity problem. B is Trap 10, batching reduces but doesn't eliminate dilution, and provides no cross-file pass. D is Trap 6, instructions don't fix attention distribution."
+    },
+    {
+      "id": "ccaf-m3-0043",
+      "source_num": 43,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nInvoiceAI forces structured extraction using tool_choice. After deployment, extractions have valid JSON structure but incorrect values: totals that don't match line items, dates from the wrong field, plausible but wrong vendor names. What does tool_choice with a JSON schema enforce, and what does it not?",
+      "options": [
+        "It enforces both the structure and the semantic accuracy of extracted values",
+        "It enforces syntactic correctness (valid structure, correct types, required fields present) but does not prevent semantic errors like wrong values, misplaced data, or hallucinated content",
+        "It prevents hallucinations by grounding Claude's output in the document during extraction",
+        "It prevents all extraction errors except those caused by network failures or missing documents"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. It enforces syntactic correctness (valid structure, correct types, required fields present) but does not prevent semantic errors like wrong values, misplaced data, or hallucinated content",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.3"
+      ],
+      "explanation": "Schema eliminates syntax errors: invalid JSON, wrong field types, missing required fields. It cannot validate that the vendor name in position X matches the actual vendor in the document, that's a semantic check requiring a validator or a human audit.\n\nTrap pattern: A is the common misconception. C is Trap 7, grounding is a separate concept unrelated to tool_choice mechanics. D is Trap 7, schema correctness says nothing about semantic correctness."
+    },
+    {
+      "id": "ccaf-m3-0044",
+      "source_num": 44,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nAn InvoiceAI report states 'Average payment terms: 32 days.' This came from two sources: a 2024-Q1 accounting database showing 28 days and a 2024-Q3 vendor survey showing 36 days. The agent averaged them. What is the correct approach?",
+      "options": [
+        "Use the most recent source (2024-Q3 survey at 36 days) as it reflects current conditions",
+        "Use the accounting database as primary data is more reliable than survey data",
+        "Present both values with their sources, flag the conflict, and note the different methodologies and time periods",
+        "Report 32 days as a confidence-interval midpoint with plus or minus 4 days as the margin of error"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Present both values with their sources, flag the conflict, and note the different methodologies and time periods",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.6"
+      ],
+      "explanation": "When two sources conflict, preserve both with full attribution. Flag the conflict explicitly. Note what explains the difference (methodology, time period). Never silently arbitrate between conflicting sources, the 32-day average is a number that doesn't correspond to either source.\n\nTrap pattern: A, recency isn't the only factor; different methodologies may produce genuinely different numbers. B, primary vs secondary data is one consideration, not a decision rule. D, averaging conflicting methodological data creates a fictional precision."
+    },
+    {
+      "id": "ccaf-m3-0045",
+      "source_num": 45,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 3: InvoiceAI - Document Processing Pipeline",
+      "q": "Scenario 3: InvoiceAI - Document Processing Pipeline\nInvoiceAI automates extraction from 10,000 financial documents per week: invoices, purchase orders, and contracts. They use a multi-stage pipeline: extract raw text, classify document type, extract structured fields, validate, batch process.\n\nA coordinator delegates contract extraction to a contract_specialist subagent. The specialist extracts payment terms successfully but times out before completing liability clauses. It returns {\"status\": \"failed\"}. The coordinator marks the task failed and discards the payment terms. What should the specialist have returned instead?",
+      "options": [
+        "{\"status\": \"complete\", \"payment_terms\": [...]} so the coordinator can use the partial result without confusion",
+        "{\"status\": \"partial\", \"completed\": [\"payment_terms\"], \"failed\": [\"liability_clauses\"], \"partial_results\": {...}, \"failure_type\": \"timeout\", \"alternative_approaches\": [\"retry with reduced scope\"]}",
+        "{\"status\": \"failed\", \"isRetryable\": true} so the coordinator knows to retry the full extraction",
+        "Return nothing; the coordinator should implement timeout detection and treat silence as a partial failure signal"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. {\"status\": \"partial\", \"completed\": [\"payment_terms\"], \"failed\": [\"liability_clauses\"], \"partial_results\": {...}, \"failure_type\": \"timeout\", \"alternative_approaches\": [\"retry with reduced scope\"]}",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.2"
+      ],
+      "explanation": "A structured subagent error report should include: status, failure_type, what was attempted, partial_results, and alternative approaches. This enables the coordinator to use completed work and decide on recovery, without discarding work that succeeded.\n\nTrap pattern: A marks partial as complete, which hides the gap. C provides a retry signal but loses the completed payment terms. D is Trap 8, silence as failure is an anti-pattern; the coordinator cannot distinguish timeout from network drop."
+    },
+    {
+      "id": "ccaf-m3-0046",
+      "source_num": 46,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nThe Nexus research agent makes 8-12 exploratory tool calls before every research task: list_databases(), then describe_table() for each relevant table. This discovery overhead precedes every task. What is the correct fix?",
+      "options": [
+        "Add a system prompt instruction telling the agent to skip the discovery phase and query directly",
+        "Increase the number of available tools so the agent has more routing options to choose from directly",
+        "Expose the database schema and table catalog as an MCP Resource, discovered at connection time and available without tool calls",
+        "Cache list_databases() results in the coordinator and inject them into each subagent's prompt at task time"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Expose the database schema and table catalog as an MCP Resource, discovered at connection time and available without tool calls",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.4"
+      ],
+      "explanation": "MCP Resources are discovered at connection time, when the session starts the client asks each MCP server what it exposes. Publishing the schema as a Resource eliminates all discovery overhead. The catalog is simply already there at the start of every task.\n\nTrap pattern: A is Trap 6, probabilistic. B is Trap 7, more tools makes selection harder, not easier. D is Trap 5, works but adds coordinator complexity for something the MCP Resource pattern handles by design."
+    },
+    {
+      "id": "ccaf-m3-0047",
+      "source_num": 47,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nNexus uses hub-and-spoke architecture. A developer proposes allowing subagents to share findings directly with each other to reduce coordinator overhead. Three properties of the current design are cited in its defence. Which three are they?",
+      "options": [
+        "Speed, simplicity, and cost efficiency of the overall system",
+        "Observability, consistent error handling, and controlled information flow",
+        "Parallelism, fault tolerance, and horizontal scalability",
+        "Tool isolation, context compression, and automatic schema validation"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Observability, consistent error handling, and controlled information flow",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.2"
+      ],
+      "explanation": "The three exam-specific rationale for hub-and-spoke: observability (the coordinator can see every exchange), consistent error handling (one place decides what to do when things fail), and controlled information flow (the coordinator decides what each specialist sees).\n\nTrap pattern: A, speed is actually reduced by the coordinator overhead (parallelism compensates, not the architecture). C, parallelism is achievable in both designs. D, these concepts exist but are not the hub-and-spoke rationale."
+    },
+    {
+      "id": "ccaf-m3-0048",
+      "source_num": 48,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nThe Nexus coordinator is configured with an AgentDefinition specifying its system prompt and tool list. When it attempts to spawn research subagents, nothing happens, the coordinator seems to request subagents but they are never created. What is the most likely cause?",
+      "options": [
+        "The coordinator's system prompt doesn't describe the multi-agent workflow clearly enough for Claude to follow",
+        "The subagents' AgentDefinitions haven't been registered in the research system's registry",
+        "allowedTools in the coordinator's AgentDefinition does not include 'Task'",
+        "The coordinator is using tool_choice: 'auto' instead of forcing the Task tool by name"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. allowedTools in the coordinator's AgentDefinition does not include 'Task'",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.2"
+      ],
+      "explanation": "allowedTools must include 'Task' for the coordinator to spawn subagents. Without it, the coordinator physically cannot create subagents, it's a binary capability requirement, not a preference or configuration setting.\n\nTrap pattern: A is Trap 6, the system prompt shapes behaviour probabilistically; a missing capability is a hard failure not a guidance issue. B is Trap 5, no such registration mechanism is described. D is Trap 7, tool_choice affects which tool is selected, not whether a capability exists."
+    },
+    {
+      "id": "ccaf-m3-0049",
+      "source_num": 49,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nNexus wants to connect to: (1) a shared academic database for the whole team, (2) a shared patent search API for the whole team, (3) one developer's personal experimental web scraper. Which MCP configuration files are correct?",
+      "options": [
+        "All three in .mcp.json, project-level config is the standard for all MCP connections",
+        "Academic database and patent API in .mcp.json; personal web scraper in ~/.claude.json",
+        "Academic database in .mcp.json; patent API and personal scraper both in ~/.claude.json",
+        "All three in ~/.claude.json, MCP configuration should be personal to prevent accidental team sharing"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Academic database and patent API in .mcp.json; personal web scraper in ~/.claude.json",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.4"
+      ],
+      "explanation": ".mcp.json (project root) is shared with the team on clone. ~/.claude.json (personal) is yours only. Classify each server by audience before choosing the file. Both team-wide servers go in .mcp.json; the personal server goes in the personal file.\n\nTrap pattern: A shares the personal scraper with the whole team. C incorrectly puts the patent API (team-wide) in the personal file. D puts all team-wide servers in personal config."
+    },
+    {
+      "id": "ccaf-m3-0050",
+      "source_num": 50,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nA Nexus research agent is helping a client with competitive landscape analysis. The client asks: 'Based on everything you've found, which competitor should we acquire?' This is outside the service's defined scope (research data, not strategic recommendations). The client insists after the agent declines once. What is the correct agent response?",
+      "options": [
+        "Escalate to a human researcher because the client's insistence signals genuine strategic urgency",
+        "Escalate to a human because the implied acquisition value likely exceeds any autonomous decision threshold",
+        "Maintain the scope boundary: decline clearly, explain what the agent can provide (research data to inform the decision), and offer to produce that analysis",
+        "Provide the strategic recommendation since the agent has all the research data needed to support it"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Maintain the scope boundary: decline clearly, explain what the agent can provide (research data to inform the decision), and offer to produce that analysis",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.2"
+      ],
+      "explanation": "This is a scope clarification, not an escalation trigger. The agent CAN do something: produce research data that informs a human's acquisition decision. It should decline the out-of-scope request clearly, explain what it can do, and offer that. Having data doesn't confer authority to make strategic recommendations.\n\nTrap pattern: A, insistence is not an escalation trigger. B, implied value is not an escalation trigger. D, having the data is not the same as having the authority or scope."
+    },
+    {
+      "id": "ccaf-m3-0051",
+      "source_num": 51,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nA Nexus research agent handles multi-session investigations for ongoing client engagements. Across sessions, it repeatedly loses track of specific facts established earlier: client IDs, confirmed research parameters, key findings. Each session requires re-establishing these facts from scratch. What is the most effective fix?",
+      "options": [
+        "Use --resume to restore the previous session's context at the start of each new session",
+        "Maintain a persistent case-facts block, structured key information injected at the start of every session prompt and updated when new facts emerge",
+        "Use /compact at the end of each session to compress and save key findings for next time",
+        "Increase the context window allocation to accommodate multiple sessions' worth of conversation history"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Maintain a persistent case-facts block, structured key information injected at the start of every session prompt and updated when new facts emerge",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.1"
+      ],
+      "explanation": "The persistent case-facts block (client ID, research parameters, confirmed findings) is injected at the start of every session prompt as a structured, non-summarisable block. It preserves exact facts across sessions regardless of how sessions end.\n\nTrap pattern: A, --resume restores full conversation history including stale tool results; after any data changes, it's not appropriate. C, /compact loses exact detail by design. D, context windows don't span separate sessions."
+    },
+    {
+      "id": "ccaf-m3-0052",
+      "source_num": 52,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nTwo competing research approaches are compared using fork_session from a shared baseline analysis. After 30 minutes of parallel investigation, a key data source referenced by both branches becomes unavailable. Which statement is correct?",
+      "options": [
+        "fork_session includes automatic staleness detection and will alert both branches when shared context becomes invalid",
+        "Both branches inherit the stale reference from the fork point; neither can automatically detect the external change",
+        "The branch that first discovers the unavailability can alert the other branch through the coordinator's shared context",
+        "Run /compact in both branches to refresh their awareness of available external data sources"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Both branches inherit the stale reference from the fork point; neither can automatically detect the external change",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.7"
+      ],
+      "explanation": "fork_session inherits whatever context existed at the fork point. Both branches were created before the data source became unavailable. There is no mechanism for detecting external state changes in forked branches, each branch simply has stale references.\n\nTrap pattern: A is Trap 8, no such staleness detection exists. C is Trap 8, forked branches do not communicate with each other. D is wrong, /compact summarises conversation content; it doesn't poll external services."
+    },
+    {
+      "id": "ccaf-m3-0053",
+      "source_num": 53,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nNexus reports 94% overall extraction accuracy across 5,000 research documents. After deployment, a major client complains that patent extractions are regularly wrong. An audit shows: general article accuracy 97%, patent accuracy 51%. What does this illustrate and what is the fix?",
+      "options": [
+        "The 94% aggregate figure is misleading, segment accuracy by document type, then allocate human review and improvement effort proportional to each type's error rate",
+        "The patent sample is too small to be statistically significant; gather more data before acting",
+        "Patent documents require specialist domain knowledge; switch to a patent-specific language model",
+        "Lower the accuracy threshold uniformly so more errors surface across all document types for review"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. The 94% aggregate figure is misleading, segment accuracy by document type, then allocate human review and improvement effort proportional to each type's error rate",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.5"
+      ],
+      "explanation": "Aggregate accuracy hides per-segment failures. 94% overall is dominated by high-volume general articles at 97%. The 5% of patents at 51% accuracy are invisible in the average. Always segment by document type before trusting an overall accuracy figure.\n\nTrap pattern: B, the audit already shows 51% on a real dataset; that's sufficient to act. C is Trap 5, over-engineering before understanding root cause. D is Trap 6, surfacing more errors doesn't fix the extraction."
+    },
+    {
+      "id": "ccaf-m3-0054",
+      "source_num": 54,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nResearch subagents return results in inconsistent formats: different date representations, citation styles, and unit conventions, from different underlying tools. The coordinator needs these normalised before Claude processes the results. Which hook implements this correctly?",
+      "options": [
+        "A PreToolUse hook on the Task tool that normalises inputs before each subagent is created",
+        "A PostToolUse hook on the Task tool that normalises subagent results before the coordinator processes them",
+        "A SubagentStop hook that blocks completion until the subagent reformats its own output",
+        "A SubagentStart hook that injects normalisation instructions when the subagent begins"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. A PostToolUse hook on the Task tool that normalises subagent results before the coordinator processes them",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.5"
+      ],
+      "explanation": "PostToolUse fires after the tool runs but before Claude sees the result, the exact moment for normalisation. It can transform results. PostToolUse on the Task tool intercepts what the subagent returns before the coordinator processes it.\n\nTrap pattern: A fires before the subagent runs (wrong timing for normalising results). C, SubagentStop can block but cannot transform output. D, SubagentStart can add context but cannot guarantee the output format of what the subagent later produces."
+    },
+    {
+      "id": "ccaf-m3-0055",
+      "source_num": 55,
+      "domain": "D2 - Tool Design & MCP",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nThe research system has three tools: analyze_literature (\"Analyses content\"), extract_citations (\"Extracts data\"), search_patents (\"Searches patents\"). The agent frequently routes literature analysis tasks to extract_citations. What is the most likely cause and correct fix?",
+      "options": [
+        "Merge analyze_literature and extract_citations into a single combined_analysis tool to eliminate the selection confusion",
+        "Rewrite analyze_literature's description to specify exactly what it does, when to use it, and explicitly when to use extract_citations instead",
+        "Add a classifier subagent that routes requests to the correct tool before the main agent sees them",
+        "Add few-shot examples in the system prompt showing the correct tool for each request type"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Rewrite analyze_literature's description to specify exactly what it does, when to use it, and explicitly when to use extract_citations instead",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-2.1"
+      ],
+      "explanation": "The tool description is the primary selection mechanism. Generic, overlapping descriptions ('Analyses content' and 'Extracts data') cause misrouting. The fix is description quality, especially the 'when NOT to use this, and what to use instead' component that the exam rewards.\n\nTrap pattern: A is Trap 5, merging tools makes selection harder, not easier. C is Trap 5, a classifier adds complexity when the fix is documentation. D is Trap 3, examples in the system prompt help but don't fix description quality, which is the root cause."
+    },
+    {
+      "id": "ccaf-m3-0056",
+      "source_num": 56,
+      "domain": "D1 - Agentic Architecture",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nA coordinator delegates summarisation to a summary_subagent, passing {\"content\": \"<full extracted text>\"}. The final summary contains no citations or source URLs, despite sources being clearly present in the extracted text. What is the root cause?",
+      "options": [
+        "The summary_subagent needs a query_sources tool to retrieve citations independently",
+        "The coordinator passed content but not the source URLs; the subagent can only cite what it receives in its task prompt",
+        "The summary_subagent's system prompt doesn't include an instruction to preserve citations",
+        "The PostToolUse normalisation hook stripped citation data from the tool result before the subagent received it"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. The coordinator passed content but not the source URLs; the subagent can only cite what it receives in its task prompt",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-1.3"
+      ],
+      "explanation": "The subagent can only work with what appears in its task prompt. The coordinator had the source URLs but didn't include them in the payload it passed. Explicit context injection is the mechanic, the coordinator must include everything the subagent needs to do its job.\n\nTrap pattern: A is Trap 5, adds overhead for information the coordinator already has. C is Trap 6, a system prompt instruction won't help if the citations weren't in the input. D is Trap 4, the stem doesn't mention normalisation hooks."
+    },
+    {
+      "id": "ccaf-m3-0057",
+      "source_num": 57,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nThree research subagents report: academic databases return 47 papers (success), patent databases return 'Connection timeout after 30s', industry reports return 0 results. How should the coordinator handle these three distinct outcomes?",
+      "options": [
+        "Treat all three as requiring retry, any non-positive result (empty or error) warrants a retry attempt",
+        "Treat the patent timeout as a transient failure (retry decision needed), the industry 0-result as a valid finding (no relevant reports exist), and the academic results as successful data",
+        "Treat the empty industry result as a potential access failure and retry all three consistently",
+        "Surface all three to the client as failures and ask them to decide which sources to retry"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Treat the patent timeout as a transient failure (retry decision needed), the industry 0-result as a valid finding (no relevant reports exist), and the academic results as successful data",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.3"
+      ],
+      "explanation": "Each outcome requires different handling: timeout is a transient failure (retry is warranted); 0 results is a valid empty result ('found nothing' is an answer, not a failure); 47 papers is success. The coordinator must apply different logic to each category.\n\nTrap pattern: A conflates empty results with failures, 0 results is information. C is Trap 6, retrying the successful academic query wastefully; 0 industry results is a legitimate answer. D is Trap 5, the coordinator should make this determination, not the client."
+    },
+    {
+      "id": "ccaf-m3-0058",
+      "source_num": 58,
+      "domain": "D3 - Claude Code Config",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nNexus has a rule in the project CLAUDE.md: 'Never include client-identifying information in any log file.' The rule must hold in every session for every team member, with no exceptions. It is violated in 3% of sessions. What is the root cause and correct fix?",
+      "options": [
+        "Move the rule from project-level to user-level ~/.claude/CLAUDE.md for stronger personal enforcement",
+        "CLAUDE.md is probabilistic; enforce the rule via a PostToolUse hook on the logging tool that strips client identifiers before writing",
+        "Strengthen the CLAUDE.md instruction with explicit examples of what constitutes client-identifying information",
+        "Create a /compliant-logging skill that all team members invoke before any logging session"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. CLAUDE.md is probabilistic; enforce the rule via a PostToolUse hook on the logging tool that strips client identifiers before writing",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-3.1"
+      ],
+      "explanation": "'Must hold with no exceptions' means deterministic enforcement. CLAUDE.md is probabilistic by design, Claude reads it alongside everything else and weighs it; contradictions may resolve arbitrarily. A hook at the logging tool boundary enforces deterministically regardless of what Claude decided.\n\nTrap pattern: A is Trap 1, user-level has narrower scope (not all team members) and is still probabilistic. C is Trap 6, examples reduce rate, never to 0%. D is Trap 6, skills are task-triggered, not automatic."
+    },
+    {
+      "id": "ccaf-m3-0059",
+      "source_num": 59,
+      "domain": "D4 - Prompt Engineering",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nThe research agent routes to four tools: one per document type. When documents of unknown or mixed type arrive, the team proposes merging all four into a single research_any tool with a generic input schema. Why is this problematic?",
+      "options": [
+        "A single tool creates a bottleneck, running four tools in parallel would be faster for mixed-type batches",
+        "Merging into one tool with a single generic schema weakens per-type guarantees, every type-specific field becomes optional, removing the ability to enforce per-type structure",
+        "The merged tool description will be longer and therefore harder for Claude to parse and use effectively",
+        "The recommended ceiling is 4-5 tools per agent; merging reduces the count unnecessarily"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Merging into one tool with a single generic schema weakens per-type guarantees, every type-specific field becomes optional, removing the ability to enforce per-type structure",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-4.3"
+      ],
+      "explanation": "A tool has one input_schema. A generic schema accommodating four document types means every type-specific field goes optional, schema enforcement no longer guarantees anything type-specific. The correct solution for unknown type is tool_choice: 'any', letting the model choose the right per-type schema.\n\nTrap pattern: A is Trap 7, parallelism is a separate concern. C is Trap 7, description length is manageable. D is Trap 7, 4-5 is a ceiling, not a target."
+    },
+    {
+      "id": "ccaf-m3-0060",
+      "source_num": 60,
+      "domain": "D5 - Context Management",
+      "topic": "Scenario 4: Nexus Research - Multi-Agent Research System",
+      "q": "Scenario 4: Nexus Research - Multi-Agent Research System\nNexus builds a multi-agent research coordinator that delegates to specialist subagents connected to academic databases, patent systems, and web search via MCP servers. Clients pay for structured research reports.\n\nDuring a research session, a Nexus client says: 'I want to speak with a researcher directly. Can you connect me with someone?' What is the correct agent response?",
+      "options": [
+        "Acknowledge the request and attempt to fulfil the research need more thoroughly before escalating",
+        "Assess whether the client's request reflects genuine dissatisfaction or is a casual preference before deciding",
+        "Escalate immediately to connect the client with a human researcher, an explicit request for a human is a mandatory escalation trigger",
+        "Ask the client to clarify whether they prefer a human or whether an automated research summary would meet their need"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Escalate immediately to connect the client with a human researcher, an explicit request for a human is a mandatory escalation trigger",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "mock-exam-3",
+        "lesson-5.2"
+      ],
+      "explanation": "An explicit request for a human is a mandatory escalation trigger, escalate immediately without assessment. This is the clearest of the three valid triggers. Adding an assessment step or asking for clarification adds unnecessary friction to an explicit, clear request.\n\nTrap pattern: A adds a step before acting on an explicit trigger, wrong. B, assessing 'genuine' dissatisfaction delays acting on an explicit request. D, the client was explicit; asking for clarification signals that the agent didn't hear them."
+    }
+  ]
+}

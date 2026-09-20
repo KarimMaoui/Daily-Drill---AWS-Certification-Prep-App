@@ -1,0 +1,2070 @@
+{
+  "id": "knowledge-saa",
+  "name": "SAA Knowledge: Facts & Gotchas",
+  "version": "0.1",
+  "language": "en",
+  "source": "Atomic exam facts distilled from the SAA-C03 drill deck explanations. Front = the concept, back = the single fact that unlocks the question. Grouped by service (filter by Domain).",
+  "official_domains": [
+    "Amazon S3",
+    "Amazon CloudFront"
+  ],
+  "topics": [
+    {
+      "id": "Object Lock & WORM",
+      "name": "Object Lock & WORM"
+    },
+    {
+      "id": "Encryption",
+      "name": "Encryption"
+    },
+    {
+      "id": "Performance & Transfer",
+      "name": "Performance & Transfer"
+    },
+    {
+      "id": "Lifecycle & Storage Classes",
+      "name": "Lifecycle & Storage Classes"
+    },
+    {
+      "id": "Access Control",
+      "name": "Access Control"
+    },
+    {
+      "id": "Edge Features",
+      "name": "Edge Features"
+    },
+    {
+      "id": "Instance Types",
+      "name": "Instance Types"
+    },
+    {
+      "id": "Purchasing Options",
+      "name": "Purchasing Options"
+    },
+    {
+      "id": "Placement Groups",
+      "name": "Placement Groups"
+    },
+    {
+      "id": "Volumes & IOPS",
+      "name": "Volumes & IOPS"
+    },
+    {
+      "id": "Snapshots & AMIs",
+      "name": "Snapshots & AMIs"
+    },
+    {
+      "id": "Scaling",
+      "name": "Scaling"
+    },
+    {
+      "id": "HA & Failover",
+      "name": "HA & Failover"
+    },
+    {
+      "id": "Read Scaling",
+      "name": "Read Scaling"
+    },
+    {
+      "id": "Connection Management",
+      "name": "Connection Management"
+    },
+    {
+      "id": "Caching Strategies",
+      "name": "Caching Strategies"
+    },
+    {
+      "id": "Engine Choice",
+      "name": "Engine Choice"
+    },
+    {
+      "id": "Capacity Modes",
+      "name": "Capacity Modes"
+    },
+    {
+      "id": "Global & Backup",
+      "name": "Global & Backup"
+    },
+    {
+      "id": "Data Modeling",
+      "name": "Data Modeling"
+    },
+    {
+      "id": "VPC Endpoints",
+      "name": "VPC Endpoints"
+    },
+    {
+      "id": "Connectivity",
+      "name": "Connectivity"
+    },
+    {
+      "id": "Peering & Transit",
+      "name": "Peering & Transit"
+    },
+    {
+      "id": "Hybrid",
+      "name": "Hybrid"
+    },
+    {
+      "id": "Edge Routing",
+      "name": "Edge Routing"
+    },
+    {
+      "id": "Routing Policies",
+      "name": "Routing Policies"
+    },
+    {
+      "id": "Network Security",
+      "name": "Network Security"
+    },
+    {
+      "id": "Messaging",
+      "name": "Messaging"
+    },
+    {
+      "id": "Fan-out & Filtering",
+      "name": "Fan-out & Filtering"
+    },
+    {
+      "id": "Limits",
+      "name": "Limits"
+    },
+    {
+      "id": "Invocation",
+      "name": "Invocation"
+    },
+    {
+      "id": "Orchestration",
+      "name": "Orchestration"
+    },
+    {
+      "id": "Event Routing",
+      "name": "Event Routing"
+    },
+    {
+      "id": "Streaming",
+      "name": "Streaming"
+    },
+    {
+      "id": "Identity",
+      "name": "Identity"
+    },
+    {
+      "id": "Policy Evaluation",
+      "name": "Policy Evaluation"
+    },
+    {
+      "id": "Cross-Account",
+      "name": "Cross-Account"
+    },
+    {
+      "id": "Key Management",
+      "name": "Key Management"
+    },
+    {
+      "id": "Encryption Choice",
+      "name": "Encryption Choice"
+    },
+    {
+      "id": "Secrets",
+      "name": "Secrets"
+    },
+    {
+      "id": "Authentication",
+      "name": "Authentication"
+    },
+    {
+      "id": "Web Protection",
+      "name": "Web Protection"
+    },
+    {
+      "id": "DDoS Protection",
+      "name": "DDoS Protection"
+    },
+    {
+      "id": "Detection",
+      "name": "Detection"
+    },
+    {
+      "id": "Governance",
+      "name": "Governance"
+    },
+    {
+      "id": "Certificates",
+      "name": "Certificates"
+    },
+    {
+      "id": "File Storage",
+      "name": "File Storage"
+    },
+    {
+      "id": "High Performance",
+      "name": "High Performance"
+    },
+    {
+      "id": "Multi-Protocol",
+      "name": "Multi-Protocol"
+    },
+    {
+      "id": "Storage Selection",
+      "name": "Storage Selection"
+    },
+    {
+      "id": "Hybrid Storage",
+      "name": "Hybrid Storage"
+    },
+    {
+      "id": "Data Transfer",
+      "name": "Data Transfer"
+    },
+    {
+      "id": "Storage Classes",
+      "name": "Storage Classes"
+    },
+    {
+      "id": "Containers",
+      "name": "Containers"
+    },
+    {
+      "id": "Compute Selection",
+      "name": "Compute Selection"
+    },
+    {
+      "id": "Platform",
+      "name": "Platform"
+    },
+    {
+      "id": "Monitoring",
+      "name": "Monitoring"
+    },
+    {
+      "id": "Operations",
+      "name": "Operations"
+    },
+    {
+      "id": "Advisory",
+      "name": "Advisory"
+    },
+    {
+      "id": "Analytics",
+      "name": "Analytics"
+    },
+    {
+      "id": "Cost",
+      "name": "Cost"
+    },
+    {
+      "id": "Event Notifications",
+      "name": "Event Notifications"
+    }
+  ],
+  "cards": [
+    {
+      "id": "kn-0001",
+      "domain": "Amazon S3",
+      "topic": "Object Lock & WORM",
+      "q": "S3 Object Lock - Compliance mode",
+      "a": "No one, including the root user, can delete or overwrite a locked object version until the retention period expires.",
+      "explanation": "This is the strongest WORM guarantee. Use it whenever the stem says 'no one can delete, even root' or names a fixed compliance retention (e.g. 1, 5, or 10 years). Plain bucket/IAM policies fail because root can change them.",
+      "tags": [
+        "s3",
+        "object-lock",
+        "compliance",
+        "worm",
+        "immutability"
+      ]
+    },
+    {
+      "id": "kn-0002",
+      "domain": "Amazon S3",
+      "topic": "Object Lock & WORM",
+      "q": "S3 Object Lock - Governance mode",
+      "a": "Objects are protected, but a user holding the s3:BypassGovernanceRetention permission can remove the lock and delete them.",
+      "explanation": "Governance mode is the trap option when the requirement is 'absolutely no one can delete'. If a privileged user is allowed to bypass, pick Governance; if even root must be blocked, pick Compliance.",
+      "tags": [
+        "s3",
+        "object-lock",
+        "governance",
+        "bypass"
+      ]
+    },
+    {
+      "id": "kn-0003",
+      "domain": "Amazon S3",
+      "topic": "Object Lock & WORM",
+      "q": "S3 Object Lock - Legal hold",
+      "a": "Makes an object immutable with no fixed end date; it stays locked until a user with s3:PutObjectLegalHold removes the hold.",
+      "explanation": "Pick legal hold when retention has no predefined duration ('until the company decides'). A fixed retention period is the wrong answer for an open-ended hold.",
+      "tags": [
+        "s3",
+        "object-lock",
+        "legal-hold"
+      ]
+    },
+    {
+      "id": "kn-0004",
+      "domain": "Amazon S3",
+      "topic": "Object Lock & WORM",
+      "q": "S3 Object Lock - prerequisites and scope",
+      "a": "Object Lock requires S3 Versioning to be enabled, and it applies per object version, not per folder or prefix.",
+      "explanation": "Any answer that 'locks a folder' or skips versioning is wrong. Object Lock is ideally enabled at bucket creation, which auto-enables versioning.",
+      "tags": [
+        "s3",
+        "object-lock",
+        "versioning"
+      ]
+    },
+    {
+      "id": "kn-0005",
+      "domain": "Amazon S3",
+      "topic": "Encryption",
+      "q": "S3 default encryption at rest",
+      "a": "S3 encrypts all new objects by default with SSE-S3, and S3 manages and rotates the keys natively at no extra cost.",
+      "explanation": "When the stem wants encryption with the LEAST operational overhead and no key management, SSE-S3 wins over SSE-KMS customer managed keys.",
+      "tags": [
+        "s3",
+        "encryption",
+        "sse-s3",
+        "least-overhead"
+      ]
+    },
+    {
+      "id": "kn-0006",
+      "domain": "Amazon S3",
+      "topic": "Encryption",
+      "q": "Encrypt existing unencrypted S3 objects at scale",
+      "a": "Turn on default encryption for future objects, use S3 Inventory to list existing unencrypted objects, then S3 Batch Operations (copy) to re-encrypt them in place.",
+      "explanation": "No download/upload needed. Manual console selection or download/re-upload are the wrong, high-effort answers.",
+      "tags": [
+        "s3",
+        "encryption",
+        "batch-operations",
+        "s3-inventory"
+      ]
+    },
+    {
+      "id": "kn-0007",
+      "domain": "Amazon S3",
+      "topic": "Performance & Transfer",
+      "q": "S3 presigned URL",
+      "a": "Lets a browser or client upload to (or download from) S3 directly, bypassing the application servers and removing the bandwidth bottleneck.",
+      "explanation": "Trigger words: 'upload directly from the browser', 'maximum scalability', 'remove the web-tier bottleneck'. Pair with an S3 event to trigger async processing (Lambda).",
+      "tags": [
+        "s3",
+        "presigned-url",
+        "decoupling",
+        "upload"
+      ]
+    },
+    {
+      "id": "kn-0008",
+      "domain": "Amazon S3",
+      "topic": "Performance & Transfer",
+      "q": "S3 Transfer Acceleration",
+      "a": "Speeds long-distance uploads and downloads to a single bucket by routing through the nearest CloudFront edge location over the optimized AWS path.",
+      "explanation": "Use it for geographically dispersed users moving large files to one bucket. It is not for caching content for viewers (that is CloudFront) and not for offline bulk transfer (that is Snowball).",
+      "tags": [
+        "s3",
+        "transfer-acceleration",
+        "edge",
+        "upload"
+      ]
+    },
+    {
+      "id": "kn-0009",
+      "domain": "Amazon S3",
+      "topic": "Lifecycle & Storage Classes",
+      "q": "Keep only the N most recent S3 object versions",
+      "a": "Use an S3 Lifecycle rule with NoncurrentVersionExpiration; it retains a set number of noncurrent versions and deletes the rest automatically.",
+      "explanation": "Fully managed, zero code. Lambda checks or Batch Operations are the higher-overhead wrong answers, and disabling versioning does not retroactively clean up.",
+      "tags": [
+        "s3",
+        "lifecycle",
+        "versioning",
+        "least-overhead"
+      ]
+    },
+    {
+      "id": "kn-0010",
+      "domain": "Amazon S3",
+      "topic": "Lifecycle & Storage Classes",
+      "q": "Glacier retrieval speed by tier",
+      "a": "Glacier Instant Retrieval = milliseconds; Glacier Flexible Retrieval = minutes to hours; Glacier Deep Archive = 12 to 48 hours.",
+      "explanation": "Map the stem: 'access as quickly as possible' rules out Deep Archive; 'a retrieval delay is acceptable' allows Flexible or Deep Archive for the cheapest cost.",
+      "tags": [
+        "s3",
+        "glacier",
+        "retrieval",
+        "storage-class"
+      ]
+    },
+    {
+      "id": "kn-0132",
+      "domain": "Amazon S3",
+      "topic": "Event Notifications",
+      "q": "S3 Event Notifications - destinations",
+      "a": "Native S3 Event Notifications can target only three destinations: Lambda, SNS, and SQS. To send object events to other/multiple targets (Step Functions, Kinesis, multiple consumers, richer rules), enable S3 integration with Amazon EventBridge.",
+      "explanation": "Trigger words: 'on object upload trigger X'. If X is Lambda/SNS/SQS, use a direct S3 event notification. If you need many targets, content-based routing, or AWS targets beyond those three, turn on EventBridge for the bucket. The durable pattern is S3 event -> SQS -> Lambda so events are buffered and retried.",
+      "tags": [
+        "s3",
+        "event-notification",
+        "lambda",
+        "sns",
+        "sqs",
+        "eventbridge"
+      ]
+    },
+    {
+      "id": "kn-0133",
+      "domain": "Amazon S3",
+      "topic": "Event Notifications",
+      "q": "S3 Event Notifications vs Amazon EventBridge",
+      "a": "S3 Event Notifications send object events directly to only three targets (Lambda, SNS, SQS) with simple prefix/suffix filtering. EventBridge (enabled per bucket) emits the same S3 events to 20+ target types with rich content-based rules, fan-out to multiple targets, archive/replay, and cross-account routing.",
+      "explanation": "Use direct S3 Event Notifications when one of Lambda/SNS/SQS reacts to an upload with simple filtering (lowest setup). Switch to EventBridge when you need multiple or non-Lambda/SNS/SQS targets (Step Functions, Kinesis, API destinations), advanced filtering on event content, or replay. They are not exclusive: a bucket can use either or both.",
+      "tags": [
+        "s3",
+        "event-notification",
+        "eventbridge",
+        "fan-out",
+        "filtering"
+      ]
+    },
+    {
+      "id": "kn-0011",
+      "domain": "Amazon CloudFront",
+      "topic": "Access Control",
+      "q": "Restrict an S3 bucket so only CloudFront can read it",
+      "a": "Use Origin Access Control (OAC), or legacy Origin Access Identity (OAI), and a bucket policy that grants read only to that CloudFront principal.",
+      "explanation": "Security groups (S3 has none), IAM users, or referencing the distribution by IP are all wrong. OAC/OAI is the AWS-recommended way to keep the bucket private.",
+      "tags": [
+        "cloudfront",
+        "oac",
+        "oai",
+        "s3-origin",
+        "access-control"
+      ]
+    },
+    {
+      "id": "kn-0012",
+      "domain": "Amazon CloudFront",
+      "topic": "Access Control",
+      "q": "CloudFront signed URLs vs signed cookies",
+      "a": "Signed URLs authorize a single file or clients that cannot use cookies; signed cookies authorize multiple files or when the URL cannot be changed.",
+      "explanation": "Cookie-less HTTP client -> signed URLs. Hardcoded URLs you cannot modify -> signed cookies. Both restrict who can access, they do not encrypt.",
+      "tags": [
+        "cloudfront",
+        "signed-url",
+        "signed-cookies",
+        "access-control"
+      ]
+    },
+    {
+      "id": "kn-0013",
+      "domain": "Amazon CloudFront",
+      "topic": "Access Control",
+      "q": "Enforce content distribution rights by country",
+      "a": "Use CloudFront geo restriction with an allowlist or blocklist of countries.",
+      "explanation": "Signed URLs authorize per request, not by geography, so they are the wrong answer when the requirement is 'block or allow specific countries'.",
+      "tags": [
+        "cloudfront",
+        "geo-restriction",
+        "distribution-rights"
+      ]
+    },
+    {
+      "id": "kn-0014",
+      "domain": "Amazon CloudFront",
+      "topic": "Edge Features",
+      "q": "CloudFront field-level encryption",
+      "a": "Encrypts specific sensitive fields with a public key at the edge so only backend services holding the private key can decrypt them.",
+      "explanation": "End-to-end protection beyond TLS for individual fields (e.g. credit-card numbers). Signed URLs/cookies and HTTPS-only origin protect access or transit, not the field content itself.",
+      "tags": [
+        "cloudfront",
+        "field-level-encryption",
+        "edge"
+      ]
+    },
+    {
+      "id": "kn-0015",
+      "domain": "Amazon CloudFront",
+      "topic": "Edge Features",
+      "q": "CloudFront not serving updated content after a deploy",
+      "a": "Old content stays cached until its TTL expires; create a CloudFront invalidation (e.g. /*) to serve the new content immediately.",
+      "explanation": "Trigger: 'site not showing the latest changes after deployment'. ElastiCache, ALB, and ACM are unrelated distractors.",
+      "tags": [
+        "cloudfront",
+        "invalidation",
+        "cache",
+        "ttl"
+      ]
+    },
+    {
+      "id": "kn-0016",
+      "domain": "Amazon CloudFront",
+      "topic": "Edge Features",
+      "q": "Lambda@Edge vs CloudFront Functions",
+      "a": "Lambda@Edge runs full custom code at the edge (image resize, auth, header-based content selection); CloudFront Functions are lightweight, for simple header/URL rewrites only.",
+      "explanation": "When the task needs general-purpose logic or authorization at the edge, choose Lambda@Edge. CloudFront Functions cannot run heavy or auth-integrated code.",
+      "tags": [
+        "cloudfront",
+        "lambda-edge",
+        "cloudfront-functions",
+        "edge"
+      ]
+    },
+    {
+      "id": "kn-0017",
+      "domain": "Amazon EBS",
+      "topic": "Volumes & IOPS",
+      "q": "gp3 maximum IOPS and when you must switch to io2",
+      "a": "A single gp3 volume tops out at 16,000 IOPS (and 1,000 MB/s). If the workload needs more than 16,000 IOPS, you must use a Provisioned IOPS volume (io2/io1), which scales to 64,000 IOPS (io2 Block Express to 256,000).",
+      "explanation": "This is a hard number trap. If a stem says performance degrades above ~20,000 IOPS on a gp3 volume, you cannot 'just increase the gp3 IOPS' because gp3 caps at 16,000. The correct fix is io2. Splitting into two gp3 volumes and striping is an app-level workaround, not the clean managed answer.",
+      "tags": [
+        "ebs",
+        "gp3",
+        "io2",
+        "iops",
+        "provisioned-iops"
+      ]
+    },
+    {
+      "id": "kn-0018",
+      "domain": "Amazon EBS",
+      "topic": "Instance Store",
+      "q": "EC2 instance store volatility",
+      "a": "Instance store is physically attached, ephemeral storage: all data is lost on stop, hibernate, or termination (and on host failure). It survives a reboot only.",
+      "explanation": "Any requirement for durability or 'minimal data loss' rules out instance store. For in-flight streaming data that must survive, send it to a durable service (e.g. Kinesis Data Streams) rather than buffering it on instance store.",
+      "tags": [
+        "ec2",
+        "instance-store",
+        "ephemeral",
+        "durability"
+      ]
+    },
+    {
+      "id": "kn-0019",
+      "domain": "Amazon EBS",
+      "topic": "Volumes & IOPS",
+      "q": "Is an EBS volume highly available?",
+      "a": "No. An EBS volume is replicated only within a single Availability Zone and is attached to one instance at a time, so it is not highly available across AZs.",
+      "explanation": "When the stem requires highly available storage, EBS is the wrong answer; choose S3 (multi-AZ by design) or EFS (multi-AZ NFS). EBS is durable within its AZ but a single point of failure if that AZ goes down.",
+      "tags": [
+        "ebs",
+        "high-availability",
+        "single-az",
+        "s3",
+        "efs"
+      ]
+    },
+    {
+      "id": "kn-0020",
+      "domain": "Amazon EBS",
+      "topic": "Volumes & IOPS",
+      "q": "Multi-Attach EBS",
+      "a": "Only io1/io2 volumes support Multi-Attach, letting a few instances in the SAME Availability Zone share one block volume. It is not a cross-AZ or general HA solution.",
+      "explanation": "Multi-Attach needs a cluster-aware filesystem and stays inside one AZ. For shared file storage across many instances/AZs, use EFS (Linux) or FSx for Windows, not Multi-Attach EBS.",
+      "tags": [
+        "ebs",
+        "multi-attach",
+        "io2",
+        "shared-storage"
+      ]
+    },
+    {
+      "id": "kn-0021",
+      "domain": "Amazon EBS",
+      "topic": "Snapshots & AMIs",
+      "q": "EBS snapshots: how they work and cross-Region DR",
+      "a": "Snapshots are incremental, stored in S3, and scoped to a Region. For disaster recovery you copy snapshots (or AMIs) to another Region; Data Lifecycle Manager (DLM) automates their schedule and retention.",
+      "explanation": "Backing up the data volume = snapshot. Backing up the full instance configuration plus its volumes = an AMI. For 'most operationally efficient' multi-resource backup, AWS Backup beats hand-written Lambda snapshot scripts.",
+      "tags": [
+        "ebs",
+        "snapshot",
+        "dlm",
+        "aws-backup",
+        "ami",
+        "dr"
+      ]
+    },
+    {
+      "id": "kn-0022",
+      "domain": "Amazon EC2",
+      "topic": "Instance Types",
+      "q": "Burstable (T-series) Unlimited mode - what it does NOT do",
+      "a": "Unlimited mode removes CPU-credit throttling so the instance can sustain high CPU by paying for surplus credits, but it does NOT raise the instance's physical vCPU ceiling.",
+      "explanation": "If a workload spikes to many times its baseline (e.g. 10x) it can saturate the limited vCPUs of a small T instance even in Unlimited mode. For large, sudden CPU spikes choose a compute optimized (C-family) instance instead of burstable.",
+      "tags": [
+        "ec2",
+        "burstable",
+        "t-series",
+        "unlimited-mode",
+        "compute-optimized"
+      ]
+    },
+    {
+      "id": "kn-0023",
+      "domain": "Amazon EC2",
+      "topic": "Purchasing Options",
+      "q": "Spot Instances - when they are safe to use",
+      "a": "Spot can be reclaimed with a 2-minute warning, so use it only for fault-tolerant, stateless, or interruptible work. Behind an SQS queue, an interruption is harmless: the unprocessed message simply becomes visible again for another worker.",
+      "explanation": "Spot is up to ~90% cheaper. The trap is a stem demanding 'no interruption / no downtime' for a single instance, where Spot is wrong. But SQS-backed batch processing tolerates Spot interruptions cleanly.",
+      "tags": [
+        "ec2",
+        "spot",
+        "sqs",
+        "fault-tolerant",
+        "cost"
+      ]
+    },
+    {
+      "id": "kn-0024",
+      "domain": "Amazon EC2",
+      "topic": "Purchasing Options",
+      "q": "Baseline + burst purchasing pattern",
+      "a": "Cover the steady baseline with Reserved Instances or a Savings Plan, then handle extra demand with On-Demand (if it must never be interrupted) or Spot (if the work is interruptible).",
+      "explanation": "Reserved/Savings = commitment discount for predictable load. On-Demand = reliable burst with no commitment. Spot = cheapest burst but interruptible. Match the burst choice to whether interruptions are acceptable.",
+      "tags": [
+        "ec2",
+        "reserved",
+        "savings-plan",
+        "on-demand",
+        "spot"
+      ]
+    },
+    {
+      "id": "kn-0025",
+      "domain": "Amazon EC2",
+      "topic": "Purchasing Options",
+      "q": "On-Demand Capacity Reservation vs Reserved Instance",
+      "a": "A Capacity Reservation guarantees that compute capacity is available in a specific AZ (so a launch never fails), independent of any billing discount. A Reserved Instance / Savings Plan is a billing discount and does not by itself reserve capacity.",
+      "explanation": "When the requirement is 'guarantee instances can always launch in these AZs', pick On-Demand Capacity Reservations. When it is 'reduce cost for steady usage', pick Reserved Instances or a Savings Plan. You can combine both.",
+      "tags": [
+        "ec2",
+        "capacity-reservation",
+        "reserved-instance",
+        "savings-plan"
+      ]
+    },
+    {
+      "id": "kn-0026",
+      "domain": "Amazon EC2",
+      "topic": "Placement Groups",
+      "q": "EC2 placement groups - the three types",
+      "a": "Cluster = pack instances close in one AZ for lowest latency / highest throughput (HPC). Spread = put each instance on distinct hardware for a small set of critical instances. Partition = isolate groups of instances onto separate racks for large distributed systems (Hadoop, Kafka, Cassandra).",
+      "explanation": "Match by keyword: 'lowest network latency / tightly coupled HPC' = Cluster; 'maximize availability for a few critical nodes' = Spread; 'large distributed/replicated data platform' = Partition. Cluster sacrifices AZ resilience for speed.",
+      "tags": [
+        "ec2",
+        "placement-group",
+        "cluster",
+        "spread",
+        "partition",
+        "hpc"
+      ]
+    },
+    {
+      "id": "kn-0027",
+      "domain": "Amazon EC2",
+      "topic": "Instance Types",
+      "q": "EC2 hibernation + warm pools",
+      "a": "Hibernation saves the in-memory (RAM) state to the EBS root volume so the instance resumes quickly; warm pools keep pre-initialized instances ready. Both reduce application start-up / launch time.",
+      "explanation": "This is a performance lever ('reduce launch time'), not a cost lever. Use it when long boot/initialization is the problem, not when the goal is to cut spend.",
+      "tags": [
+        "ec2",
+        "hibernation",
+        "warm-pools",
+        "launch-time",
+        "performance"
+      ]
+    },
+    {
+      "id": "kn-0028",
+      "domain": "EC2 Auto Scaling",
+      "topic": "Scaling",
+      "q": "Auto Scaling for high availability across AZs",
+      "a": "Set the ASG minimum capacity to the number of instances that must always run and spread the group across multiple AZs. The ASG self-heals by relaunching failed instances, including in a surviving AZ after an AZ outage.",
+      "explanation": "The exam treats fast ASG self-healing as sufficient for HA and favors the cost-effective layout (min across 2 AZs) over permanently doubling instance count just to cover a brief AZ-failure window.",
+      "tags": [
+        "auto-scaling",
+        "asg",
+        "high-availability",
+        "multi-az",
+        "self-healing"
+      ]
+    },
+    {
+      "id": "kn-0029",
+      "domain": "EC2 Auto Scaling",
+      "topic": "Scaling",
+      "q": "Scheduled vs dynamic vs predictive scaling",
+      "a": "Scheduled scaling pre-warms capacity at a known time before a predictable load. Dynamic (target tracking / step) scaling reacts to live metrics after demand changes. Predictive scaling forecasts from recurring historical patterns.",
+      "explanation": "Known clock time (e.g. batch every night at 23:00) = scheduled. Unpredictable spikes = dynamic on a metric or request count. Regular repeating daily/weekly pattern = predictive. Reactive scaling always lags the spike by the warm-up time.",
+      "tags": [
+        "auto-scaling",
+        "scheduled",
+        "dynamic",
+        "predictive",
+        "target-tracking"
+      ]
+    },
+    {
+      "id": "kn-0030",
+      "domain": "Amazon RDS",
+      "topic": "HA & Failover",
+      "q": "RDS Multi-AZ - what it is for",
+      "a": "Multi-AZ keeps a synchronous standby replica in a second AZ purely for high availability and automatic failover. The standby is NOT readable and does not add read capacity.",
+      "explanation": "Trigger words: 'high availability', 'automatic failover', 'minimize downtime'. The classic trap is using Multi-AZ to scale reads, which it cannot do because the standby only takes over on failure.",
+      "tags": [
+        "rds",
+        "multi-az",
+        "high-availability",
+        "failover",
+        "standby"
+      ]
+    },
+    {
+      "id": "kn-0031",
+      "domain": "Amazon RDS",
+      "topic": "Read Scaling",
+      "q": "RDS Read Replicas - what they are for",
+      "a": "Read replicas are asynchronous copies that serve read traffic to offload the primary, can be created across Regions, and can be promoted to a standalone primary. They are for read scaling, not automatic failover.",
+      "explanation": "Trigger words: 'offload reporting/read traffic', 'scale reads'. They are eventually consistent (async lag). For HA use Multi-AZ; for read scale use read replicas. Aurora can combine both with reader endpoints.",
+      "tags": [
+        "rds",
+        "read-replica",
+        "read-scaling",
+        "asynchronous"
+      ]
+    },
+    {
+      "id": "kn-0032",
+      "domain": "Amazon RDS",
+      "topic": "HA & Failover",
+      "q": "Multi-AZ vs Read Replica - how to choose",
+      "a": "Need availability/failover with no read benefit -> Multi-AZ (synchronous standby). Need to scale or offload reads -> read replicas (async). They solve different problems and are often combined.",
+      "explanation": "Decide by the requirement verb: 'survive an AZ failure / minimize downtime' = Multi-AZ; 'reduce load on the primary / heavy reporting reads' = read replicas. If both are required, deploy read replicas on a Multi-AZ instance.",
+      "tags": [
+        "rds",
+        "multi-az",
+        "read-replica",
+        "decision"
+      ]
+    },
+    {
+      "id": "kn-0033",
+      "domain": "Amazon RDS",
+      "topic": "Connection Management",
+      "q": "RDS Proxy - what it solves and its limit",
+      "a": "RDS Proxy pools and reuses database connections, which smooths connection storms (especially from Lambda) and speeds up failover. It does NOT store or buffer writes while the database itself is fully unavailable.",
+      "explanation": "Use RDS Proxy when 'too many connections' or 'Lambda exhausts DB connections'. The trap: if the requirement is to not lose writes during a full DB outage/upgrade, RDS Proxy is wrong; buffer the writes in SQS and drain them after.",
+      "tags": [
+        "rds",
+        "rds-proxy",
+        "connection-pooling",
+        "lambda",
+        "sqs"
+      ]
+    },
+    {
+      "id": "kn-0128",
+      "domain": "Amazon RDS",
+      "topic": "Engine Choice",
+      "q": "RDS for Oracle vs RDS Custom for Oracle",
+      "a": "Standard RDS for Oracle is fully managed but gives NO OS or SSH access. RDS Custom for Oracle keeps most managed benefits (automated backups, patching tooling, monitoring) while granting privileged OS/SSH and database access, for legacy apps that must customize the OS or install third-party/DB components.",
+      "explanation": "Trigger words: 'need root/OS access' or 'install custom agents / specific Oracle patches' BUT 'still want managed backups and patching'. Plain RDS for Oracle does not expose the OS; plain EC2 is fully self-managed (too much ops). RDS Custom is the middle ground between managed RDS and self-managed EC2.",
+      "tags": [
+        "rds",
+        "rds-custom",
+        "oracle",
+        "os-access",
+        "managed"
+      ]
+    },
+    {
+      "id": "kn-0131",
+      "domain": "Amazon RDS",
+      "topic": "Encryption Choice",
+      "q": "Encrypt an existing unencrypted RDS database",
+      "a": "RDS encryption at rest (KMS) can only be enabled at creation. To encrypt an existing unencrypted instance: take a snapshot, copy the snapshot with encryption enabled (choose a KMS key), then restore that encrypted snapshot to a NEW DB instance and point the app to it. You cannot toggle encryption on a running DB.",
+      "explanation": "Trigger words: 'encrypt an existing RDS database', 'database is already running and unencrypted'. The snapshot-copy-with-encryption then restore path is the only supported method. EBS volume copy does not apply (RDS storage is DB-managed). The reverse (removing encryption) is equally impossible.",
+      "tags": [
+        "rds",
+        "encryption",
+        "kms",
+        "snapshot",
+        "at-creation"
+      ]
+    },
+    {
+      "id": "kn-0034",
+      "domain": "Amazon Aurora",
+      "topic": "Read Scaling",
+      "q": "Aurora Replicas and shared storage",
+      "a": "Aurora's storage is a single shared, auto-scaling cluster volume replicated 6 ways across 3 AZs. Aurora Replicas read from that same volume, so they add read capacity (and serve as failover targets) with no extra storage cost.",
+      "explanation": "Because writer and readers share storage, adding Aurora Replicas to offload read-heavy reporting is the most cost-effective read-scaling answer versus separate replica storage in standard RDS.",
+      "tags": [
+        "aurora",
+        "aurora-replica",
+        "shared-storage",
+        "read-scaling"
+      ]
+    },
+    {
+      "id": "kn-0035",
+      "domain": "Amazon Aurora",
+      "topic": "Capacity Modes",
+      "q": "Aurora Serverless - when to pick it",
+      "a": "Aurora Serverless auto-scales database capacity up and down (and can scale to near zero) without you choosing an instance type, ideal for infrequent, intermittent, or unpredictable workloads.",
+      "explanation": "Trigger words: 'without selecting an instance type', 'infrequent/variable usage', 'don't want to manage capacity'. For steady, predictable high load, provisioned Aurora is usually cheaper.",
+      "tags": [
+        "aurora",
+        "aurora-serverless",
+        "auto-scaling",
+        "capacity"
+      ]
+    },
+    {
+      "id": "kn-0036",
+      "domain": "Amazon ElastiCache",
+      "topic": "Engine Choice",
+      "q": "ElastiCache Redis vs Memcached",
+      "a": "Redis supports replication, Multi-AZ, automatic failover, persistence, and advanced structures (sorted sets, pub/sub). Memcached is a simple, multi-threaded cache with no persistence and no high availability.",
+      "explanation": "If the stem needs HA, durability, or data structures like leaderboards (sorted sets), choose Redis. Memcached is the answer only for a plain, horizontally scalable cache where losing the data is acceptable.",
+      "tags": [
+        "elasticache",
+        "redis",
+        "memcached",
+        "high-availability"
+      ]
+    },
+    {
+      "id": "kn-0037",
+      "domain": "Amazon ElastiCache",
+      "topic": "Caching Strategies",
+      "q": "Lazy loading vs write-through caching",
+      "a": "Lazy loading caches data only on a cache miss, so the cache can be stale but holds only requested data. Write-through writes to the cache and the database on every write, so the cache is always fresh but stores data that may never be read.",
+      "explanation": "Stale-read concerns -> write-through (always current). Minimize cache footprint / cold data -> lazy loading. A TTL is often added to bound staleness in lazy loading.",
+      "tags": [
+        "elasticache",
+        "lazy-loading",
+        "write-through",
+        "ttl",
+        "caching"
+      ]
+    },
+    {
+      "id": "kn-0038",
+      "domain": "Amazon ElastiCache",
+      "topic": "Caching Strategies",
+      "q": "Reduce the NUMBER of database reads",
+      "a": "Put a cache (ElastiCache) in front of the database so repeat reads are served from memory. This reduces total reads hitting the database; read replicas do not, because every replica read still hits a database.",
+      "explanation": "Watch the exact wording. 'Reduce the number of reads on the database' = caching. 'Distribute/scale read traffic' = read replicas. If HA is also required for the cache, use Redis.",
+      "tags": [
+        "elasticache",
+        "caching",
+        "read-replica",
+        "reduce-reads"
+      ]
+    },
+    {
+      "id": "kn-0039",
+      "domain": "Amazon DynamoDB",
+      "topic": "Caching Strategies",
+      "q": "DynamoDB Accelerator (DAX)",
+      "a": "DAX is an in-memory cache purpose-built for DynamoDB that gives microsecond read latency with no application caching logic. It only accelerates DynamoDB, not other databases.",
+      "explanation": "For a read-heavy DynamoDB workload needing microsecond reads, DAX is the drop-in answer. ElastiCache would require you to write cache-management code; DAX is API-compatible with DynamoDB.",
+      "tags": [
+        "dynamodb",
+        "dax",
+        "in-memory",
+        "read-heavy"
+      ]
+    },
+    {
+      "id": "kn-0040",
+      "domain": "Amazon DynamoDB",
+      "topic": "Capacity Modes",
+      "q": "DynamoDB on-demand vs provisioned capacity",
+      "a": "On-demand instantly absorbs unpredictable or spiky traffic and bills per request. Provisioned (even with auto scaling) reacts more slowly and is cheaper only for steady, predictable load.",
+      "explanation": "Sudden, unpredictable bursts (e.g. millions of users at a morning peak) = on-demand. Provisioned auto scaling lags the spike, so it is the wrong answer when the spike is sharp and unforeseeable.",
+      "tags": [
+        "dynamodb",
+        "on-demand",
+        "provisioned",
+        "auto-scaling",
+        "capacity"
+      ]
+    },
+    {
+      "id": "kn-0041",
+      "domain": "Amazon DynamoDB",
+      "topic": "Global & Backup",
+      "q": "DynamoDB Global Tables",
+      "a": "Global Tables give a multi-Region, active-active (multi-master) replicated table for low-latency local reads/writes worldwide and Regional disaster recovery.",
+      "explanation": "Trigger words: 'multi-Region', 'low latency for global users', 'read and write in multiple Regions'. This is the native answer rather than building cross-Region replication yourself.",
+      "tags": [
+        "dynamodb",
+        "global-tables",
+        "multi-region",
+        "active-active"
+      ]
+    },
+    {
+      "id": "kn-0042",
+      "domain": "Amazon DynamoDB",
+      "topic": "Global & Backup",
+      "q": "DynamoDB export to S3 with PITR",
+      "a": "DynamoDB has a built-in Export to S3 feature backed by point-in-time recovery (PITR). It consumes no table read capacity, does not affect availability, and needs no code.",
+      "explanation": "For analytics or backup of a table to S3 with the least overhead, use the native export, not EMR or a Streams+Lambda pipeline (both consume capacity and add code).",
+      "tags": [
+        "dynamodb",
+        "export-to-s3",
+        "pitr",
+        "backup"
+      ]
+    },
+    {
+      "id": "kn-0043",
+      "domain": "Amazon DynamoDB",
+      "topic": "Data Modeling",
+      "q": "DynamoDB item size limit",
+      "a": "A single DynamoDB item is capped at 400 KB. Large objects (images, videos, documents) belong in S3, with DynamoDB holding only the metadata and the S3 key.",
+      "explanation": "Any answer that stores big blobs directly in DynamoDB is wrong on both the size limit and cost. The pattern is S3 for the blob + DynamoDB for fast metadata lookups.",
+      "tags": [
+        "dynamodb",
+        "item-size",
+        "400kb",
+        "s3",
+        "metadata"
+      ]
+    },
+    {
+      "id": "kn-0044",
+      "domain": "Amazon Redshift",
+      "topic": "Engine Choice",
+      "q": "Redshift is OLAP, not OLTP",
+      "a": "Redshift is a columnar data warehouse for analytical (OLAP) queries over large datasets. It is the wrong choice for low-latency transactional (OLTP) application reads/writes.",
+      "explanation": "If a stem describes high-volume app transactions or single-digit-ms lookups, Redshift is a distractor (use RDS/Aurora or DynamoDB). Redshift Spectrum extends Redshift to query data directly in S3.",
+      "tags": [
+        "redshift",
+        "olap",
+        "data-warehouse",
+        "spectrum",
+        "oltp"
+      ]
+    },
+    {
+      "id": "kn-0045",
+      "domain": "VPC Endpoints",
+      "topic": "VPC Endpoints",
+      "q": "Gateway VPC endpoint",
+      "a": "A gateway VPC endpoint provides private access to Amazon S3 and DynamoDB ONLY. It is free, added as a target in the route table, and keeps traffic on the AWS backbone (no NAT or Internet Gateway, no data-transfer charges).",
+      "explanation": "When the requirement is private, no-internet access to S3/DynamoDB at the lowest cost, the gateway endpoint is the answer. Note: gateway endpoints have no security groups and cannot be reached from on-premises.",
+      "tags": [
+        "vpc-endpoint",
+        "gateway-endpoint",
+        "s3",
+        "dynamodb",
+        "free"
+      ]
+    },
+    {
+      "id": "kn-0046",
+      "domain": "VPC Endpoints",
+      "topic": "VPC Endpoints",
+      "q": "Interface VPC endpoint (PrivateLink)",
+      "a": "An interface VPC endpoint is an ENI in your subnet (powered by PrivateLink) that privately reaches most AWS services and SaaS. It has a security group and incurs an hourly plus per-GB charge, and it is reachable from on-premises over DX/VPN.",
+      "explanation": "Use it for services other than S3/DynamoDB, or when on-premises systems need private access to a service. It works for S3 too but costs money, whereas the gateway endpoint for S3 is free.",
+      "tags": [
+        "vpc-endpoint",
+        "interface-endpoint",
+        "privatelink",
+        "eni",
+        "security-group"
+      ]
+    },
+    {
+      "id": "kn-0047",
+      "domain": "VPC Endpoints",
+      "topic": "VPC Endpoints",
+      "q": "Gateway vs interface endpoint - how to choose",
+      "a": "Private access to S3/DynamoDB at no cost -> gateway endpoint. Private access to other services, or access from on-premises, or you need a security group -> interface endpoint.",
+      "explanation": "On the exam, 'no public internet + S3 + cheapest' points to the gateway endpoint. The interface endpoint is the answer only when the service is not S3/DynamoDB or when on-prem reachability/SG control is required.",
+      "tags": [
+        "vpc-endpoint",
+        "gateway",
+        "interface",
+        "decision"
+      ]
+    },
+    {
+      "id": "kn-0048",
+      "domain": "Amazon VPC",
+      "topic": "Connectivity",
+      "q": "NAT gateway",
+      "a": "A NAT gateway lets instances in private subnets make OUTBOUND connections to the internet while staying unreachable from inbound internet traffic. It lives in a public subnet; deploy one per AZ for high availability.",
+      "explanation": "Trigger: private instances need to download patches or call a third-party API but must not be exposed. A single NAT gateway is an AZ-level single point of failure, so HA designs use one per AZ.",
+      "tags": [
+        "vpc",
+        "nat-gateway",
+        "private-subnet",
+        "outbound",
+        "high-availability"
+      ]
+    },
+    {
+      "id": "kn-0049",
+      "domain": "Amazon VPC",
+      "topic": "Peering & Transit",
+      "q": "VPC peering - key limits",
+      "a": "VPC peering is non-transitive (A-B and B-C does not give A-C) and forbids overlapping CIDRs. Same-Region peering lets a security group reference a peer SG; cross-Region peering does NOT, so you must use IP ranges.",
+      "explanation": "The cross-Region trap: a rule referencing a security group ID in another Region fails. Allow the peer's IP addresses instead. For many VPCs, peering becomes a mesh, which is the cue to use Transit Gateway.",
+      "tags": [
+        "vpc",
+        "peering",
+        "non-transitive",
+        "cross-region",
+        "security-group"
+      ]
+    },
+    {
+      "id": "kn-0050",
+      "domain": "Amazon VPC",
+      "topic": "Peering & Transit",
+      "q": "Transit Gateway",
+      "a": "Transit Gateway is a hub-and-spoke router that connects many VPCs and on-premises networks with transitive routing, replacing a complex full mesh of peering connections.",
+      "explanation": "Trigger words: 'connect hundreds of VPCs', 'simplify the network', 'transitive routing between VPCs and on-prem'. Peering is fine for a few VPCs; Transit Gateway is the scalable answer.",
+      "tags": [
+        "vpc",
+        "transit-gateway",
+        "hub-and-spoke",
+        "transitive"
+      ]
+    },
+    {
+      "id": "kn-0051",
+      "domain": "Hybrid Connectivity",
+      "topic": "Hybrid",
+      "q": "Direct Connect vs Site-to-Site VPN",
+      "a": "Direct Connect is a dedicated private physical link with consistent low latency and high bandwidth, but takes weeks to provision and is not encrypted by itself. Site-to-Site VPN is quick to set up and encrypted, but runs over the public internet with variable latency.",
+      "explanation": "Need consistent performance/large throughput -> Direct Connect. Need encryption or a fast/temporary link -> VPN. For private link that is also encrypted, run a VPN over Direct Connect. A VPN is also the common DX backup.",
+      "tags": [
+        "direct-connect",
+        "vpn",
+        "hybrid",
+        "latency",
+        "encryption"
+      ]
+    },
+    {
+      "id": "kn-0052",
+      "domain": "AWS Global Accelerator",
+      "topic": "Edge Routing",
+      "q": "Global Accelerator vs CloudFront",
+      "a": "Global Accelerator gives static anycast IPs and routes TCP/UDP traffic over the AWS backbone to the closest healthy endpoint with sub-second cross-Region failover. CloudFront caches HTTP/HTTPS content at the edge.",
+      "explanation": "Non-HTTP (gaming, VoIP, IoT, UDP), static IP needs, or fast multi-Region failover = Global Accelerator. Cacheable web content/video = CloudFront. CloudFront cannot carry UDP.",
+      "tags": [
+        "global-accelerator",
+        "cloudfront",
+        "anycast",
+        "udp",
+        "failover"
+      ]
+    },
+    {
+      "id": "kn-0053",
+      "domain": "AWS Global Accelerator",
+      "topic": "Edge Routing",
+      "q": "ALB vs NLB for UDP",
+      "a": "ALB is HTTP/HTTPS (Layer 7) only and does NOT support UDP. NLB is Layer 4 and handles TCP and UDP at very high throughput, so UDP workloads use NLB (often behind Global Accelerator).",
+      "explanation": "Any answer pairing UDP with an ALB is immediately wrong. The classic low-latency UDP pattern is Global Accelerator + NLB + the backend (EC2 or on-prem).",
+      "tags": [
+        "alb",
+        "nlb",
+        "udp",
+        "layer4",
+        "load-balancing"
+      ]
+    },
+    {
+      "id": "kn-0054",
+      "domain": "Amazon Route 53",
+      "topic": "Routing Policies",
+      "q": "Route 53 routing policies - pick by intent",
+      "a": "Latency = lowest network latency (minimize load time). Geolocation = route by the user's location (compliance/distribution rights). Geoproximity = shift traffic between Regions with a bias. Weighted = split traffic by percentage (A/B, canary). Failover = active-passive DR. Multivalue = return several healthy records.",
+      "explanation": "Keyword mapping is everything: 'minimize latency/load time' = latency; 'serve content by country / licensing' = geolocation; 'gradually shift / bias' = geoproximity; 'send X% to a version' = weighted; 'primary with standby' = failover.",
+      "tags": [
+        "route53",
+        "latency",
+        "geolocation",
+        "weighted",
+        "failover",
+        "geoproximity"
+      ]
+    },
+    {
+      "id": "kn-0055",
+      "domain": "Amazon VPC",
+      "topic": "Network Security",
+      "q": "Security groups - behavior",
+      "a": "Security groups are stateful (return traffic is automatically allowed), operate at the instance/ENI level, support ALLOW rules only, and by default deny all inbound and allow all outbound. A rule can reference another security group.",
+      "explanation": "Best practice for tiered apps: the DB SG allows the app/web tier SG as the source (not an IP range), so it scales as instances change. There is no 'deny' rule in a security group.",
+      "tags": [
+        "vpc",
+        "security-group",
+        "stateful",
+        "allow-only",
+        "instance-level"
+      ]
+    },
+    {
+      "id": "kn-0056",
+      "domain": "Amazon VPC",
+      "topic": "Network Security",
+      "q": "Network ACL vs security group",
+      "a": "Network ACLs are stateless (you must allow both directions), operate at the subnet level, are evaluated by rule number, and support both ALLOW and DENY. Security groups are stateful, instance-level, and allow-only.",
+      "explanation": "Need to explicitly block a specific IP or CIDR -> network ACL DENY rule (security groups cannot deny). Need normal tier-to-tier access control -> security groups. NACLs are stateless, so remember to allow ephemeral return ports.",
+      "tags": [
+        "vpc",
+        "nacl",
+        "security-group",
+        "stateless",
+        "deny",
+        "subnet"
+      ]
+    },
+    {
+      "id": "kn-0057",
+      "domain": "Amazon SQS",
+      "topic": "Messaging",
+      "q": "SQS Standard vs FIFO",
+      "a": "Standard queues give nearly unlimited throughput, at-least-once delivery, and best-effort ordering. FIFO queues guarantee strict ordering and exactly-once processing but cap at 300 messages/sec (3,000 with batching).",
+      "explanation": "Pick FIFO only when order or no-duplicates is explicitly required (e.g. financial transactions in sequence). If the stem stresses massive throughput and order does not matter, Standard is correct.",
+      "tags": [
+        "sqs",
+        "fifo",
+        "standard",
+        "ordering",
+        "exactly-once"
+      ]
+    },
+    {
+      "id": "kn-0058",
+      "domain": "Amazon SQS",
+      "topic": "Messaging",
+      "q": "SQS as a buffer to decouple a spike",
+      "a": "Putting an SQS queue between producers and consumers absorbs sudden load: requests are stored durably and workers process them at their own pace, so nothing is dropped during a spike.",
+      "explanation": "Trigger words: 'ensure all requests are processed', 'sudden increase', 'asynchronous processing'. Auto Scaling alone can still drop requests if it cannot scale fast enough; the queue is what guarantees no loss.",
+      "tags": [
+        "sqs",
+        "buffer",
+        "decoupling",
+        "spike",
+        "async"
+      ]
+    },
+    {
+      "id": "kn-0059",
+      "domain": "Amazon SQS",
+      "topic": "Messaging",
+      "q": "SQS visibility timeout and dead-letter queue",
+      "a": "While one consumer processes a message it is hidden for the visibility-timeout period; if processing fails it becomes visible again for retry. A dead-letter queue (DLQ) captures messages that fail repeatedly so they stop blocking the queue.",
+      "explanation": "If a 'poison' message keeps failing and stalling processing, the answer is a DLQ with a maxReceiveCount. A too-short visibility timeout causes duplicate processing; a too-long one delays retries.",
+      "tags": [
+        "sqs",
+        "visibility-timeout",
+        "dlq",
+        "retry",
+        "poison-message"
+      ]
+    },
+    {
+      "id": "kn-0060",
+      "domain": "Amazon SQS",
+      "topic": "Messaging",
+      "q": "Scaling consumers behind SQS",
+      "a": "Scale the consumer fleet on the queue depth metric (ApproximateNumberOfMessagesVisible) so more workers spin up when messages back up. You scale the consumers, not the queue (the queue scales itself).",
+      "explanation": "When a backlog builds, the bottleneck is the consumer tier. An Auto Scaling group tracking queue depth is the canonical fix. Caching (DAX/ElastiCache) is a distractor because the issue is processing throughput, not reads.",
+      "tags": [
+        "sqs",
+        "auto-scaling",
+        "queue-depth",
+        "consumers"
+      ]
+    },
+    {
+      "id": "kn-0129",
+      "domain": "Amazon MQ",
+      "topic": "Messaging",
+      "q": "Amazon MQ vs SQS/SNS",
+      "a": "Amazon MQ is a managed message broker for Apache ActiveMQ and RabbitMQ that supports standard protocols (JMS, AMQP, MQTT, STOMP, OpenWire). Choose it to lift-and-shift an existing on-prem application that already uses these protocols, without rewriting the messaging layer. SQS/SNS are AWS-native APIs for new, cloud-native decoupling.",
+      "explanation": "Trigger words: 'migrate an existing application that uses a message broker', 'JMS/AMQP/MQTT', 'minimal code changes'. If the app already speaks a standard broker protocol, Amazon MQ avoids re-architecting to SQS/SNS. For brand-new serverless decoupling, prefer SQS/SNS. Amazon MQ runs active/standby across 2 AZs for HA.",
+      "tags": [
+        "amazon-mq",
+        "activemq",
+        "rabbitmq",
+        "jms",
+        "amqp",
+        "migration"
+      ]
+    },
+    {
+      "id": "kn-0061",
+      "domain": "Amazon SNS",
+      "topic": "Fan-out & Filtering",
+      "q": "SNS fan-out pattern",
+      "a": "SNS delivers each published message to all subscribers at once. The fan-out pattern subscribes multiple SQS queues to one topic so several systems process the same event in parallel, each with its own durable queue.",
+      "explanation": "Trigger words: 'send the same event to multiple systems'. SNS to multiple SQS queues adds durability (each consumer drains its own queue) versus SNS straight to multiple Lambdas.",
+      "tags": [
+        "sns",
+        "fan-out",
+        "sqs",
+        "pub-sub",
+        "parallel"
+      ]
+    },
+    {
+      "id": "kn-0062",
+      "domain": "Amazon SNS",
+      "topic": "Fan-out & Filtering",
+      "q": "SNS message filtering vs a topic per type",
+      "a": "A single SNS topic with subscription filter policies routes each message to the right SQS queue based on message attributes, so you avoid creating and maintaining a separate topic per message type.",
+      "explanation": "When messages must be separated by type with least maintenance, use one topic + filtering + per-type SQS queues. Creating many topics (or Lambda-per-type without a queue) is the higher-overhead, lossy trap.",
+      "tags": [
+        "sns",
+        "message-filtering",
+        "filter-policy",
+        "sqs"
+      ]
+    },
+    {
+      "id": "kn-0063",
+      "domain": "Amazon SNS",
+      "topic": "Fan-out & Filtering",
+      "q": "SNS + SQS vs SNS + Lambda for durability",
+      "a": "Subscribing SQS queues to SNS makes delivery durable: if a consumer fails, the message stays in its queue until processed. SNS straight to Lambda can lose the message if the function fails and there is no queue or DLQ.",
+      "explanation": "When the requirement is 'messages must not be lost', insert SQS between SNS and the workers. SQS guarantees retry and no loss; a bare Lambda subscription does not.",
+      "tags": [
+        "sns",
+        "sqs",
+        "lambda",
+        "durability",
+        "no-loss"
+      ]
+    },
+    {
+      "id": "kn-0064",
+      "domain": "AWS Lambda",
+      "topic": "Limits",
+      "q": "Lambda hard limits",
+      "a": "A Lambda invocation can run at most 15 minutes, with up to 10 GB memory and 10 GB of /tmp. It is for short, event-driven work, not long-running or always-on processes.",
+      "explanation": "If a job needs to run longer than 15 minutes or run continuously, Lambda is wrong; use Fargate/ECS or EC2, or break the work into steps with Step Functions.",
+      "tags": [
+        "lambda",
+        "timeout",
+        "15-minutes",
+        "memory",
+        "limits"
+      ]
+    },
+    {
+      "id": "kn-0065",
+      "domain": "AWS Lambda",
+      "topic": "Invocation",
+      "q": "Lambda Function URL vs API Gateway",
+      "a": "A Lambda Function URL exposes a single function over HTTPS with built-in IAM auth and zero extra infrastructure (lowest overhead). API Gateway adds routing, throttling, request validation, caching, and richer auth (Cognito, custom authorizers).",
+      "explanation": "One function, simplest possible HTTPS endpoint = Function URL. Need API management features (throttling, multiple routes, usage plans) = API Gateway.",
+      "tags": [
+        "lambda",
+        "function-url",
+        "api-gateway",
+        "least-overhead"
+      ]
+    },
+    {
+      "id": "kn-0066",
+      "domain": "AWS Step Functions",
+      "topic": "Orchestration",
+      "q": "When to use Step Functions",
+      "a": "Step Functions orchestrate a multi-step workflow as a state machine with built-in sequencing, branching, retries, error handling, and waits, so you do not hand-code coordination between Lambdas and services.",
+      "explanation": "Trigger words: 'coordinate/orchestrate multiple steps', 'long-running workflow with retries and state'. Chaining Lambdas manually or via queues is the brittle alternative the exam steers away from.",
+      "tags": [
+        "step-functions",
+        "orchestration",
+        "state-machine",
+        "workflow"
+      ]
+    },
+    {
+      "id": "kn-0067",
+      "domain": "Amazon EventBridge",
+      "topic": "Event Routing",
+      "q": "EventBridge vs SNS",
+      "a": "EventBridge is an event bus that routes events with content-based rules from many AWS and SaaS sources, supports schemas and scheduled events, and fans out to many targets. SNS is simpler, very high-throughput pub/sub fan-out, mainly to SQS/Lambda/HTTP.",
+      "explanation": "Need rich content-based filtering, third-party/SaaS event sources, or scheduled rules = EventBridge. Need high-volume, low-latency fan-out of notifications = SNS.",
+      "tags": [
+        "eventbridge",
+        "sns",
+        "event-bus",
+        "content-filtering",
+        "scheduling"
+      ]
+    },
+    {
+      "id": "kn-0068",
+      "domain": "Amazon Kinesis",
+      "topic": "Streaming",
+      "q": "Kinesis Data Streams vs Data Firehose",
+      "a": "Data Streams is real-time (sub-second) with custom consumers, shards, and replayable retention, but you manage scaling and consumers. Firehose is fully managed near-real-time delivery to S3/Redshift/OpenSearch/Splunk with buffering and no consumer code.",
+      "explanation": "Need custom real-time processing, multiple consumers, or replay = Data Streams. Need the simplest managed load into a data store with minimal ops (and buffering latency is acceptable) = Firehose.",
+      "tags": [
+        "kinesis",
+        "data-streams",
+        "firehose",
+        "real-time",
+        "managed"
+      ]
+    },
+    {
+      "id": "kn-0069",
+      "domain": "Amazon Kinesis",
+      "topic": "Streaming",
+      "q": "Kinesis Data Streams retention gotcha",
+      "a": "Kinesis Data Streams retains records for 24 hours by default (extendable up to 365 days). If a consumer reads less frequently than the retention window, records expire and are lost before being read.",
+      "explanation": "If S3 is missing data because the consumer runs every 48 hours against a default stream, the fix is to increase the retention period, not to add shards (shards address throughput, not expiry).",
+      "tags": [
+        "kinesis",
+        "data-streams",
+        "retention",
+        "24-hours",
+        "data-loss"
+      ]
+    },
+    {
+      "id": "kn-0070",
+      "domain": "Amazon Kinesis",
+      "topic": "Streaming",
+      "q": "Kinesis Data Streams vs SQS",
+      "a": "Kinesis Data Streams keeps an ordered, replayable log that multiple consumers can read independently in real time. SQS is a queue where each message is processed once by one consumer group and then deleted (no replay).",
+      "explanation": "Need ordering, replay, or many independent consumers/real-time analytics = Kinesis. Need simple decoupling where a message is handled once and removed = SQS.",
+      "tags": [
+        "kinesis",
+        "sqs",
+        "replay",
+        "ordering",
+        "multiple-consumers"
+      ]
+    },
+    {
+      "id": "kn-0071",
+      "domain": "AWS IAM",
+      "topic": "Identity",
+      "q": "IAM roles vs long-term access keys",
+      "a": "Give EC2, Lambda, and other services an IAM role: it delivers temporary, automatically rotated credentials. Never embed long-term access keys in code or on instances.",
+      "explanation": "Any answer that stores access keys on an instance or in code is wrong. The secure pattern is an instance profile / execution role that the service assumes to get short-lived credentials.",
+      "tags": [
+        "iam",
+        "role",
+        "access-keys",
+        "temporary-credentials",
+        "instance-profile"
+      ]
+    },
+    {
+      "id": "kn-0072",
+      "domain": "AWS IAM",
+      "topic": "Policy Evaluation",
+      "q": "IAM policy evaluation - explicit deny wins",
+      "a": "Access is denied by default; an Allow is needed to permit an action, but an explicit Deny in ANY applicable policy always overrides any Allow.",
+      "explanation": "When a request is unexpectedly blocked, look for an explicit deny (in an SCP, boundary, or resource policy) or a condition (e.g. aws:SourceIp) that is not met. Effective permissions are the intersection of SCPs and identity policies.",
+      "tags": [
+        "iam",
+        "explicit-deny",
+        "policy-evaluation",
+        "scp",
+        "condition"
+      ]
+    },
+    {
+      "id": "kn-0073",
+      "domain": "AWS IAM",
+      "topic": "Cross-Account",
+      "q": "Cross-account access with AssumeRole",
+      "a": "For cross-account access, create an IAM role in the target account that trusts the other account, and have principals call sts:AssumeRole to get temporary credentials. Do not share IAM user credentials.",
+      "explanation": "Trigger words: 'access resources in another account'. The role's trust policy names the trusted account; the caller needs sts:AssumeRole permission. This avoids any long-term shared keys.",
+      "tags": [
+        "iam",
+        "sts",
+        "assume-role",
+        "cross-account",
+        "trust-policy"
+      ]
+    },
+    {
+      "id": "kn-0074",
+      "domain": "AWS KMS",
+      "topic": "Key Management",
+      "q": "KMS customer managed key vs AWS managed key",
+      "a": "A customer managed KMS key lets you control the key policy, grants, and enable automatic yearly rotation, and produces CloudTrail audit logs of every use. AWS managed keys are automatic but you cannot edit their policy or rotation.",
+      "explanation": "Choose a customer managed key when the requirement is control over access, auditing of key usage, or configurable rotation. KMS automatic rotation rotates the key material once per year.",
+      "tags": [
+        "kms",
+        "customer-managed-key",
+        "rotation",
+        "cloudtrail",
+        "audit"
+      ]
+    },
+    {
+      "id": "kn-0075",
+      "domain": "AWS KMS",
+      "topic": "Encryption Choice",
+      "q": "SSE-S3 vs SSE-KMS vs SSE-C",
+      "a": "SSE-S3: S3 manages and rotates keys, least overhead, no audit of key use. SSE-KMS: KMS keys give access control plus CloudTrail auditing and optional rotation. SSE-C: you supply and manage the keys yourself on every request.",
+      "explanation": "Least overhead + auto rotation = SSE-S3. Need access control / audit trail on the key = SSE-KMS. Must keep custody of keys outside AWS = SSE-C. Match the answer to whether control/audit is required.",
+      "tags": [
+        "s3",
+        "sse-s3",
+        "sse-kms",
+        "sse-c",
+        "encryption"
+      ]
+    },
+    {
+      "id": "kn-0076",
+      "domain": "AWS Secrets Manager",
+      "topic": "Secrets",
+      "q": "Secrets Manager vs SSM Parameter Store",
+      "a": "Secrets Manager natively rotates secrets (e.g. RDS credentials) on a schedule via Lambda, at a per-secret cost. Parameter Store stores config and secrets for free (SecureString via KMS) but has no built-in rotation.",
+      "explanation": "Requirement says 'automatically rotate the database credentials' -> Secrets Manager. Just need to store config/secrets cheaply with no rotation -> Parameter Store.",
+      "tags": [
+        "secrets-manager",
+        "parameter-store",
+        "rotation",
+        "credentials"
+      ]
+    },
+    {
+      "id": "kn-0077",
+      "domain": "Amazon Cognito",
+      "topic": "Authentication",
+      "q": "Cognito user pool vs identity pool",
+      "a": "A user pool handles authentication (sign-up/sign-in, returns JWT tokens). An identity pool handles authorization, exchanging a verified identity for temporary AWS credentials to access AWS resources.",
+      "explanation": "Need to authenticate app users / manage a directory = user pool. Need to grant those users temporary IAM access to AWS services (S3, DynamoDB) = identity pool. They are often used together.",
+      "tags": [
+        "cognito",
+        "user-pool",
+        "identity-pool",
+        "authentication",
+        "authorization"
+      ]
+    },
+    {
+      "id": "kn-0078",
+      "domain": "Edge Protection",
+      "topic": "Web Protection",
+      "q": "AWS WAF",
+      "a": "AWS WAF filters Layer 7 HTTP(S) traffic with managed and custom rules (SQL injection, XSS), rate-based rules (rate limiting), IP set matching (allow/block IP lists), and geo-matching (allow/block by country). It attaches to CloudFront, ALB, API Gateway, or AppSync.",
+      "explanation": "Trigger words: 'block SQLi/XSS', 'rate-limit requests', 'block specific IPs', 'block traffic from a country'. WAF protects HTTP applications; it does not mitigate network-layer DDoS (that is Shield) and has no executing principal for bucket policies.",
+      "tags": [
+        "waf",
+        "layer7",
+        "sql-injection",
+        "xss",
+        "rate-based",
+        "ip-filtering",
+        "geo-match"
+      ]
+    },
+    {
+      "id": "kn-0079",
+      "domain": "Edge Protection",
+      "topic": "DDoS Protection",
+      "q": "Shield Standard vs Shield Advanced",
+      "a": "Shield Standard is automatic and free, covering common Layer 3/4 DDoS. Shield Advanced adds enhanced L3/4/7 mitigation, 24/7 DDoS Response Team, cost protection, and protects ELB, CloudFront, Global Accelerator, Route 53, and EIPs.",
+      "explanation": "Large-scale DDoS, the DRT, or billing protection during an attack = Shield Advanced. Application-layer attacks like SQLi/XSS are WAF, not Shield.",
+      "tags": [
+        "shield",
+        "shield-advanced",
+        "ddos",
+        "drt",
+        "layer3-4"
+      ]
+    },
+    {
+      "id": "kn-0080",
+      "domain": "Edge Protection",
+      "topic": "Web Protection",
+      "q": "AWS Network Firewall - outbound FQDN filtering",
+      "a": "AWS Network Firewall is a managed stateful VPC firewall that can allow or deny traffic by domain name (FQDN), including filtering OUTBOUND traffic to only approved URLs.",
+      "explanation": "When the need is 'allow EC2 to reach only approved external repositories/URLs', use Network Firewall domain rules. WAF is inbound web-app protection, and security groups filter by IP/port, not by domain.",
+      "tags": [
+        "network-firewall",
+        "fqdn",
+        "egress",
+        "outbound",
+        "vpc"
+      ]
+    },
+    {
+      "id": "kn-0081",
+      "domain": "Threat Detection",
+      "topic": "Detection",
+      "q": "GuardDuty vs Inspector vs Macie",
+      "a": "GuardDuty detects threats by analyzing logs (VPC Flow, DNS, CloudTrail). Inspector scans EC2, ECR images, and Lambda for software vulnerabilities. Macie discovers and classifies sensitive data (PII) in S3.",
+      "explanation": "Map by target: suspicious activity from logs = GuardDuty; CVE/vulnerability scanning = Inspector; finding PII/sensitive data in S3 = Macie. Detective then helps investigate GuardDuty findings.",
+      "tags": [
+        "guardduty",
+        "inspector",
+        "macie",
+        "threat-detection",
+        "pii"
+      ]
+    },
+    {
+      "id": "kn-0082",
+      "domain": "Threat Detection",
+      "topic": "Governance",
+      "q": "AWS Config vs CloudTrail",
+      "a": "AWS Config records resource configuration state over time and evaluates compliance rules (what a resource looks like). CloudTrail records API calls (who did what, when). They answer different questions.",
+      "explanation": "'Is this resource configured compliantly / what changed in its config' = Config. 'Who made this API call / audit of actions' = CloudTrail. Config has managed rules like acm-certificate-expiration-check.",
+      "tags": [
+        "config",
+        "cloudtrail",
+        "compliance",
+        "audit",
+        "configuration"
+      ]
+    },
+    {
+      "id": "kn-0083",
+      "domain": "AWS Organizations",
+      "topic": "Governance",
+      "q": "Service Control Policies (SCPs)",
+      "a": "SCPs set the maximum available permissions (guardrails) for accounts or OUs in an Organization. They never grant access; they only limit what identity policies in those accounts can allow.",
+      "explanation": "Use SCPs to enforce org-wide restrictions (e.g. deny a Region or service across all accounts). Effective permissions are the intersection of the SCP and the account's IAM policies; an SCP deny cannot be overridden locally.",
+      "tags": [
+        "organizations",
+        "scp",
+        "guardrails",
+        "permissions",
+        "ou"
+      ]
+    },
+    {
+      "id": "kn-0084",
+      "domain": "AWS Certificate Manager",
+      "topic": "Certificates",
+      "q": "ACM certificate gotchas",
+      "a": "ACM provisions and auto-renews TLS certs; DNS validation renews indefinitely as long as the CNAME stays in place. ACM public certs cannot be exported, and for a CloudFront/edge-optimized distribution the cert MUST be in us-east-1.",
+      "explanation": "A third-party-CA-signed cert must be IMPORTED into ACM (ACM cannot issue it). Regional services (regional API Gateway, ALB) need the cert in their own Region; CloudFront and edge-optimized endpoints need us-east-1.",
+      "tags": [
+        "acm",
+        "tls",
+        "dns-validation",
+        "us-east-1",
+        "cloudfront"
+      ]
+    },
+    {
+      "id": "kn-0087",
+      "domain": "Amazon FSx",
+      "topic": "High Performance",
+      "q": "FSx for Lustre",
+      "a": "A high-performance parallel file system for compute-intensive workloads (HPC, machine learning, media processing) that integrates directly with S3 for input/output data.",
+      "explanation": "Trigger words: 'HPC', 'machine learning training', 'highest throughput / lowest latency file system', 'process data in S3'. Lustre is the high-performance answer, not EFS.",
+      "tags": [
+        "fsx",
+        "lustre",
+        "hpc",
+        "machine-learning",
+        "s3"
+      ]
+    },
+    {
+      "id": "kn-0088",
+      "domain": "Amazon FSx",
+      "topic": "Multi-Protocol",
+      "q": "FSx for NetApp ONTAP - multi-protocol",
+      "a": "FSx for NetApp ONTAP serves the same data over BOTH NFS and SMB (multi-protocol), so a Linux app (NFS) and a Windows app (SMB) can share one dataset.",
+      "explanation": "Trigger words: 'Linux and Windows clients need the same files', 'NFS and SMB on the same data'. This solves the dual-filesystem problem without keeping two copies.",
+      "tags": [
+        "fsx",
+        "netapp-ontap",
+        "nfs",
+        "smb",
+        "multi-protocol"
+      ]
+    },
+    {
+      "id": "kn-0090",
+      "domain": "AWS Storage Gateway",
+      "topic": "Hybrid Storage",
+      "q": "S3 File Gateway",
+      "a": "S3 File Gateway exposes S3 to on-premises systems as an NFS or SMB share, with a local cache for low-latency access to recent files. Files are stored as S3 objects.",
+      "explanation": "Trigger words: 'on-prem app needs a file share backed by S3', 'local cache'. Pair it with S3 Lifecycle to tier older files to Glacier automatically.",
+      "tags": [
+        "storage-gateway",
+        "file-gateway",
+        "s3",
+        "nfs",
+        "smb",
+        "cache"
+      ]
+    },
+    {
+      "id": "kn-0091",
+      "domain": "AWS Storage Gateway",
+      "topic": "Hybrid Storage",
+      "q": "Volume Gateway: stored vs cached",
+      "a": "Stored volumes keep a FULL copy of all data on premises (low-latency access to everything) and asynchronously back up to AWS. Cached volumes keep only frequently accessed data locally and store the primary dataset in AWS.",
+      "explanation": "Requirement says local access to ALL data / all files immediately -> stored volume. Requirement says keep only hot data on-prem and primary data in AWS -> cached volume. Both present iSCSI block volumes.",
+      "tags": [
+        "storage-gateway",
+        "volume-gateway",
+        "stored",
+        "cached",
+        "iscsi"
+      ]
+    },
+    {
+      "id": "kn-0092",
+      "domain": "AWS Storage Gateway",
+      "topic": "Hybrid Storage",
+      "q": "Tape Gateway",
+      "a": "Tape Gateway presents a virtual tape library (VTL) to existing backup software, replacing physical tapes; virtual tapes are stored in S3 and archived to Glacier/Glacier Deep Archive.",
+      "explanation": "Trigger words: 'existing tape-based backup', 'replace physical tapes', 'keep using the backup application'. Combined with Snowball, it is also the way to migrate huge tape archives when bandwidth is limited.",
+      "tags": [
+        "storage-gateway",
+        "tape-gateway",
+        "vtl",
+        "glacier",
+        "backup"
+      ]
+    },
+    {
+      "id": "kn-0093",
+      "domain": "Data Transfer",
+      "topic": "Data Transfer",
+      "q": "AWS DataSync",
+      "a": "DataSync is a managed, agent-based service that transfers and synchronizes large datasets over the network between on-premises storage and AWS (S3, EFS, FSx), with scheduling and integrity checks.",
+      "explanation": "Use DataSync for ongoing or large online migrations when network bandwidth is sufficient. The trade-off versus a simple s3 sync is that DataSync needs an agent (more setup) but adds scheduling and validation.",
+      "tags": [
+        "datasync",
+        "migration",
+        "agent",
+        "online",
+        "sync"
+      ]
+    },
+    {
+      "id": "kn-0094",
+      "domain": "Data Transfer",
+      "topic": "Data Transfer",
+      "q": "AWS Snow Family",
+      "a": "Snow devices move large datasets OFFLINE by shipping physical hardware: Snowcone (up to ~8 TB), Snowball Edge (tens of TB, with optional compute), and historically Snowmobile (exabyte). Use them when there is little or no network bandwidth.",
+      "explanation": "Compute the transfer time: if moving the data over the available link would take too long (e.g. petabytes on a slow uplink), ship a Snow device. Match device capacity to the data size (50 TB exceeds Snowcone).",
+      "tags": [
+        "snowball",
+        "snowcone",
+        "snow-family",
+        "offline",
+        "bandwidth"
+      ]
+    },
+    {
+      "id": "kn-0095",
+      "domain": "Data Transfer",
+      "topic": "Data Transfer",
+      "q": "AWS Transfer Family",
+      "a": "Transfer Family provides fully managed SFTP, FTPS, and FTP endpoints that land files directly in S3 or EFS, and integrates with external/custom identity providers, so users need no AWS console accounts.",
+      "explanation": "Trigger words: 'SFTP for partners/employees into S3', 'keep existing SFTP workflow'. It avoids creating IAM users per external user and removes self-managed SFTP servers.",
+      "tags": [
+        "transfer-family",
+        "sftp",
+        "ftps",
+        "s3",
+        "managed"
+      ]
+    },
+    {
+      "id": "kn-0096",
+      "domain": "Data Transfer",
+      "topic": "Data Transfer",
+      "q": "Choosing a migration method by size and bandwidth",
+      "a": "Small/quick over an available link -> aws s3 sync (encrypted in transit, zero infra). Large or ongoing online sync with enough bandwidth -> DataSync. Huge data with little/no bandwidth or a hard deadline -> Snow Family (offline).",
+      "explanation": "Always sanity-check the math: data size divided by link speed. If that exceeds the deadline, the network answer is wrong and you ship a Snow device. For ~100 GB on a decent link, s3 sync is the least-overhead choice.",
+      "tags": [
+        "migration",
+        "s3-sync",
+        "datasync",
+        "snowball",
+        "bandwidth"
+      ]
+    },
+    {
+      "id": "kn-0097",
+      "domain": "S3 Storage Classes",
+      "topic": "Storage Classes",
+      "q": "S3 storage classes overview",
+      "a": "Standard (frequent), Standard-IA (infrequent, multi-AZ), One Zone-IA (infrequent, single AZ), Intelligent-Tiering (auto-moves by access), and Glacier Instant (ms) / Flexible (mins-hours) / Deep Archive (12-48h) for archival.",
+      "explanation": "Pick by access frequency and retrieval-speed need. IA classes have a per-GB retrieval fee; Glacier tiers trade retrieval latency for cheaper storage. Lifecycle rules transition objects between classes automatically.",
+      "tags": [
+        "s3",
+        "storage-class",
+        "standard-ia",
+        "glacier",
+        "lifecycle"
+      ]
+    },
+    {
+      "id": "kn-0098",
+      "domain": "S3 Storage Classes",
+      "topic": "Storage Classes",
+      "q": "S3 Intelligent-Tiering",
+      "a": "Intelligent-Tiering automatically moves objects between access tiers based on usage, for a small per-object monitoring fee and no retrieval fees. It is ideal when access patterns are unknown or changing.",
+      "explanation": "Trigger words: 'unpredictable/unknown access patterns', 'optimize cost without managing lifecycle rules'. If the pattern is known and predictable, an explicit lifecycle policy to IA/Glacier is cheaper.",
+      "tags": [
+        "s3",
+        "intelligent-tiering",
+        "monitoring-fee",
+        "unknown-access"
+      ]
+    },
+    {
+      "id": "kn-0099",
+      "domain": "S3 Storage Classes",
+      "topic": "Storage Classes",
+      "q": "S3 One Zone-IA caveat",
+      "a": "One Zone-IA is cheaper than Standard-IA but stores data in a single Availability Zone, so it is lost if that AZ is destroyed. Use it only for reproducible or non-critical data.",
+      "explanation": "If the stem needs durability/availability across AZs, One Zone-IA is the wrong (cheap) trap. It fits secondary copies or data you can regenerate.",
+      "tags": [
+        "s3",
+        "one-zone-ia",
+        "single-az",
+        "reproducible"
+      ]
+    },
+    {
+      "id": "kn-0100",
+      "domain": "S3 Storage Classes",
+      "topic": "Storage Classes",
+      "q": "Glacier Vault Lock vs S3 Object Lock",
+      "a": "Glacier Vault Lock enforces a WORM policy on a Glacier vault (legacy Glacier vaults). S3 Object Lock enforces WORM immutability on S3 objects (with Compliance or Governance mode). For S3 data, Object Lock is the modern answer.",
+      "explanation": "If the data lives in S3 and must be immutable, use S3 Object Lock. Glacier Vault Lock applies specifically to Glacier vaults, an older construct, and is the answer only when the question is about Glacier vaults.",
+      "tags": [
+        "glacier",
+        "vault-lock",
+        "object-lock",
+        "worm",
+        "compliance"
+      ]
+    },
+    {
+      "id": "kn-0101",
+      "domain": "Amazon ECS",
+      "topic": "Containers",
+      "q": "ECS launch types: Fargate vs EC2",
+      "a": "With the Fargate launch type AWS runs the containers serverlessly (no instances to manage). With the EC2 launch type you provision and manage the EC2 container hosts yourself.",
+      "explanation": "Want no server management / least ops = Fargate. Need control over the host, special instance types, or GPUs = EC2 launch type. Both run the same task definitions.",
+      "tags": [
+        "ecs",
+        "fargate",
+        "ec2-launch-type",
+        "serverless"
+      ]
+    },
+    {
+      "id": "kn-0104",
+      "domain": "Amazon ECS",
+      "topic": "Containers",
+      "q": "ECS vs EKS",
+      "a": "ECS is AWS's simpler, fully integrated container orchestrator with less to learn. EKS runs upstream Kubernetes for teams that need the K8s ecosystem or portability, at higher operational complexity.",
+      "explanation": "No Kubernetes requirement + simplest path = ECS. Kubernetes standardization/portability = EKS. Either can run on Fargate to remove node management.",
+      "tags": [
+        "ecs",
+        "eks",
+        "orchestration",
+        "decision"
+      ]
+    },
+    {
+      "id": "kn-0105",
+      "domain": "AWS Fargate",
+      "topic": "Containers",
+      "q": "Scaling ECS/Fargate services",
+      "a": "ECS services scale with Application Auto Scaling target tracking policies (e.g. keep average CPU at 70%): tasks are added and removed automatically to hold the target metric.",
+      "explanation": "Trigger words: 'automatically scale containers up and down on CPU/memory'. Target tracking is the managed answer versus manually adjusting task counts.",
+      "tags": [
+        "fargate",
+        "ecs",
+        "application-auto-scaling",
+        "target-tracking"
+      ]
+    },
+    {
+      "id": "kn-0106",
+      "domain": "Amazon EKS",
+      "topic": "Containers",
+      "q": "EKS L7 routing to microservices",
+      "a": "The AWS Load Balancer Controller provisions an ALB for EKS, enabling HTTP path-based (Layer 7) routing to different microservices (e.g. /customers vs /orders).",
+      "explanation": "Need host/path-based routing to multiple services = ALB via the Load Balancer Controller. NLB is Layer 4 and cannot do path-based routing.",
+      "tags": [
+        "eks",
+        "alb",
+        "load-balancer-controller",
+        "path-routing"
+      ]
+    },
+    {
+      "id": "kn-0108",
+      "domain": "Compute Selection",
+      "topic": "Compute Selection",
+      "q": "Lambda vs Fargate vs EC2",
+      "a": "Lambda: short, event-driven functions (<=15 min), zero server management. Fargate: containers without managing nodes. EC2: full OS control and long-running or specialized workloads.",
+      "explanation": "Map by need: event-driven/bursty short tasks = Lambda; containerized services without node ops = Fargate; full control, custom kernel, long-running, or licensing = EC2.",
+      "tags": [
+        "lambda",
+        "fargate",
+        "ec2",
+        "compute-selection"
+      ]
+    },
+    {
+      "id": "kn-0110",
+      "domain": "Amazon CloudWatch",
+      "topic": "Monitoring",
+      "q": "CloudWatch metrics, alarms, and custom metrics",
+      "a": "CloudWatch collects metrics and triggers alarms/actions on thresholds. Memory and disk usage are NOT default EC2 metrics; you publish them as custom metrics via the CloudWatch agent.",
+      "explanation": "A common trap: 'monitor memory utilization' on EC2 requires the CloudWatch agent and a custom metric, because the hypervisor only exposes CPU, network, and disk I/O by default.",
+      "tags": [
+        "cloudwatch",
+        "alarms",
+        "custom-metrics",
+        "agent",
+        "memory"
+      ]
+    },
+    {
+      "id": "kn-0110b",
+      "domain": "Amazon CloudWatch",
+      "topic": "Monitoring",
+      "q": "CloudWatch composite alarms",
+      "a": "A composite alarm does not watch a metric directly. It combines the state of multiple existing metric alarms with a rule expression (AND, OR, NOT), e.g. ALARM(A) AND ALARM(B), and triggers a single action only when the combined condition is met.",
+      "explanation": "Use case: reduce alarm noise / avoid alert spam. Notify only when several conditions are true at once (e.g. high CPU AND high latency). Trigger words: 'combine multiple alarms', 'reduce noisy notifications', 'alert only when conditions A and B'.",
+      "tags": [
+        "cloudwatch",
+        "composite-alarm",
+        "alarms",
+        "and-or",
+        "noise-reduction"
+      ]
+    },
+    {
+      "id": "kn-0111",
+      "domain": "Amazon CloudWatch",
+      "topic": "Monitoring",
+      "q": "CloudWatch Logs metric filters",
+      "a": "A metric filter scans CloudWatch Logs for a pattern (e.g. an error string, or RDP/SSH activity in VPC Flow Logs), turns matches into a metric, and an alarm then notifies via SNS.",
+      "explanation": "To alert on something found in log content, the pattern is: logs -> metric filter -> alarm -> SNS. For example, detecting that port 22/3389 access occurred is done with Flow Logs plus a metric filter, not an EC2 state-change event.",
+      "tags": [
+        "cloudwatch-logs",
+        "metric-filter",
+        "alarm",
+        "sns",
+        "flow-logs"
+      ]
+    },
+    {
+      "id": "kn-0112",
+      "domain": "Amazon CloudWatch",
+      "topic": "Monitoring",
+      "q": "CloudWatch Container Insights",
+      "a": "Container Insights collects metrics, logs, and traces from ECS, EKS, and Kubernetes with built-in dashboards, purpose-built for container observability.",
+      "explanation": "When the requirement is full observability of a containerized platform, Container Insights is the targeted answer rather than the plain CloudWatch agent (logs only).",
+      "tags": [
+        "cloudwatch",
+        "container-insights",
+        "ecs",
+        "eks",
+        "observability"
+      ]
+    },
+    {
+      "id": "kn-0130",
+      "domain": "Amazon CloudWatch",
+      "topic": "Monitoring",
+      "q": "Stream CloudWatch Logs to OpenSearch",
+      "a": "CloudWatch Logs has a native subscription filter that streams a log group to Amazon OpenSearch Service in near real time, set up in a few clicks with AWS handling the streaming. No custom Lambda or self-managed agent is needed.",
+      "explanation": "Trigger words: 'send/stream CloudWatch Logs to OpenSearch for search/analytics, least overhead'. The subscription filter is the managed answer; a DIY Lambda forwarder reinvents it, and a Kinesis agent on each server is extra ops. Note: when the source is VPC Flow Logs feeding OpenSearch, a Kinesis Data Firehose subscription is the managed delivery path.",
+      "tags": [
+        "cloudwatch-logs",
+        "subscription-filter",
+        "opensearch",
+        "near-real-time",
+        "streaming"
+      ]
+    },
+    {
+      "id": "kn-0113",
+      "domain": "AWS Systems Manager",
+      "topic": "Operations",
+      "q": "Systems Manager Session Manager",
+      "a": "Session Manager gives audited shell access to EC2 (and on-prem) instances with no SSH keys, no bastion host, and no inbound ports open. Sessions can be logged natively to S3 or CloudWatch Logs.",
+      "explanation": "Trigger words: 'access instances without opening port 22 / without a bastion', 'audit administrative access'. It removes the public attack surface of SSH/RDP.",
+      "tags": [
+        "systems-manager",
+        "session-manager",
+        "no-bastion",
+        "no-ssh",
+        "audit"
+      ]
+    },
+    {
+      "id": "kn-0115",
+      "domain": "Amazon Athena",
+      "topic": "Analytics",
+      "q": "Amazon Athena",
+      "a": "Athena runs standard SQL directly on data in S3 with no servers and no data loading; you pay per query based on data scanned.",
+      "explanation": "Trigger words: 'query data/logs in S3 with SQL', 'serverless', 'no infrastructure'. Partitioning and columnar formats (Parquet) cut the data scanned and the cost. It does not move or store the data.",
+      "tags": [
+        "athena",
+        "sql",
+        "s3",
+        "serverless",
+        "pay-per-query"
+      ]
+    },
+    {
+      "id": "kn-0116",
+      "domain": "AWS Glue",
+      "topic": "Analytics",
+      "q": "AWS Glue",
+      "a": "Glue is serverless ETL plus a Data Catalog: it crawls, catalogs, and transforms data with no infrastructure to manage.",
+      "explanation": "Trigger words: 'transform/prepare data', 'data catalog', 'serverless ETL', 'least operational overhead'. The Glue Data Catalog is the metastore Athena and EMR query against.",
+      "tags": [
+        "glue",
+        "etl",
+        "data-catalog",
+        "serverless"
+      ]
+    },
+    {
+      "id": "kn-0117",
+      "domain": "Amazon EMR",
+      "topic": "Analytics",
+      "q": "Amazon EMR",
+      "a": "EMR is managed big-data processing running Hadoop, Spark, Hive, Presto, and similar frameworks on a cluster, for large-scale or custom batch processing.",
+      "explanation": "Trigger words: 'Hadoop/Spark', 'petabyte-scale processing', 'existing big-data jobs'. You manage a cluster, so it has more overhead than serverless Glue.",
+      "tags": [
+        "emr",
+        "hadoop",
+        "spark",
+        "big-data",
+        "cluster"
+      ]
+    },
+    {
+      "id": "kn-0118",
+      "domain": "AWS Glue",
+      "topic": "Analytics",
+      "q": "Glue vs EMR",
+      "a": "Glue is serverless, managed ETL for the least operational overhead. EMR runs a managed cluster you control, suited to large or custom Spark/Hadoop workloads where you need that control.",
+      "explanation": "If the stem says least operational overhead for ETL, pick Glue. If it requires running existing Hadoop/Spark code or fine cluster control at scale, pick EMR.",
+      "tags": [
+        "glue",
+        "emr",
+        "etl",
+        "serverless",
+        "decision"
+      ]
+    },
+    {
+      "id": "kn-0120",
+      "domain": "Amazon OpenSearch",
+      "topic": "Analytics",
+      "q": "Amazon OpenSearch Service",
+      "a": "OpenSearch provides full-text search and near-real-time log/operational analytics with dashboards (Kibana/OpenSearch Dashboards).",
+      "explanation": "Trigger words: 'full-text search', 'search and analyze logs in near real time', 'log analytics dashboards'. For ad-hoc SQL on S3 it is Athena; for search/log indexing it is OpenSearch.",
+      "tags": [
+        "opensearch",
+        "search",
+        "log-analytics",
+        "kibana"
+      ]
+    },
+    {
+      "id": "kn-0121",
+      "domain": "AWS Lake Formation",
+      "topic": "Analytics",
+      "q": "AWS Lake Formation",
+      "a": "Lake Formation builds and governs a data lake on S3 with fine-grained, tag-based access control (LF-TBAC), including cross-account sharing, without copying the data.",
+      "explanation": "Trigger words: 'central permissions on a data lake', 'grant column/table/tag-level access', 'share data across accounts'. It centralizes governance over data that stays in S3.",
+      "tags": [
+        "lake-formation",
+        "data-lake",
+        "tag-based-access",
+        "cross-account",
+        "s3"
+      ]
+    },
+    {
+      "id": "kn-0122",
+      "domain": "Amazon Athena",
+      "topic": "Analytics",
+      "q": "Analyze S3 logs with SQL and visualize",
+      "a": "The standard serverless pattern is Athena to query the logs in S3 with SQL, and QuickSight to visualize the results, with no servers and no data movement.",
+      "explanation": "Trigger words: 'analyze access/CloudFront/VPC logs stored in S3 + dashboards, least overhead'. Glue is ETL (not visualization) and DynamoDB cannot query S3 logs.",
+      "tags": [
+        "athena",
+        "quicksight",
+        "logs",
+        "s3",
+        "serverless"
+      ]
+    },
+    {
+      "id": "kn-0123",
+      "domain": "Cost Management",
+      "topic": "Cost",
+      "q": "Savings Plans vs Reserved Instances",
+      "a": "A Compute Savings Plan gives a discount for a usage commitment that applies flexibly across EC2, Lambda, and Fargate (any family/Region). Reserved Instances discount specific instance attributes and are less flexible.",
+      "explanation": "Need flexible commitment-based savings across compute = Compute Savings Plan. RIs can be marginally cheaper for a fixed, known instance type but lock you in more. Both reduce cost versus On-Demand for steady usage.",
+      "tags": [
+        "savings-plan",
+        "reserved-instance",
+        "commitment",
+        "discount"
+      ]
+    },
+    {
+      "id": "kn-0126",
+      "domain": "Cost Management",
+      "topic": "Cost",
+      "q": "Cost and Usage Reports (CUR)",
+      "a": "The Cost and Usage Report is the most granular billing dataset, delivered from the management account (covering all member accounts) to S3, and is typically queried with Athena.",
+      "explanation": "Trigger words: 'most detailed billing line items', 'analyze consolidated costs across all accounts'. CUR + Athena is the deep-dive pattern; Cost Explorer is the lighter visual tool.",
+      "tags": [
+        "cur",
+        "billing",
+        "s3",
+        "athena",
+        "consolidated"
+      ]
+    },
+    {
+      "id": "kn-0127",
+      "domain": "Cost Management",
+      "topic": "Cost",
+      "q": "S3 Storage Lens",
+      "a": "S3 Storage Lens gives organization-wide storage visibility across accounts and Regions, surfacing optimization opportunities such as incomplete multipart uploads and cold data.",
+      "explanation": "Trigger words: 'visibility into S3 usage across the whole org', 'find incomplete multipart uploads / cost-saving opportunities in S3'. It is enabled from a dashboard with no extra setup.",
+      "tags": [
+        "storage-lens",
+        "s3",
+        "organization",
+        "multipart",
+        "optimization"
+      ]
+    }
+  ]
+}

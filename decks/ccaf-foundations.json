@@ -1,0 +1,1407 @@
+{
+  "id": "ccaf-foundations",
+  "name": "Claude Certified Architect - Foundations",
+  "version": "1.0",
+  "language": "en",
+  "source": "CCAR-F Form 1: 60 questions with answers and explanations, imported from the deck owner's ccar-f-questions.md (source: aicertificates.study/ccar-f/form/1).",
+  "cards": [
+    {
+      "id": "ccaf-foundations-0001",
+      "source_num": 1,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The resolution loop's dispatcher branches on response.stop_reason. One branch executes the tool Claude asked for and sends the result back for another iteration; the other stops and returns the reply to the customer. Which pair of literal values does the dispatcher branch on?",
+      "options": [
+        "\"function_call\" to run the requested tool, \"end_turn\" to finish the turn",
+        "\"tool_call\" to run the requested tool, \"complete\" to finish the turn",
+        "\"tool_result\" to run the requested tool, \"stop\" to finish the turn",
+        "\"tool_use\" to run the requested tool, \"end_turn\" to finish the turn"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. \"tool_use\" to run the requested tool, \"end_turn\" to finish the turn",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Pairs the right terminal value with the wrong iteration value. \"function_call\" is what other tool-calling APIs name this event, so the refund branch never fires and every tool request falls through to the reply.\n\nB. Reads naturally and matches the vocabulary of several other vendors' loops, but neither string is emitted here, so the dispatcher matches nothing and the loop stalls on its first tool request.\n\nC. \"tool_result\" is a real name in this API, for the block carrying a tool's output back in the next user message. It is not a stop_reason, and \"stop\" is not one either.\n\nD. Correct. \"tool_use\" is the value Claude returns when it wants a tool executed and \"end_turn\" the value it returns when the turn is finished, which is exactly the two-branch split the dispatcher needs.\n\nKey principle: The agentic loop continues while stop_reason is \"tool_use\" and terminates when it is \"end_turn\". Those two literals are what the control flow switches on."
+    },
+    {
+      "id": "ccaf-foundations-0002",
+      "source_num": 2,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "Tier-2 staff say escalated disputes arrive with only a one-line reason, so they re-interview the customer from scratch. escalate_to_human currently accepts a single free-text reason string. Which change most directly removes the rework?",
+      "options": [
+        "Grant Tier-2 direct read access to the session transcript so they can reconstruct what was already established",
+        "Extend escalate_to_human to carry the verified customer ID, root-cause analysis, and recommended action",
+        "Attach the full tool-call and tool-result history of the session to every escalation the agent files",
+        "Require the agent to draft a customer-facing apology and resolution summary before it escalates"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Extend escalate_to_human to carry the verified customer ID, root-cause analysis, and recommended action",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Removes the information gap, but shifts the reading cost onto the human: a transcript still has to be mined for the customer ID, the finding, and the proposed remedy. It restores raw data where a conclusion is needed.\n\nB. Correct. A structured handoff carries exactly what the receiving human needs to act, who the customer is, what was found, and what the agent recommends, without them replaying the conversation.\n\nC. Preserves everything the agent saw, and is useful for later debugging, but raw tool output is even denser than a transcript and buries the analysis Tier-2 needs at the top.\n\nD. Improves the customer's experience of the handoff, and is worth doing, but the apology text is addressed to the customer and carries none of the case facts Tier-2 is missing.\n\nKey principle: Escalation is an interface between an agent and a human who lacks the agent's context. The handoff payload should be a structured conclusion, identity, root cause, recommended action, not the raw material the conclusion came from."
+    },
+    {
+      "id": "ccaf-foundations-0003",
+      "source_num": 3,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "lookup_order returns orderDate as a Unix epoch integer while the billing MCP server returns ISO 8601 strings. The agent has twice quoted a 1970 delivery date to a customer on a call. Which change reconciles the two representations in code?",
+      "options": [
+        "A PreToolUse hook whose updatedInput adds a canonical date-format argument to each of the two lookup calls",
+        "A PostToolUse hook that rewrites every timestamp field in a returned result into one format",
+        "An orderDate property typed as an ISO 8601 date string in lookup_order's own JSON input schema",
+        "A loop check that rejects any result whose orderDate is not ISO 8601 and re-issues that call"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. A PostToolUse hook that rewrites every timestamp field in a returned result into one format",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. PreToolUse can rewrite a call before it executes, which is the right instrument when the defect is in the arguments being sent. The epoch integer is chosen by each backend as it answers, so nothing in the outgoing call decides it.\n\nB. Correct. PostToolUse runs on the result after the call returns and before the model reads it, which is the point at which a tool's own output can be reshaped in code rather than left to the model's judgment.\n\nC. A tool's input schema is a genuine constraint and does reject malformed arguments before a call goes out. It governs the arguments Claude sends rather than the payload the tool hands back, so it never sees the value at issue.\n\nD. Rejecting a non-conforming result is deterministic and would keep the 1970 date away from the customer, but the backend returns the same representation every time, so the call is re-issued until the loop abandons a lookup that succeeded.\n\nKey principle: Hook phase decides what a hook can touch: PreToolUse sees the outgoing call, PostToolUse sees the returned result. Reconciling formats that two backends produce is work on the result, and a tool's input schema has no view of it."
+    },
+    {
+      "id": "ccaf-foundations-0004",
+      "source_num": 4,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "On a disputed charge the coordinator verifies the caller with get_customer and pulls the order with lookup_order, then spawns the billing-dispute subagent, which calls both tools again on the same account. Tool calls per dispute have roughly doubled. Which two changes address the cause?",
+      "options": [
+        "Give the subagent one named slice of the case, the disputed charge and its payment history, and nothing wider",
+        "Add a result cache in front of get_customer so the subagent's repeat lookup is served without a second call",
+        "Split the record types between them, so the coordinator reads identity and the subagent reads orders, each once",
+        "Tell the subagent in its prompt to skip any lookup the coordinator has most likely already run for this case",
+        "Have both agents work the whole ticket and then reconcile their two findings, so that duplicated conclusions merge"
+      ],
+      "correct_indices": [
+        0,
+        2
+      ],
+      "a": "A. Give the subagent one named slice of the case, the disputed charge and its payment history, and nothing wider; C. Split the record types between them, so the coordinator reads identity and the subagent reads orders, each once",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Correct. A subagent handed a defined slice stops re-deriving what the coordinator already holds; scope, not memory, is what removes the duplicate calls.\n\nB. Cuts the cost of the second lookup and is worth having on a hot path, but both agents still spend a turn deciding to make it and the duplicated reasoning remains.\n\nC. Correct. Partitioning by record type is the other axis of the same decomposition: each source is read by exactly one agent, so coverage stays complete without overlap.\n\nD. Sets a sensible expectation and costs nothing to try, yet the subagent cannot see which lookups the coordinator ran, so it is guessing about state it has no access to.\n\nE. Produces one consistent answer and catches contradictions between the two agents, but it accepts the duplicated work as the price rather than removing it.\n\nKey principle: Decomposition means giving each agent a distinct slice, a subtopic or a source type, so the work is covered once. Reconciling afterwards, or hoping one agent guesses what another already did, leaves the duplication in place."
+    },
+    {
+      "id": "ccaf-foundations-0005",
+      "source_num": 5,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The support coordinator runs with get_customer, lookup_order, process_refund and escalate_to_human in its allowedTools, and the billing-dispute subagent is defined and described. The coordinator never spawns it. Which entry must allowedTools also contain?",
+      "options": [
+        "\"Invoke\", added to the coordinator's allowedTools",
+        "\"Delegate\", added to the coordinator's allowedTools",
+        "\"Subagent\", added to the coordinator's allowedTools",
+        "\"Task\", added to the coordinator's allowedTools"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. \"Task\", added to the coordinator's allowedTools",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Names the thing being spawned, which is how the configuration reads, and an allowedTools list does hold the names the coordinator may invoke. This is not one of them, so nothing changes.\n\nB. Reads as the action the coordinator is meant to take, and delegation is genuinely what is being configured. The list takes tool names rather than intents, and no tool carries this one.\n\nC. Matches the vocabulary the rest of the configuration uses for the child agent, so it is the name an architect reaches for from memory. The spawning tool is not named after its result.\n\nD. Correct. Spawning runs through the Task tool, and a coordinator can invoke subagents only when \"Task\" appears in its allowedTools.\n\nKey principle: Subagent spawning is a tool call: the coordinator needs \"Task\" in allowedTools, whatever its prompt and the subagent's description say."
+    },
+    {
+      "id": "ccaf-foundations-0006",
+      "source_num": 6,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The coordinator spawns the billing-dispute subagent with a fixed script: call get_customer, then lookup_order, then decide. On a dispute where the charge sits on a profile merged from two accounts, the subagent runs the script, finds no matching order, and returns nothing. How should the spawning prompt change?",
+      "options": [
+        "Extend the script with a merged-profile branch so the procedure now covers the case the subagent just failed on",
+        "State the research goal and the quality bar it must meet, then leave the choice of calls to the subagent",
+        "Include worked examples of past disputes in the prompt so the subagent recognizes shapes the script misses",
+        "Have the subagent report back to the coordinator after each scripted step so the coordinator can redirect it"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. State the research goal and the quality bar it must meet, then leave the choice of calls to the subagent",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Fixes exactly this dispute and is the fastest patch available, but the next unfamiliar shape needs another branch, and the prompt still cannot adapt on its own.\n\nB. Correct. A goal plus explicit quality criteria lets the subagent choose its own path when the case is not the shape a script assumed, which is the reason to delegate it at all.\n\nC. Improves recognition of the shapes actually shown and is a sound prompting technique, yet examples enumerate cases the way a procedure does and run out at the same edge.\n\nD. Buys the coordinator a chance to intervene and adds real observability, but it keeps the procedure fixed and pays a round trip per step to work around its rigidity.\n\nKey principle: A subagent prompt should say what a good result looks like, not the exact sequence of calls that produces one. Procedural instructions fail on the first case their author did not picture."
+    },
+    {
+      "id": "ccaf-foundations-0007",
+      "source_num": 7,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The session that mapped atlas's HTTP client call sites is still current, and the team has decided to branch it two ways so each migration strategy explores from that same map without contaminating the other. Which named mechanism creates those branches?",
+      "options": [
+        "Launch each strategy with --resume under a different session name.",
+        "Copy the mapped session's file and open both copies side by side.",
+        "Launch each strategy with fork_session set on the mapped session.",
+        "Launch each strategy with branch_session set on the mapped session."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Launch each strategy with fork_session set on the mapped session.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. --resume is the named way to continue a specific prior conversation, so it is the right tool for picking the call-site session back up. Two resumptions share one lineage rather than splitting it, so the second inherits whatever the first did.\n\nB. Duplicating the file looks like it would produce two independent copies of the baseline. Session state is not managed by hand-copying its storage, and nothing in the session vocabulary names this move.\n\nC. Correct. fork_session creates independent branches from a shared analysis baseline, which is exactly what comparing two migration strategies against one call-site map requires.\n\nD. A plausible name for the operation, and it reads like the sibling of --resume. The option that performs a fork is not called branch_session, so a candidate working from the shape of the word rather than the vocabulary lands here.\n\nKey principle: fork_session is the named mechanism for creating independent branches from a shared analysis baseline, e.g. comparing two refactoring approaches from one codebase analysis. --resume is a different named operation: continuing one named session, not splitting it."
+    },
+    {
+      "id": "ccaf-foundations-0008",
+      "source_num": 8,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The coordinator runs its own tool-use loop. After executing a search_web call it appends the output to the conversation as a plain user message beginning \"Search returned:\", with no reference to the request that produced it. The model keeps re-issuing searches it has already run. What should the loop do instead?",
+      "options": [
+        "Keep a running list of the queries already executed in the coordinator's system prompt, refreshing it every turn.",
+        "Return each result as a tool_result block in a user message carrying the tool_use_id from the model's request.",
+        "Cache search_web responses by query at the tool layer, so that a repeated call returns the stored result instead.",
+        "Paste the outputs into the next prompt as a numbered findings list, with each query labelled above its own result."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Return each result as a tool_result block in a user message carrying the tool_use_id from the model's request.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. A visible list of completed queries gives the model something to check itself against and will suppress some of the repeats, but it asks the model to track in prose the state that the message format is supposed to carry structurally.\n\nB. Correct. A tool result belongs in a user message as a tool_result block whose tool_use_id matches the originating request; that linkage is what tells the model its call was satisfied and what the answer was.\n\nC. Caching makes a duplicate search cheap and instant, and is worth having on a pipeline this size regardless, but it treats the repeats as a cost problem rather than fixing why the model never sees its calls resolved.\n\nD. A labelled findings list is easier for both the model and a human reviewer to follow, yet it is still free text in a user turn: nothing binds those results to the tool_use blocks that asked for them.\n\nKey principle: Tool results are part of the API's message structure, not free text. Returning them as tool_result blocks with the matching tool_use_id is what closes the loop; anything pasted as prose leaves the model's own request unanswered."
+    },
+    {
+      "id": "ccaf-foundations-0009",
+      "source_num": 9,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "To save a hop, report-writer was allowed to call doc-analysis directly whenever a citation looks thin. Coverage improved, but the coordinator's logs no longer show which sources were re-checked, and retry behaviour now differs between the two paths. What is the strongest argument for routing that call back through the coordinator?",
+      "options": [
+        "It restores a single observable point for inter-agent traffic, keeping error handling and routing consistent.",
+        "It reduces the report-writer's tool count, which improves selection reliability among the tools it retains.",
+        "It lets doc-analysis reuse the coordinator's conversation history, so re-checks inherit the original context.",
+        "It prevents the two subagents from running concurrently, removing contention for the shared document cache."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. It restores a single observable point for inter-agent traffic, keeping error handling and routing consistent.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Correct. In a hub-and-spoke design the coordinator mediates all inter-subagent communication, which is what gives you one place to observe traffic, apply error handling uniformly, and control what information moves between agents.\n\nB. Removing a delegation path does trim the report-writer's surface and marginally helps tool selection, but that is a side effect here; the reported symptoms are lost observability and divergent retry behaviour.\n\nC. This describes a benefit that does not exist: subagents run with isolated context and never inherit the coordinator's conversation history automatically, whoever invokes them. Context has to be passed in the prompt.\n\nD. Serializing the two agents would remove cache contention, which is a real concern in some pipelines, but nothing in the symptoms points at concurrency, and hub routing does not itself prevent parallel work.\n\nKey principle: Hub-and-spoke is chosen for observability, consistent error handling, and controlled information flow. Direct spoke-to-spoke shortcuts trade those properties away for a latency saving that is rarely worth it."
+    },
+    {
+      "id": "ccaf-foundations-0010",
+      "source_num": 10,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "The synthesis subagent is spawned with the prompt \"Synthesize the findings gathered so far into a coherent narrative.\" Its output reads fluently but carries no source URLs and none of the figures doc-analysis extracted, all of which sit in the coordinator's own history. What explains this?",
+      "options": [
+        "The synthesis subagent's context window filled before it reached the figures, so middle sections were dropped.",
+        "Synthesis was spawned before doc-analysis returned, so the shared findings store was still empty at that moment.",
+        "The coordinator's system prompt does not grant synthesis read access to the transcripts the other subagents wrote.",
+        "Subagents start with isolated context, so findings not written into the synthesis prompt are unavailable to it."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Subagents start with isolated context, so findings not written into the synthesis prompt are unavailable to it.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Position effects are real and do cause middle-of-input omissions in long aggregated inputs, but that produces partial loss, not the total absence of every figure and URL seen here.\n\nB. An ordering bug would explain empty input and is worth ruling out in a parallel pipeline, but it presumes a shared findings store that subagents read automatically, the delegation model has no such implicit channel.\n\nC. Read permissions on transcripts sound like the right shape of fix, and tool restrictions are configurable per subagent, but there is no permission toggle that makes a subagent see another agent's conversation.\n\nD. Correct. Subagents do not inherit the coordinator's conversation history. A prompt saying \"the findings gathered so far\" refers to nothing the subagent can see; the complete findings must be included in the prompt itself.\n\nKey principle: Isolation is the default in coordinator-subagent systems. Anything a subagent needs, findings, source URLs, extracted figures, has to be passed explicitly, and vague back-references to shared state are the most common cause of thin subagent output."
+    },
+    {
+      "id": "ccaf-foundations-0011",
+      "source_num": 11,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "You are writing the AgentDefinition for the doc-analysis subagent so the coordinator can spawn it. Select the TWO things that the definition object itself declares.",
+      "options": [
+        "The coordinator's conversation history to that point, which doc-analysis inherits on spawn.",
+        "The system prompt that governs how doc-analysis reads a source and reports what it found.",
+        "The internal corpus server credentials doc-analysis presents when the MCP connection opens.",
+        "The restricted tool set it may call, holding doc-analysis to library_search and verify_fact.",
+        "The coordinator's own retry policy for when doc-analysis returns nothing usable at all."
+      ],
+      "correct_indices": [
+        1,
+        3
+      ],
+      "a": "B. The system prompt that governs how doc-analysis reads a source and reports what it found.; D. The restricted tool set it may call, holding doc-analysis to library_search and verify_fact.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Nothing of the sort is declared here. Subagents do not inherit the parent's context at all, so there is no field for it - anything doc-analysis needs from the coordinator has to be written into the prompt that spawns it.\n\nB. Correct. An AgentDefinition carries the subagent type's own system prompt, alongside its description and its tool restrictions. That prompt is what makes doc-analysis behave as a document analyst rather than a generic worker.\n\nC. MCP server connection details, including how the token-authenticated corpus server is reached, live in the MCP configuration rather than in a subagent's definition. The definition can restrict which tools are reachable, not supply credentials.\n\nD. Correct. Per-subagent tool restrictions are declared in the AgentDefinition, which is how doc-analysis is confined to corpus reading and fact checking instead of inheriting the coordinator's full tool surface.\n\nE. An iteration ceiling is a property of how the agent loop is run, not part of the subagent type's configuration object. It is a real control, but it is set elsewhere.\n\nKey principle: An AgentDefinition configures a subagent type: its description, its system prompt, and the tools it is allowed to call. Session context, MCP credentials, and loop limits all live outside it - which is why a subagent's brief must be written into its prompt."
+    },
+    {
+      "id": "ccaf-foundations-0012",
+      "source_num": 12,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "Policy says no report ships containing a claim that verify_fact has not confirmed. The coordinator's prompt states this in bold and repeats it twice. An audit of 200 published reports still finds nine with unverified claims in the executive summary. What change makes the rule hold?",
+      "options": [
+        "Add a required verified_claim_ids array to render_report's input schema, so no call can be issued without one.",
+        "Move render_report out of report-writer's tool set, leaving the coordinator as the only agent able to call it.",
+        "Add a programmatic prerequisite that blocks render_report until verify_fact has returned for every claim.",
+        "Have a second Claude instance review each finished report and flag any claim that lacks a verification record."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Add a programmatic prerequisite that blocks render_report until verify_fact has returned for every claim.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. A required property does make the call impossible to issue without the field, which is why this reads as decisive. The schema checks that the array is present, not that its ids came from verify_fact, so the model fills it from claims it never checked.\n\nB. Narrowing who holds a tool is a real control and would stop report-writer rendering anything at all. It moves the call rather than conditioning it, and the coordinator can render an unverified claim exactly as easily.\n\nC. Correct. A prerequisite gate that blocks the downstream tool call until the required step has completed converts a policy into a deterministic guarantee, which is what a rule with a compliance audit behind it requires.\n\nD. An independent reviewer catches escapes and is a reasonable defence in depth, but it reads the report after render_report has produced it, so it detects violations rather than preventing them.\n\nKey principle: A rule that must hold every time is enforced at the moment of the call. A schema constrains the shape of the arguments and a tool grant decides who may call; neither can express \"only after this other call has returned.\""
+    },
+    {
+      "id": "ccaf-foundations-0013",
+      "source_num": 13,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "Queries built from internal corpus documents occasionally carry the corpus server's auth token inside the string web-research hands to search_web, sending a live credential to a third-party endpoint. The searches are otherwise legitimate and the team does not want them abandoned. What mechanism keeps the credential from leaving while the search still goes out?",
+      "options": [
+        "Add a PreToolUse hook that denies any search_web call whose query text matches the corpus token pattern.",
+        "State in web-research's own system prompt that credentials must never be placed inside a search query.",
+        "Add a PreToolUse hook that uses updatedInput to strip the token, letting the search run without it.",
+        "Add a PostToolUse hook that redacts the token from search_web results before the model ever reads them."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Add a PreToolUse hook that uses updatedInput to strip the token, letting the search run without it.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. A deny decision does guarantee the credential never leaves, and it is the right call when no version of the call is acceptable, but here it throws away a search that is sound apart from one contaminated field.\n\nB. Telling the subagent not to embed credentials costs nothing and would cut how often this happens, but it leaves a credential leak resting on a probabilistic instruction, and one miss in a trace is already one too many.\n\nC. Correct. PreToolUse can return updatedInput to rewrite a call before it executes, so the token is removed from the query and the search still goes out with the rest of its terms intact.\n\nD. Redacting the result keeps the token out of the model's context and out of the stored transcript, which is worth doing, but by then the call has already reached the third-party endpoint and the credential has left.\n\nKey principle: PreToolUse can allow, deny, or rewrite a call. When only part of the input is unacceptable, rewriting it enforces the rule without discarding the work; PostToolUse runs after the call has already gone out."
+    },
+    {
+      "id": "ccaf-foundations-0014",
+      "source_num": 14,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "Two request types share the pipeline. A \"quarterly competitor brief\" always needs the same five sections in the same order. A \"what happened with X\" request is open-ended, and its useful subtopics only become visible once early sources are read. Both currently use one decomposition strategy. What should you do?",
+      "options": [
+        "Keep the fixed chain for quarterly briefs and let open-ended requests use decomposition that adapts to findings.",
+        "Move both request types onto the fixed chain, adding sections until the open-ended requests are covered too.",
+        "Move both to adaptive decomposition and let the coordinator derive the quarterly brief's five sections at run time.",
+        "Keep one strategy, and have the coordinator run a second pass over any request whose coverage looks thin."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Keep the fixed chain for quarterly briefs and let open-ended requests use decomposition that adapts to findings.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Correct. Prompt chaining suits predictable multi-aspect work with known sections, while dynamic decomposition suits open-ended investigation where subtasks emerge from intermediate findings. The two request types genuinely need different patterns.\n\nB. One fixed chain is simple to reason about and keeps output shape stable, but no fixed section list can anticipate an open-ended question, so coverage gaps reappear on every unfamiliar topic.\n\nC. Adaptive decomposition everywhere is flexible and would handle both, at the price of re-deriving a section list you already know, adding variance and cost to the one workflow that is fully specified.\n\nD. A coverage second pass is a useful safety net either way and does catch some gaps, but it patches the output after the fact instead of choosing a decomposition that fits each request type.\n\nKey principle: Decomposition strategy follows the shape of the task, not the shape of the pipeline. Predictable, enumerable work wants a fixed chain; open-ended investigation wants subtasks generated from what has been discovered."
+    },
+    {
+      "id": "ccaf-foundations-0015",
+      "source_num": 15,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "An investigation is resumed with --resume market-shift. The web and news results it cached are still accurate, but the internal corpus server was re-indexed overnight and about a dozen of the documents it analysed now sit at different identifiers. Nobody needs the pre-reindex identifiers kept. What is the better move?",
+      "options": [
+        "Start a fresh session seeded with a structured summary, then re-run every search the investigation made.",
+        "Fork the session so the pre-reindex analysis is preserved while a branch re-checks the archive corpus.",
+        "Resume the session and tell it at the start of the turn which archive documents were re-indexed.",
+        "Resume the session and have it re-run all three servers' searches so nothing cached is trusted now."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Resume the session and tell it at the start of the turn which archive documents were re-indexed.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Guarantees nothing stale survives, and is the right call when prior results have gone stale wholesale. Here most of the session is still accurate, so it discards a large body of valid work and pays to rebuild it.\n\nB. Preserves the earlier analysis on its own branch, which is what forking is for when two lines of work must both survive. Nothing here needs preserving, and the new branch inherits exactly the same re-indexed identifiers.\n\nC. Correct. When a resumed session's context is mostly still valid, naming what changed lets it re-analyse just that slice instead of re-exploring everything.\n\nD. Removes any chance of a stale citation surviving, at the cost of discarding the web and news results that were never affected, full re-exploration to fix a known, bounded change.\n\nKey principle: Inform a resumed session about the specific changes rather than re-exploring from scratch. Full re-analysis is the answer only when the stale share is large enough that little of the prior context still holds."
+    },
+    {
+      "id": "ccaf-foundations-0016",
+      "source_num": 16,
+      "domain": "D1 - Agentic Architecture & Orchestration",
+      "q": "Bundled shipment packets run about 60 pages, holding several manifests and the invoices that match them. One request currently extracts every field and reconciles manifests against invoices at the same time. Documents in the middle of a packet get skipped, and two reconciliations of the same shipment disagree. How should you restructure the work?",
+      "options": [
+        "Run one extraction pass per document, then a separate integration pass that reconciles the structured results.",
+        "Split each packet into two thirty-page requests and merge the reconciliation output of the two halves.",
+        "Have the model restate each of its earlier findings before it starts the next document so nothing drops out of view.",
+        "Move the reconciliation instructions above the packet text so the task is read before the content arrives."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Run one extraction pass per document, then a separate integration pass that reconciles the structured results.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d1"
+      ],
+      "explanation": "A. Correct. Each pass then has one job over a bounded input: local extraction sees a single document, and reconciliation runs over compact structured records rather than 60 pages of raw text, so neither is competing for attention with the other.\n\nB. Halving the input does lower the per-request load and would recover some middle-of-packet fields. It cuts at an arbitrary page boundary, so a manifest and its invoice can land in different requests, and neither half can reconcile a pairing it only half sees.\n\nC. Rolling restatement is a genuine mitigation for position effects and keeps earlier material near the end of the window. It leaves one request doing per-document extraction and cross-document reconciliation together, which is the mixture producing the contradictory pairings.\n\nD. Placing instructions ahead of a long input is sound prompt construction and helps the model hold the task in view. It changes where the instruction sits rather than how much material one pass must attend to, so middle-of-packet documents keep getting skimmed.\n\nKey principle: Break a large multi-document analysis into per-item local passes plus a separate cross-item integration pass. One request asked to do both dilutes its attention across the input and produces inconsistent cross-document conclusions."
+    },
+    {
+      "id": "ccaf-foundations-0017",
+      "source_num": 17,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Since the system prompt gained the line \"always look up the customer's history before deciding,\" the agent calls get_customer twice per turn, once to verify identity and again before each order action. Both tool descriptions are detailed and accurate. What is the most likely cause?",
+      "options": [
+        "The prompt's \"look up the customer's history\" wording binds that instruction to get_customer on each turn",
+        "The get_customer description overlaps lookup_order enough that the agent hedges by calling both tools",
+        "The agent cannot see its own earlier tool results within a turn, so it re-queries identity before acting",
+        "tool_choice is set to \"any\", which forces at least one tool call before the agent may answer in text"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. The prompt's \"look up the customer's history\" wording binds that instruction to get_customer on each turn",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Correct. Keyword-sensitive system prompt language creates unintended tool associations: \"look up\" and \"customer\" read as a standing directive to invoke get_customer, overriding otherwise sound descriptions.\n\nB. Would be the usual first suspect and is worth ruling out, but the stem states both descriptions are detailed and accurate, and the symptom is repetition of one tool rather than misrouting between two.\n\nC. Would explain re-querying, and context loss does cause duplicate calls in other systems, but tool results are appended to the conversation and remain visible for the rest of the turn.\n\nD. Would guarantee a tool call rather than prose, which is a real effect of that setting, but it does not explain why the same tool is chosen a second time in a single turn.\n\nKey principle: System prompt wording competes with tool descriptions for control of tool selection. When behavior changes right after a prompt edit, read the new wording for keywords that map onto a tool name before suspecting the tool definitions."
+    },
+    {
+      "id": "ccaf-foundations-0018",
+      "source_num": 18,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "When the payments backend times out, process_refund returns isError: true with the text \"Operation failed.\" Policy rejections return the same payload. The agent now retries policy rejections indefinitely and gives up on real timeouts. What should the tool return instead?",
+      "options": [
+        "A distinct human-readable error string per failure mode so the agent can match on the wording it gets",
+        "A retry loop inside the tool itself, surfacing only the final outcome after three attempts have failed",
+        "The backend's own exception class name in a code field, so the agent can branch on the code it gets",
+        "An errorCategory value and an isRetryable boolean alongside a readable description of what failed"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. An errorCategory value and an isRetryable boolean alongside a readable description of what failed",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Gives the agent more to go on than one generic string, but it puts the retry decision back on string matching, which breaks the moment someone rewords a message.\n\nB. Handles transient failures close to the source, which is genuinely good practice, but it does nothing for the policy rejections that should never be retried at all.\n\nC. A stable code is a real improvement on prose and is something the agent can match exactly rather than interpret. It exports the backend's internal taxonomy, so the agent must carry its own map of which classes are worth retrying.\n\nD. Correct. Structured error metadata lets the agent branch on isRetryable rather than infer intent from prose, and errorCategory separates transient failures from business-rule violations.\n\nKey principle: Uniform failure payloads strip an agent of the information it needs to recover. Errors should carry a category and an explicit retryability flag so the retry decision is data, not interpretation."
+    },
+    {
+      "id": "ccaf-foundations-0019",
+      "source_num": 19,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "run_query lets the billing subagent compose arbitrary queries against the billing database. Twice last quarter it returned invoice rows belonging to a different account whose contact name matched the caller's. Which two changes most directly address this?",
+      "options": [
+        "Replace run_query with a lookup_invoice tool that takes an invoice ID and rejects invoices outside the account in dispute",
+        "Rewrite run_query's description so it warns that the tool is a last resort, for questions no specific billing tool covers",
+        "Remove run_query from the billing subagent's tool set once lookup_invoice covers the lookups the role actually needs",
+        "Add a PostToolUse hook that drops any returned row whose account id is not the account currently in dispute",
+        "Use forced tool selection so lookup_order runs first on each billing turn and establishes the account in context"
+      ],
+      "correct_indices": [
+        0,
+        2
+      ],
+      "a": "A. Replace run_query with a lookup_invoice tool that takes an invoice ID and rejects invoices outside the account in dispute; C. Remove run_query from the billing subagent's tool set once lookup_invoice covers the lookups the role actually needs",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Correct. A constrained replacement makes the account boundary part of the tool contract, so a cross-account row cannot come back however the model phrases its request.\n\nB. Sharpens selection and would reduce casual reaching for it, but the capability is unchanged: a tool that can read any account still will when the description is outweighed.\n\nC. Correct. The narrow tool only helps if the broad one is gone; leaving both in the set keeps the unconstrained path one selection away.\n\nD. Filtering the result set is deterministic and does keep the foreign rows out of the model's context, which is worth having as a backstop. The query still ran unconstrained, so the read happened and the tool can be asked for anything.\n\nE. Establishes the account early and is a sound use of forced selection, but nothing then stops a later run_query from reaching past that account anyway.\n\nKey principle: Guardrails belong in the tool interface, not in the instructions wrapped around it. Narrowing a generic tool means both building the constrained replacement and retiring the general tool it replaces."
+    },
+    {
+      "id": "ccaf-foundations-0020",
+      "source_num": 20,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Refund work must be scoped to a verified account, and get_customer is the tool that verifies one. On tool_choice \"auto\" the agent opens roughly one dispute in eight with lookup_order instead, then works whichever account that order belongs to. What settles the opening call?",
+      "options": [
+        "Set tool_choice to \"any\" for the opening turn, so the agent must call some tool before it may reply in text.",
+        "Use forced tool selection to name get_customer as the opening call, then let the dispute continue on auto.",
+        "State in the system prompt that get_customer is the required first call on every dispute the agent picks up.",
+        "Withhold lookup_order until get_customer has returned, then supply it for the turns that follow in the dispute."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Use forced tool selection to name get_customer as the opening call, then let the dispute continue on auto.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Guaranteeing a tool call rather than conversational text is the right instrument when an agent answers from memory, and it would fix that failure. It does not say which tool, so the eighth dispute still opens on lookup_order.\n\nB. Correct. Forced tool selection names the one tool that must be called, which is how a specific call is guaranteed to run first; the rest of the dispute then proceeds on auto in the follow-up turns.\n\nC. Prompt instructions steer selection, cost nothing to add, and would carry most disputes. A stated preference competes with the model's own reading of the tools rather than deciding the call, so a fraction still goes the other way.\n\nD. Varying the tool set by turn does make the wrong opening impossible and is a real technique. It asks the caller to track dispute state and rebuild the tool set each turn, where a single tool_choice value does the same job.\n\nKey principle: tool_choice \"any\" guarantees that some tool is called; forced selection guarantees which one. When a specific call has to come first, name it and let the following turns run on auto."
+    },
+    {
+      "id": "ccaf-foundations-0021",
+      "source_num": 21,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "An engineer adds an experimental invoice-reconciliation MCP server to her own user-scoped ~/.claude.json, alongside the team's shared project-scoped .mcp.json. When do that server's tools become available to the support agent?",
+      "options": [
+        "On first use, once the agent names a tool from that server and its connection opens",
+        "Only in sessions started from the directory that holds that server's configuration",
+        "Only after that server is listed in the permitted-servers setting for the project",
+        "At connection time, when the tools of every configured server are discovered together"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. At connection time, when the tools of every configured server are discovered together",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Describes lazy discovery, which some tool ecosystems really do use to keep startup cheap. Here the agent could not name a tool it had not yet been shown, since discovery precedes selection.\n\nB. Directory-scoped activation is real for project configuration, and the shared .mcp.json is found that way. Availability of a user-scoped server's tools is not conditioned on the working directory.\n\nC. An allow-list gate is how several other capabilities are governed, and scoping tools is a genuine concern. Discovery is not gated on a project-level roster of permitted servers.\n\nD. Correct. Tools from all configured MCP servers are discovered when the connections are established, and from then on every server's tools are available to the agent simultaneously.\n\nKey principle: All configured MCP servers, project-scoped and user-scoped alike, have their tools discovered at connection time and offered to the agent together."
+    },
+    {
+      "id": "ccaf-foundations-0022",
+      "source_num": 22,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Before answering a returns question the agent fires four or five exploratory lookups just to discover which return policies exist. Response latency is now the top complaint in post-chat surveys. Which change reduces those calls with the least new machinery?",
+      "options": [
+        "Expose the policy catalog as an MCP resource so the agent can see what exists without probing for it",
+        "Cache each policy lookup for an hour so repeated questions skip the round trip to the policy backend",
+        "Add a policy_search tool with fuzzy matching so a single call replaces the exploratory call sequence",
+        "Place the full text of every return policy in the system prompt so no lookup is needed during a turn"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Expose the policy catalog as an MCP resource so the agent can see what exists without probing for it",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Correct. MCP resources expose a content catalog the agent can consult directly, so it knows what policies exist without spending tool calls discovering the shape of the data.\n\nB. Cuts latency for repeat questions and is worth having regardless, but the first customer to ask about any policy still pays the full exploratory sequence.\n\nC. Collapses the sequence into one call and would help, at the cost of a new tool to build and tune, plus fuzzy matching that can return a confidently wrong policy.\n\nD. Removes lookups entirely, which is tempting, but it burns context on every turn regardless of relevance and goes stale the moment the policy team edits anything.\n\nKey principle: Exploratory tool calls are usually a visibility problem. Exposing the catalog as a resource lets the agent see what is available without spending calls to find out."
+    },
+    {
+      "id": "ccaf-foundations-0023",
+      "source_num": 23,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "The corpus MCP server exposes library_search, whose description reads in full: \"Searches the internal library.\" It takes a natural-language query, filters by report date, and returns section-level citations. Traces show report-writer reaching for Grep across the ~300 Markdown reports under reports/ on nearly every run, missing reports that use different wording for the same topic. What is the most effective fix?",
+      "options": [
+        "Drop Grep from report-writer's tool set, leaving the corpus server as its only route into the reports directory.",
+        "Expand library_search's description to state its query input, its citation-bearing output, and when to prefer it.",
+        "Add a line to report-writer's system prompt telling it to consult the internal library before any local file search.",
+        "Have report-writer run Grep first and fall back to library_search only when the text search returns no matching file."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Expand library_search's description to state its query input, its citation-bearing output, and when to prefer it.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Removing the built-in does guarantee the corpus server gets used, and it is the right call when a tool is genuinely unsafe here, but it also costs report-writer exact-string lookups that Grep does well.\n\nB. Correct. A one-line description gives the model nothing to weigh against a familiar built-in, so stating the inputs, the citation-bearing output, and when to prefer it lets the more capable tool win selection on merit.\n\nC. A prompt instruction is cheap and would lift usage somewhat, but it leaves the description uninformative for every other agent that loads the server, and it relies on the model following guidance every turn.\n\nD. Ordering the two tools does put library_search in the path and would catch some missed reports, but it keeps a wording-sensitive text search as the default and still never tells the model what the MCP tool actually returns.\n\nKey principle: Agents choose tools from their descriptions, and a well-known built-in outcompetes a thinly described MCP tool even when the MCP tool is strictly more capable. Describe inputs, outputs, and the conditions that favour it."
+    },
+    {
+      "id": "ccaf-foundations-0024",
+      "source_num": 24,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Reports are rendered from a template whose final block is a run of six identical citation footers, one per section, emitted by a generator with nothing between them but blank lines. The methodology footer, the fourth, must gain a collection-date line and the other five must not change. An Edit keyed on the footer text fails. How should the change be made?",
+      "options": [
+        "Read the template in full, then Write it back with the fourth footer changed and the rest reproduced unchanged",
+        "Grep the template for the footer text and pass the line number Grep reports as the anchor for the Edit call",
+        "Edit the footer text everywhere it appears, then Edit the five that should not have changed back to the original",
+        "Split the run of footers into six files the generator imports, then Edit the one belonging to the methodology section"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Read the template in full, then Write it back with the fourth footer changed and the rest reproduced unchanged",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Correct. Edit needs text that occurs exactly once, and every occurrence here is byte-identical, so no anchor can be built. Reading the file and writing it back makes position rather than uniqueness the selector.\n\nB. Grep is the right tool for finding where text occurs and would report all six positions. Edit matches on text rather than on line numbers, so a position from Grep is not something it can be given.\n\nC. Editing all six and reverting five does reach the intended state without a full-file write. It rewrites five blocks that were already correct, and a failure between the two steps leaves the template in a state nobody intended.\n\nD. Splitting the generated run into per-section files makes each one addressable and is a defensible change to the generator. It refactors the template pipeline in order to change one line today.\n\nKey principle: Edit depends on a unique text match. Where a file repeats a block verbatim, Read the file and Write it back with the intended occurrence changed instead of trying to manufacture an anchor."
+    },
+    {
+      "id": "ccaf-foundations-0025",
+      "source_num": 25,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Every subagent is spawned with the same 18-tool set. Traces show the synthesis subagent calling search_web to chase a claim it distrusts, then building a section on a source doc-analysis never vetted. You still want synthesis to be able to check claims. What is the right configuration?",
+      "options": [
+        "Give synthesis all 18 tools but add a prompt rule stating that it must not perform web searches of its own.",
+        "Reduce every subagent to the same four tools, chosen as the ones the pipeline calls most across all roles.",
+        "Leave the tool sets as they are and have the coordinator reject any section whose sources doc-analysis never vetted.",
+        "Scope synthesis to its own tools plus verify_fact, routing anything needing new sources back to the coordinator."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Scope synthesis to its own tools plus verify_fact, routing anything needing new sources back to the coordinator.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. A prohibition in the prompt is quick and preserves flexibility, but leaving a tool in reach and asking the model not to use it is prompted compliance where a configuration change would be decisive.\n\nB. A smaller uniform tool set does improve selection reliability, since decision complexity grows with tool count, but one shared set ignores that each role needs different tools and would strip capabilities other agents depend on.\n\nC. A coordinator-side gate on unvetted sources is a real safeguard and catches the bad section, though it rejects work after synthesis has already spent tokens producing it and leaves the misuse pattern intact.\n\nD. Correct. Scoped access gives each agent the tools its role needs, plus a narrow cross-role tool for a high-frequency need like fact checking, with anything larger routed through the coordinator.\n\nKey principle: Agents holding tools outside their specialization tend to misuse them. Scope tool sets by role and grant deliberate, narrow exceptions rather than a shared superset or a prompt-level ban."
+    },
+    {
+      "id": "ccaf-foundations-0026",
+      "source_num": 26,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "The corpus MCP server needs an auth token and every researcher on the team must have it configured identically. A second, experimental patents server is one engineer's private trial that nobody else wants yet. Where should each be configured?",
+      "options": [
+        "Corpus in project .mcp.json with the token as ${CORPUS_TOKEN}; patents in that engineer's ~/.claude.json.",
+        "Both in the project's .mcp.json, with the patents server left disabled until the team decides to adopt it.",
+        "Both in each engineer's own ~/.claude.json, so that tokens never enter a file committed to the repository.",
+        "Corpus in the project's .mcp.json with the token value inlined, and the patents server in that same file."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Corpus in project .mcp.json with the token as ${CORPUS_TOKEN}; patents in that engineer's ~/.claude.json.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Correct. Project-scoped .mcp.json is for shared team tooling and supports environment variable expansion so the credential stays out of version control; user-scoped ~/.claude.json is where personal and experimental servers belong.\n\nB. Keeping everything in one file does make the team's tooling easy to audit, but it pushes one engineer's experiment onto everyone and invites churn in a shared, version-controlled config.\n\nC. User-scoped config does keep secrets local, which is the instinct behind this answer, but it also means the shared server must be configured by hand on every machine and drifts out of sync.\n\nD. Project scope is right for the corpus server, yet inlining the token commits a live credential to the repository, and the experimental server does not belong in shared config at all.\n\nKey principle: Scope MCP servers by audience: shared tooling in project-level .mcp.json with ${VAR} expansion for credentials, personal or experimental servers in user-level config."
+    },
+    {
+      "id": "ccaf-foundations-0027",
+      "source_num": 27,
+      "domain": "D2 - Tool Design & MCP Integration",
+      "q": "Before drafting, report-writer must match the citation style used across roughly 300 prior reports stored as Markdown under reports/, and find which of them already cover the requested topic. Its first move today is to Read every file in that directory. What is the better approach?",
+      "options": [
+        "Use Glob on reports/**/*.md to enumerate the corpus, then Read the three most recent files end to end.",
+        "Use Grep to search report bodies for the topic terms and citation markers, then Read the files that hit.",
+        "Use Bash with a find command to sort the directory by date, then Read the twenty newest reports in full.",
+        "Keep reading every file, but ask the coordinator to raise this subagent's context budget for that phase."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Use Grep to search report bodies for the topic terms and citation markers, then Read the files that hit.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d2"
+      ],
+      "explanation": "A. Glob is the right tool for listing files by pattern, and sampling recent reports would show the house citation style, but it cannot tell you which of the 300 reports mention the topic, that is a content question.\n\nB. Correct. Grep searches file contents for patterns, so it locates both the citation markers and the topic terms across the corpus, and Read is then spent only on the files that actually matter.\n\nC. Shelling out to find works and gives precise date ordering, but it duplicates what Glob already does and still selects by recency rather than by whether a report covers the requested topic.\n\nD. A larger budget would let the brute-force read complete, and there are cases where full corpus review is warranted, but it spends enormous context on 300 files to extract a style pattern and a handful of matches.\n\nKey principle: Build understanding incrementally: search content with Grep, match paths with Glob, and Read only what the search identified. Loading everything up front trades context for work a search tool does for free."
+    },
+    {
+      "id": "ccaf-foundations-0028",
+      "source_num": 28,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "A developer who joined the atlas monorepo last week keeps producing commit messages in the wrong format, while everyone else's sessions get it right. Her clone is current and the convention is written down. What is the most likely cause?",
+      "options": [
+        "The convention lives in each teammate's ~/.claude/CLAUDE.md, which version control never carries to a new clone.",
+        "Her project-level .claude/CLAUDE.md is being shadowed by a directory-level CLAUDE.md that omits the commit rules.",
+        "The convention sits in a .claude/rules/ file whose paths frontmatter excludes the files she has actually been editing.",
+        "Her sessions run long enough that the root CLAUDE.md is loaded and then displaced as earlier context is dropped."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. The convention lives in each teammate's ~/.claude/CLAUDE.md, which version control never carries to a new clone.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Correct. User-level configuration applies only to the user who wrote it; it is never shared through the repository, so a teammate who was never told to create it simply does not have the rule.\n\nB. Directory-level CLAUDE.md files do add scoped instructions, and diagnosing an omission there is a real exercise, but that would affect everyone editing those directories, not one new clone.\n\nC. A paths mismatch is a genuine cause of rules that never fire, and worth checking. It would not explain a convention that works for every other developer in the same files.\n\nD. Context pressure does degrade adherence in very long sessions, and shortening them helps. The pattern here is per-person rather than per-session, which points at configuration scope.\n\nKey principle: When behaviour differs by person rather than by file or by session, suspect the configuration hierarchy: user-level instructions are invisible to teammates."
+    },
+    {
+      "id": "ccaf-foundations-0029",
+      "source_num": 29,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "The tech lead has written /atlas-scaffold, which generates a handler, a test and docs from one route definition. Every maintainer across the four packages must have it the moment they clone or pull atlas, with no per-machine setup, and it must not sit in context on the sessions that never run it. Where does the command file belong?",
+      "options": [
+        "In .claude/commands/ inside the atlas repository, which version control carries to every clone and pull",
+        "In ~/.claude/commands/ on each maintainer's machine, copied there from a reference file kept in the repo",
+        "In a .claude/rules/ file with a paths glob, so that it activates whenever a route definition is edited",
+        "In the root CLAUDE.md, under a heading naming the scaffold procedure that the four packages all share"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. In .claude/commands/ inside the atlas repository, which version control carries to every clone and pull",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Correct. A command file under the repository's .claude/commands/ is version-controlled, so it arrives with the code and needs no install, and its body is read when someone invokes it rather than loaded into every session.\n\nB. This is a real commands directory and the command runs perfectly for whoever placed a copy there, but the user-level path sits outside version control, so each maintainer installs it by hand and the copies drift apart.\n\nC. Path-scoped rules do load conditionally and would keep scaffold guidance out of unrelated sessions, which is half of what is being asked. A rule file is context that activates on a matching edit, not an artefact anyone invokes by name.\n\nD. The root file travels with the repository and reaches every maintainer, so the distribution half is satisfied. It is always-loaded context rather than an invocable command, so it is carried by every session and nothing answers to /atlas-scaffold.\n\nKey principle: Two properties decide the placement: whether version control carries the file, and whether its contents load on invocation or in every session. Of the surfaces available, .claude/commands/ is the only one that gives both."
+    },
+    {
+      "id": "ccaf-foundations-0030",
+      "source_num": 30,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "The team's dep-audit skill walks every package manifest in atlas and prints a few thousand lines of findings. Developers report that running it mid-task leaves Claude vague about the refactor they were in the middle of. Which frontmatter change addresses that?",
+      "options": [
+        "Set allowed-tools to Read and Grep so the skill cannot modify any files while it walks the package manifests.",
+        "Set context: fork so the skill runs in an isolated sub-agent and only its summary returns to the session.",
+        "Set an argument-hint so developers scope the audit to a single package rather than to the whole monorepo.",
+        "Move the skill into ~/.claude/skills/ so each developer keeps a personal copy tuned to the packages they own."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Set context: fork so the skill runs in an isolated sub-agent and only its summary returns to the session.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Restricting allowed-tools is a sound safety measure for a skill that only needs to read, and it prevents destructive edits. It does nothing about the volume of output landing in the conversation.\n\nB. Correct. context: fork runs the skill in an isolated sub-agent context, so its verbose output never pollutes the main conversation and the refactor in progress stays intact.\n\nC. An argument-hint advertises the parameter a skill takes, and an audit scoped to one package would indeed print less. It relies on the developer narrowing scope rather than isolating the output structurally.\n\nD. A personal variant in the user-level skills directory avoids affecting teammates and can be tuned per developer. The output still lands in whichever session invokes it.\n\nKey principle: Skills that produce verbose or exploratory output belong in a forked context; isolation preserves the main conversation regardless of how the developer invokes them."
+    },
+    {
+      "id": "ccaf-foundations-0031",
+      "source_num": 31,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "A read-through cache in front of the pricing service is next up in packages/api. Nobody has settled how entries are invalidated, what a miss during a deploy should do, or whether a stale read is ever acceptable. A developer opens a session to build it. How should the session start?",
+      "options": [
+        "Ask for three candidate designs up front and compare them once written, keeping whichever handles invalidation best",
+        "Have Claude question the developer about invalidation, deploys and staleness until the requirements settle",
+        "Write the test suite from the acceptance criteria first, then iterate by feeding the failing test output back",
+        "Build the cache with conventional defaults and refine it against the review comments the first pull request draws"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Have Claude question the developer about invalidation, deploys and staleness until the requirements settle",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Three designs make the tradeoffs concrete and can be compared quickly. It builds the thing three times to elicit requirements a conversation would settle, and the comparison has no agreed criteria to judge against.\n\nB. Correct. The interview pattern surfaces the decisions nobody has made, invalidation, deploy-time misses, tolerable staleness, before any code exists that quietly assumes an answer to each of them.\n\nC. Test-first is the right driver when the expected behaviour is known and can be written down, as it is for a normalizer with fixed output shapes. Here the tests would encode guesses, and passing them would prove nothing.\n\nD. Shipping something conventional is fast and puts a real artefact in front of reviewers. Review comments arrive after the design is chosen, which is the expensive moment to learn the team wanted different staleness rules.\n\nKey principle: When the requirements themselves are unsettled, have the model interview you before it writes anything. Test-first and iterate-on-review both assume the expected behaviour has already been agreed."
+    },
+    {
+      "id": "ccaf-foundations-0032",
+      "source_num": 32,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "The rule file .claude/rules/testing.md carries paths: [\"packages/api/**/*.test.ts\"]. Tests also live at packages/web/src/components/Button.test.tsx and packages/ingest/tests/test_loader.py, and Claude ignores the conventions in both. What is the best fix?",
+      "options": [
+        "Broaden the paths globs to match test files by name wherever they sit: **/*.test.ts, **/*.test.tsx and **/test_*.py.",
+        "Add a CLAUDE.md to each directory holding test files so the conventions load whenever those folders are in scope.",
+        "Move testing.md's content into the root CLAUDE.md so the conventions are present in every session regardless of path.",
+        "Split testing.md into one rule file per package, each scoped to that package's own top-level tests directory."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Broaden the paths globs to match test files by name wherever they sit: **/*.test.ts, **/*.test.tsx and **/test_*.py.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Correct. Glob patterns applied by file type rather than by directory catch test files wherever they live, including ones colocated beside the code they exercise.\n\nB. Directory CLAUDE.md files do scope conventions to a location, and would work for a tests/ folder. Colocated files like Button.test.tsx sit among components, so the rule would leak onto every component edit.\n\nC. Loading in every session would certainly make the conventions available, at the cost of carrying test standards through sessions that never touch a test.\n\nD. Per-package rule files keep ownership clean and would cover packages/ingest/tests. Scoping to top-level tests directories still misses the colocated .test.tsx files entirely.\n\nKey principle: When a convention follows a file type rather than a directory, scope it with glob patterns; directory-based configuration cannot follow files that are spread across the tree."
+    },
+    {
+      "id": "ccaf-foundations-0033",
+      "source_num": 33,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "A 90-line Terraform release runbook, plan, review, apply, roll back, sits in atlas's root CLAUDE.md. The team runs a release about twice a month, but every session in every package loads the block. A cost review flags the per-session overhead. How should the runbook be packaged?",
+      "options": [
+        "Move it into infra/CLAUDE.md, so the runbook loads for work under infra/ rather than in sessions across all four packages.",
+        "Move it into the personal ~/.claude/CLAUDE.md of the two engineers who actually carry out the Terraform releases each month.",
+        "Move it into a skill under .claude/skills/, so the runbook enters context when an engineer invokes it to run a release.",
+        "Condense it to a five-line summary in CLAUDE.md that links the full runbook document for Claude to open when a release starts."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Move it into a skill under .claude/skills/, so the runbook enters context when an engineer invokes it to run a release.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. A directory-level file does lift the block out of the root and is the right tool when a convention is genuinely directory-bound. Terraform files also sit in each package's deploy/ folder, which infra/ would not cover.\n\nB. User-level files take the cost off everyone else's sessions immediately and need no repo change. They also leave version control, so the runbook stops being reviewable and a new engineer never receives it.\n\nC. Correct. A procedure carried out twice a month is task-specific and on demand, which is what skills are for; CLAUDE.md is for the universal standards that every session should be carrying anyway.\n\nD. Summarizing cuts the per-session cost right away and leaves a pointer behind. The full document still has to be read at release time, and the detail that survives five lines is the part that was already obvious.\n\nKey principle: Choose between CLAUDE.md and a skill by how content is used rather than how important it is: always-applicable standards belong in CLAUDE.md, occasional task-specific procedures in a skill that loads on invocation."
+    },
+    {
+      "id": "ccaf-foundations-0034",
+      "source_num": 34,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "atlas keeps one standards file per concern, testing, api-conventions and deployment, and each package's maintainers own only some of them. Which syntax references the chosen files from a package's own CLAUDE.md?",
+      "options": [
+        "A paths: glob in .claude/rules/ naming the packages each standards file covers.",
+        "An @path reference in the package's CLAUDE.md naming each file it should carry.",
+        "An include: array in .claude/config.json mapping packages to standards files.",
+        "Pasting each file's contents into the CLAUDE.md of every package that needs it."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. An @path reference in the package's CLAUDE.md naming each file it should carry.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. The strongest wrong answer: .claude/rules/ with paths: frontmatter is a real mechanism for activating rules conditionally, so anyone reasoning from 'load only what applies' arrives here. It scopes a rule file by path; it does not compose a CLAUDE.md.\n\nB. Correct. @path is the named syntax for referencing external files from CLAUDE.md, letting each package selectively include the standards files its maintainers need.\n\nC. An include: array in a config file is how several tools compose configuration, so it reads as the obvious shape. No such key is part of the CLAUDE.md configuration surface.\n\nD. Pasting works and keeps each package self-contained, which is why teams do it. Three copies of every standard then drift apart, which is the duplication @path exists to remove.\n\nKey principle: @path is the named syntax for pulling external files into CLAUDE.md, so each package includes only the standards relevant to its maintainers. .claude/rules/ with paths: is the adjacent mechanism for path-scoped rule activation, a different job."
+    },
+    {
+      "id": "ccaf-foundations-0035",
+      "source_num": 35,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "Migrating atlas off the deprecated HTTP client starts with finding every call site: 47 files across packages/api, packages/web and packages/ingest, most of which will need nothing beyond a read. The session that does the discovery then has to carry out the migration. How should discovery be run?",
+      "options": [
+        "Read all 47 of the files in the main session and compact the conversation whenever the window fills up, delegating none of the reading.",
+        "Grep for the client's import statement and read only the matching lines, leaving the surrounding call bodies unopened.",
+        "Split the migration into three sessions, one per package, so each session reads only the files in its own package.",
+        "Delegate discovery to the Explore subagent and have it return a call-site summary, keeping the file contents out of the session."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Delegate discovery to the Explore subagent and have it return a call-site summary, keeping the file contents out of the session.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Compaction does reclaim room and keeps the whole job in one place. What it discards is chosen automatically, and the per-call-site specifics are exactly the detail most likely to be summarized away.\n\nB. Matching on the import line is a cheap way to narrow 47 files to the affected modules, and it would find them. The replacement pattern is decided by how each call is shaped, and the bodies are what this skips.\n\nC. Per-package sessions keep each context small and are a sensible split when the work really is independent. No session then sees the whole picture, and the replacement pattern is a cross-package decision.\n\nD. Correct. The Explore subagent absorbs verbose discovery in its own context and returns only a summary, so the main session keeps the room it needs for the migration that follows.\n\nKey principle: Verbose discovery and the work that follows it compete for one window; isolating discovery in a subagent returns a summary instead of the raw reading, and buys back the context implementation still needs."
+    },
+    {
+      "id": "ccaf-foundations-0036",
+      "source_num": 36,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "atlas's ingest normalizer must turn raw log lines into the team's standard event shape, and nothing is implemented yet. The shapes it has to emit, nested metadata, absent timestamps, multi-line stack traces and about a dozen more, can all be written down in advance. How should the developer drive the work?",
+      "options": [
+        "Write the test suite covering those shapes and their edge cases first, then iterate by feeding the failing test output back.",
+        "Have Claude produce the normalizer and its test suite together in one pass, then review the tests that came back green.",
+        "Implement the normalizer first, then write tests against the behaviour it settles on so that the shapes cannot regress later.",
+        "Run a draft normalizer over a week of production log lines and review a sample of its output by hand after each change."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Write the test suite covering those shapes and their edge cases first, then iterate by feeding the failing test output back.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Correct. Results that can be enumerated up front can be written as tests before any code exists, and a failing test is a precise, repeatable statement of what is wrong, far better iteration fuel than another rewording.\n\nB. One pass is quick and does produce coverage alongside the code. The tests come out of the same reading of the requirement as the implementation, so a misunderstanding yields a green suite that agrees with the bug.\n\nC. Tests written afterwards do guard against regressions from that point onward, and they are better than no tests. They ratify whichever shape happened to be produced, which is the thing not yet pinned down.\n\nD. Sampling real traffic surfaces line formats nobody thought to list and is worth doing before release. Hand review of samples is slow and gives no automatic signal to iterate against between one change and the next.\n\nKey principle: When the outputs can be enumerated ahead of time, write them as tests before implementation; the failures then supply the specific, repeatable feedback each iteration needs."
+    },
+    {
+      "id": "ccaf-foundations-0037",
+      "source_num": 37,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "Review of a generated pagination helper turns up three problems: the cursor is encoded before it is validated, the page-size default contradicts that encoding, and an unrelated log line uses the wrong level. The first two are entangled. How should the feedback be delivered?",
+      "options": [
+        "One message listing all three problems, so the whole review is addressed in a single iteration pass.",
+        "Three sequential messages, confirming each fix is green before the next problem is described in turn.",
+        "One message covering the cursor and page-size problems together, then a separate pass for log level.",
+        "One message with the log-level fix first, since it is isolated, then the two coupled problems after it."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. One message covering the cursor and page-size problems together, then a separate pass for log level.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Batching everything is efficient and avoids extra turns. Folding the unrelated log-level fix into the coupled pair adds noise to the message that most needs precision.\n\nB. Sequential iteration is the right rhythm for independent problems and keeps each change verifiable. Fixing the cursor without the page-size default in view invites a fix that the next message undoes.\n\nC. Correct. Interacting issues belong in one detailed message so the fix accounts for both at once; independent issues are better handled as their own pass.\n\nD. Ordering by isolation is a reasonable instinct and does keep the log fix from getting lost. It still mixes an unrelated concern into the message about the coupled pair.\n\nKey principle: Group feedback by whether the fixes interact: coupled problems go in one message, independent ones iterate separately."
+    },
+    {
+      "id": "ccaf-foundations-0038",
+      "source_num": 38,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "The pr-review.yml workflow invokes Claude Code to review each pull request in atlas. The job sometimes hangs until the runner times out, and when it does finish, the script that posts inline comments fails trying to pull findings out of prose. Which two changes address those two failures?",
+      "options": [
+        "Invoke Claude Code with the -p flag so the run never blocks waiting on interactive input from a terminal.",
+        "Add --output-format json together with --json-schema so the findings come back in a machine-parseable shape.",
+        "Raise the workflow's job timeout and retry the review step once, so a slow review is not lost to the runner.",
+        "Move the team's review criteria into CLAUDE.md so the CI reviewer applies the same standards developers do.",
+        "Post the raw session transcript as a single PR comment and let the assigned reviewer read the findings there."
+      ],
+      "correct_indices": [
+        0,
+        1
+      ],
+      "a": "A. Invoke Claude Code with the -p flag so the run never blocks waiting on interactive input from a terminal.; B. Add --output-format json together with --json-schema so the findings come back in a machine-parseable shape.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Correct. Non-interactive mode is what -p (or --print) is for: in a pipeline there is no one to answer a prompt, so an interactive invocation hangs until the runner kills it.\n\nB. Correct. --output-format json with --json-schema produces structured findings the posting script can parse, instead of it scraping prose for file names and line numbers.\n\nC. A longer timeout with a retry does reduce lost runs and is cheap to configure. It accommodates the hang rather than removing its cause, and burns runner minutes doing so.\n\nD. Putting review criteria in CLAUDE.md is genuinely how CI-invoked Claude Code gets project context, and it improves review quality. It changes what is reported, not whether the job hangs or parses.\n\nE. Dumping the transcript guarantees nothing is lost and needs no schema work. It also abandons inline comments and puts the parsing burden back on a human.\n\nKey principle: Automated invocations need two things the interactive path supplies by hand: a non-interactive entry point and an output contract the calling script can rely on."
+    },
+    {
+      "id": "ccaf-foundations-0039",
+      "source_num": 39,
+      "domain": "D3 - Claude Code Configuration & Workflows",
+      "q": "After every new commit, the CI reviewer re-posts the same three findings it raised on the previous run alongside any new ones. Two of the three are still genuinely unfixed. Developers have started ignoring the bot entirely. What change fixes this?",
+      "options": [
+        "Review only the diff since the last reviewed commit, so previously covered lines are never examined twice.",
+        "Include the prior run's findings in context and instruct the reviewer to report only new or unaddressed ones.",
+        "Deduplicate inside the posting script by hashing each finding's file, line and message before commenting it.",
+        "Restrict the reviewer to high-severity findings so the volume of repeated comments drops below notice."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Include the prior run's findings in context and instruct the reviewer to report only new or unaddressed ones.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d3"
+      ],
+      "explanation": "A. Diff-scoped review cuts cost and does suppress most repeats. It also blinds the reviewer to the two findings that are still unfixed on lines this commit did not touch.\n\nB. Correct. Passing prior findings as context lets the reviewer distinguish resolved from still-open issues and report only what a developer has not already seen.\n\nC. Hashing removes exact duplicates cheaply and needs no prompt change. Line numbers shift as commits land, so the same issue re-hashes differently and posts again.\n\nD. Tightening severity does reduce comment volume and can restore trust when false positives are the problem. Repetition is the complaint here, and high-severity findings would repeat too.\n\nKey principle: Re-running a review without telling it what was already reported guarantees duplicates; prior findings are context the reviewer needs, not noise to strip."
+    },
+    {
+      "id": "ccaf-foundations-0040",
+      "source_num": 40,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "The extraction prompt tells the model to flag any invoice field that looks questionable. Roughly 30% of invoices come back flagged, most for fields the AP reviewers find are fine, and the reviewers have started clearing the flag queue without reading it. Which change most directly improves flag precision?",
+      "options": [
+        "Tell the model to be conservative and flag only high-confidence problems, leaving borderline fields unmarked.",
+        "Have the model attach a 1-10 certainty rating to each flag so reviewers can work the strongest ones first.",
+        "Replace it with named conditions - total mismatch, missing tax ID, date outside the billing period - with examples.",
+        "Run a second extraction pass on every invoice and flag only the fields where the two passes disagree."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Replace it with named conditions - total mismatch, missing tax ID, date outside the billing period - with examples.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. This does dial down flag volume, and lower volume is part of what reviewers want. But \"be conservative\" and \"high-confidence\" are the same vague instruction in a quieter register: the model still has no definition of what counts as questionable, so the flags that survive are an arbitrary subset rather than a more accurate one.\n\nB. Certainty ratings give reviewers an ordering, which is a real improvement to queue triage. They do not improve the underlying judgment, though - a model that cannot tell a genuine problem from a normal value will rate its bad flags confidently too, so the top of the sorted queue stays polluted.\n\nC. Correct. Explicit categorical criteria with concrete examples define what a flag means, so the model is classifying against a rule rather than guessing at \"questionable.\" That is what moves precision, and it is what restores reviewer trust in the flags that remain.\n\nD. A second pass and a disagreement filter would catch genuine instability in the extraction, and it is a reasonable consistency check. It costs a full extra call per invoice and still measures agreement rather than correctness: two passes reading the same vague instruction can agree on the same wrong flag.\n\nKey principle: Vague quality instructions cannot be fixed by softening them or by filtering their output. Precision comes from specific categorical criteria that define what qualifies, illustrated with examples."
+    },
+    {
+      "id": "ccaf-foundations-0041",
+      "source_num": 41,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "A field-level audit shows payment_terms flags are wrong on about 40% of the invoices they fire on, while vendor_name and stated_total flags are almost always right. Reviewers have begun skimming past all three. Rewriting the payment_terms criteria will take a full sprint. What should you do in the meantime?",
+      "options": [
+        "Keep all three categories running but mark payment_terms as lower-confidence in the reviewer UI so reviewers weight it.",
+        "Raise the flagging threshold across all three categories so fewer invoices land in the reviewer queue.",
+        "Turn off payment_terms flagging while its criteria are rewritten, leaving the two accurate categories running.",
+        "Suspend all flagging until payment_terms is rewritten and the full rule set has been re-validated."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Turn off payment_terms flagging while its criteria are rewritten, leaving the two accurate categories running.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Labelling the weak category is honest and keeps some payment_terms coverage alive, which has value. It also leaves the noise in the queue and asks reviewers to do the discounting themselves - the behaviour they have already shown they will not do, since they are skimming past all three today.\n\nB. A uniform threshold rise would reduce total queue volume, which addresses the reviewers' workload complaint. It suppresses the accurate categories at the same rate as the inaccurate one, so you lose real findings from vendor_name and stated_total to fix a problem that lives in only one category.\n\nC. Correct. The damage from a high false-positive category is not confined to that category - it teaches reviewers that flags in general are noise. Disabling the one bad category preserves the trust the two accurate ones have earned, and costs only the payment_terms coverage you were not getting value from anyway.\n\nD. Stopping everything guarantees no further false positives reach reviewers, which is a defensible way to protect trust. It also discards two categories that are working, leaves invoices unchecked for a sprint, and treats a localised precision problem as though the whole rule set were suspect.\n\nKey principle: False positives are contagious across categories: one noisy category undermines confidence in accurate ones. Disable the offending category specifically rather than degrading or suspending the whole system."
+    },
+    {
+      "id": "ccaf-foundations-0042",
+      "source_num": 42,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "A newly onboarded carrier starts sending shipping manifests on Monday, about 200 a night, on a layout the pipeline has never processed. The AP team wants them in the same nightly Message Batches run as the other 1,200 documents from the first night. What should happen before that batch goes out?",
+      "options": [
+        "Submit them with the rest, then resubmit whatever failed by custom_id once the morning's failure list is in.",
+        "Run a sample of the carrier's manifests, refine the extraction prompt on the results, then batch all 200.",
+        "Submit them with the rest under a tightened extract_manifest schema, so a misread layout is rejected on arrival.",
+        "Extract this carrier's manifests synchronously for the first week, then fold them into the nightly batch run."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Run a sample of the carrier's manifests, refine the extraction prompt on the results, then batch all 200.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Resubmitting failed custom_ids is the documented way to handle batch failures and is worth planning for anyway. A layout the prompt has never met fails as a class rather than at random, so most of the 200 come back for a second paid run.\n\nB. Correct. Refining the prompt on a sample before batch-processing a large volume is what raises the first-pass success rate, and a dozen sample manifests cost a fraction of the resubmission a bad first night would force.\n\nC. A tighter schema does keep malformed extractions out of the AP ledger and is good hygiene on any new document type. Rejection is not extraction: the batch is paid for in full and every rejected manifest still has to be worked afterwards.\n\nD. Synchronous calls surface each failure immediately and would certainly expose the new layout fast. It forgoes the batch saving for a week on volume that has no latency requirement, to learn what a sample of a dozen answers in an hour.\n\nKey principle: A batch is committed and paid for all at once, so first-pass quality has to be established before submission. Prompt refinement on a sample is what buys that, and it is cheapest on a document type nothing has been tuned against."
+    },
+    {
+      "id": "ccaf-foundations-0043",
+      "source_num": 43,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "Shipping manifests sometimes record quantities informally, such as \"2 pallets (48 cases)\". The extraction records 2 on some manifests and 48 on others with no discernible pattern. You are adding three few-shot examples of informal quantity phrasing. What makes them most likely to generalise to phrasings you have not seen yet?",
+      "options": [
+        "Each example covers one more of the specific phrasings seen in the last month of incoming manifests.",
+        "The examples sit at the very end of the prompt, immediately before the document being processed.",
+        "Each example shows the complete schema output, so every field is demonstrated alongside quantity.",
+        "Each example states why the chosen unit was picked over the plausible alternative in that document."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Each example states why the chosen unit was picked over the plausible alternative in that document.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Covering observed phrasings guarantees those exact cases are handled, and for a fixed vocabulary that would be enough. Manifest phrasing is open-ended, so pure pattern coverage produces a lookup table: the model matches the demonstrated strings and is back to guessing on the fourth phrasing that shows up next month.\n\nB. Placement near the document is a sound prompt-construction habit and keeps the examples salient. It changes where the model reads the examples, not what they teach - three examples that only show inputs and outputs teach the same thing wherever they sit in the prompt.\n\nC. Showing the full schema output does reinforce the overall shape of a correct extraction, which is useful when several fields are unstable. Here only quantity is unstable, and padding each example with the other fields dilutes the signal about unit choice rather than sharpening it.\n\nD. Correct. Examples that show the reasoning - why cases rather than pallets was the right unit here - teach the judgment rather than the string. That is what lets the model generalise to novel phrasings instead of matching pre-specified cases.\n\nKey principle: Few-shot examples for ambiguous cases should show why one reading was chosen over a plausible alternative. Reasoning generalises to novel inputs; input-output pairs alone only cover what they demonstrate."
+    },
+    {
+      "id": "ccaf-foundations-0044",
+      "source_num": 44,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "Incoming files arrive unlabelled and may be a supplier invoice, a purchase order, or a shipping manifest. You have defined extract_invoice, extract_po, and extract_manifest, each with its own JSON schema, and every file must come back as schema-valid structured data. Which configuration fits?",
+      "options": [
+        "Set tool_choice to \"auto\" and let the model return text describing the file when it is unsure.",
+        "Force extract_invoice by name for every file, then correct the mismatched ones downstream.",
+        "Classify the document type in a prior call, then run the single extraction tool that result names.",
+        "Set tool_choice to \"any\", so the model must call one of the three tools but chooses which one."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Set tool_choice to \"any\", so the model must call one of the three tools but chooses which one.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. \"auto\" preserves the model's option to explain rather than extract, which is genuinely useful when a file might be unreadable. It also means an unsure model returns free text with no schema at all, which is the one outcome this pipeline cannot accept.\n\nB. Forcing a named tool does guarantee structured output, and forced selection is the right mode when one specific extraction must run. Forcing the invoice schema onto purchase orders and manifests produces valid JSON in the wrong shape, which is worse than a parse failure because it passes validation.\n\nC. A classify-then-extract split is a real architecture and gives you an auditable document-type decision. It costs a second call on every file and adds a failure mode of its own, when \"any\" already delivers the guarantee in one call by letting the model select the schema.\n\nD. Correct. \"any\" guarantees a tool call - so the response is always schema-compliant structured data - while leaving the choice of which schema to the model. That is precisely the case where several extraction schemas exist and the document type is not known in advance.\n\nKey principle: tool_choice \"any\" guarantees a tool call while leaving schema selection to the model - the right setting when multiple extraction schemas exist and the document type is unknown. Forced selection is for when one specific tool must run."
+    },
+    {
+      "id": "ccaf-foundations-0045",
+      "source_num": 45,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "About 15% of purchase orders state no delivery date anywhere on the page, yet delivery_date comes back populated on nearly all of them - sometimes copying the order date, sometimes a plausible invention. The field is currently marked required in the extract_po schema. What is the right correction?",
+      "options": [
+        "Keep delivery_date required and define a sentinel value of \"NOT_STATED\" for the purchase orders that carry no date.",
+        "Add a validation rule rejecting any delivery_date equal to the order date, then retry those extractions.",
+        "Make delivery_date optional and nullable, so the model can return no value rather than satisfy a requirement.",
+        "Add a delivery_date_confidence score to the schema and route the low-confidence purchase orders to review."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Make delivery_date optional and nullable, so the model can return no value rather than satisfy a requirement.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. A sentinel does give absence somewhere to go, and reserved values are a long-standing convention in flat file formats. The field stays required and stops being a date: every downstream consumer has to special-case the string, and a model that misses the convention supplies a plausible date instead.\n\nB. Rejecting dates equal to the order date catches one recognisable fabrication pattern and is cheap to implement. It only catches that pattern - the plausible inventions that are not the order date pass straight through - and the retry re-runs against the same required field, so the model fabricates again.\n\nC. Correct. The model is fabricating because the schema requires a value and the document has none. Making the field optional and nullable removes the pressure, so absent information is reported as absent instead of invented.\n\nD. Field-level confidence plus routing is a sound way to direct scarce reviewer attention, and it would surface some of these. It leaves the root cause running - the schema still demands a value - so reviewers spend their capacity deleting fabrications the pipeline should never have produced.\n\nKey principle: Required schema fields on information that may genuinely be absent push the model to fabricate. Design fields the source may not contain as optional and nullable so absence can be represented."
+    },
+    {
+      "id": "ccaf-foundations-0046",
+      "source_num": 46,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "The validation-retry loop resends the document, the failed extraction, and the specific validation error, and clears most failures on the first retry. One cluster does not: manifests fail three retries every night on carrier_tracking_number, a value the carrier only ever issues in a separate file the pipeline does not pass in. What should change?",
+      "options": [
+        "Raise the retry ceiling for that field and include each failed attempt in the follow-up request.",
+        "Stop retrying it, return null, and source the tracking number from the carrier file downstream.",
+        "Add few-shot examples of manifests where the tracking number sits in an unusual page position.",
+        "Escalate the failing manifests to human reviewers, who can look each tracking number up by hand."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Stop retrying it, return null, and source the tracking number from the carrier file downstream.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. More retries with richer error history is the correct instinct for format and structure failures, and it is why the loop works on everything else. Here the information is not in the document at all, so every additional attempt costs tokens and latency to rediscover the same absence - or invents a value to end the loop.\n\nB. Correct. Retry helps when the model mis-formatted or mis-structured available information. It cannot help when the required value is absent from the source, so the extraction should record null and the join to the carrier file should happen where that data actually lives.\n\nC. Positional few-shot examples are the right fix when a value is present but in an unexpected place, which is a real failure mode for varied manifests. The stem rules that out - the number is issued in a separate file - so the examples would demonstrate an extraction that cannot occur.\n\nD. Human escalation guarantees the ledger eventually gets a tracking number, and escalation is appropriate for ambiguous or contradictory sources. This case is neither ambiguous nor a judgment call: a reviewer would simply open the carrier file, which a downstream join can do automatically and at no marginal cost.\n\nKey principle: Retry-with-error-feedback fixes format and structure errors. When the required information is absent from the source document, no number of retries will produce it - return null and obtain the value where it exists."
+    },
+    {
+      "id": "ccaf-foundations-0047",
+      "source_num": 47,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "Since extraction moved to tool use with strict JSON schemas, parse failures have gone to zero. The AP ledger still receives invoices whose line_items do not add up to the stated_total printed on the page. Which change surfaces these before the ledger accepts them?",
+      "options": [
+        "Tighten the numeric types on each of the line item fields so the schema rejects malformed amounts on arrival.",
+        "Add a prompt instruction telling the model to check its arithmetic before it returns the extraction.",
+        "Compare each invoice total against the matching purchase order and flag the pairs that disagree.",
+        "Extract calculated_total from the line items alongside stated_total and flag invoices where they differ."
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Extract calculated_total from the line items alongside stated_total and flag invoices where they differ.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Stricter numeric typing is good schema hygiene and blocks a class of malformed values. It operates on individual fields in isolation, though, and every value in these invoices is already well-formed - the defect is the relationship between the line items and the total, which no per-field type can express.\n\nB. Asking for a self-check costs nothing and will catch some arithmetic slips, so it is a reasonable addition. It is also probabilistic on exactly the kind of error the model just made, and it produces no artefact the pipeline can gate on - the ledger has nothing to test.\n\nC. A three-way match against the purchase order is a genuinely valuable AP control and catches billing disputes. It answers a different question - whether the invoice matches what was ordered - and misses the internal inconsistency here, where an invoice can disagree with itself while matching its PO.\n\nD. Correct. Having the model produce the sum it derives from the line items as well as the total printed on the page turns a semantic error into a machine-checkable discrepancy the pipeline can flag deterministically.\n\nKey principle: Strict schemas via tool use eliminate syntax errors but not semantic ones. Extracting a derived value alongside the stated one converts a semantic inconsistency into an explicit, testable discrepancy."
+    },
+    {
+      "id": "ccaf-foundations-0048",
+      "source_num": 48,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "The AP ledger accepts four payment-terms codes and nothing else, but payment_terms comes back from extract_invoice as whatever the invoice printed - \"Net 30\", \"30 days net\", \"payable within one month\". The loader's phrase-to-code mapping table gains an entry most weeks. What is the right correction?",
+      "options": [
+        "Grow the loader's mapping table into a normalisation service the AP team can extend themselves whenever a new phrasing turns up.",
+        "Instruct the extraction prompt to return one of the four ledger codes, listing each code beside a sample phrase an invoice might print.",
+        "Declare payment_terms in the tool's JSON schema as an enum of the four ledger codes the AP ledger is willing to accept.",
+        "Validate each extraction against the four codes and send any invoice carrying an unrecognised phrase back through the retry loop."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Declare payment_terms in the tool's JSON schema as an enum of the four ledger codes the AP ledger is willing to accept.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Owning the mapping gives the AP team a change they can make without a pipeline release, and it does keep the ledger clean. It leaves the model free to phrase the field however the document does on all 1,400 nightly extractions, so the table is permanently chasing wording that has already shipped.\n\nB. Naming the four codes in the prompt with a sample phrase for each raises conformance sharply and is worth doing alongside any schema work. On its own it constrains nothing - a fifth value is still a legal response, and at nightly volume the occasional stray reaches the ledger.\n\nC. Correct. An enum in the tool's JSON schema makes those four codes the only values the extraction is able to return, so the ledger's constraint is enforced where the output is produced rather than translated after the fact.\n\nD. Rejecting unrecognised values does guarantee the ledger only ever sees the four codes, and the retry loop already exists to handle validation failures. It spends a second extraction call correcting a shape the schema could have made unrepresentable in the first place.\n\nKey principle: When a downstream system accepts a closed set of values, put that set in the tool's JSON schema. Prompt wording and downstream mapping both act after the model has already chosen; the schema decides what can be produced at all."
+    },
+    {
+      "id": "ccaf-foundations-0049",
+      "source_num": 49,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "Your team is moving the nightly reconciliation of 1,400 documents onto the Message Batches API and is writing the code that consumes the results. Which two statements about that API should shape the design?",
+      "options": [
+        "Batch pricing halves the cost only for the requests that finish inside the first hour of the window.",
+        "A batch may take up to 24 hours to complete, and it carries no guaranteed latency SLA.",
+        "A batch request will pause for a client-side tool result and resume once the caller returns it.",
+        "A single failed document forces the whole batch to be resubmitted, since custom_id is per batch.",
+        "Responses can come back in a different order from submission, so pair them by custom_id."
+      ],
+      "correct_indices": [
+        1,
+        4
+      ],
+      "a": "B. A batch may take up to 24 hours to complete, and it carries no guaranteed latency SLA.; E. Responses can come back in a different order from submission, so pair them by custom_id.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. The 50% saving is real, which makes this tempting, but it is not conditional on completion time. Attaching the discount to a first-hour deadline would invent a latency expectation the API explicitly does not offer, and would push the team to build monitoring against a threshold that does not exist.\n\nB. Correct. The window can run up to 24 hours with no latency guarantee, so the consuming code must be built as an asynchronous poll-and-collect rather than assuming results are ready by a given clock time.\n\nC. Tool calling itself does work in batch requests, so this is close enough to true to be dangerous. Multi-turn tool calling is not supported within a single batch request - tools cannot execute mid-request and return results - so any enrichment lookup must be a separate stage in the pipeline.\n\nD. Handling failures by resubmission is right, and resubmitting only what failed is the documented approach. custom_id is what identifies the individual failed documents, which is precisely what lets you resubmit that subset - often with a modification such as chunking an oversized document - rather than the entire batch.\n\nE. Correct. Results are not guaranteed to arrive in submission order, so the consuming code must correlate each response to its request by custom_id. Pairing by position will silently attach extractions to the wrong documents.\n\nKey principle: The Batches API trades latency guarantees for cost: results arrive within an up-to-24-hour window, in any order, correlated only by custom_id. Design the consumer around identity, never position."
+    },
+    {
+      "id": "ccaf-foundations-0050",
+      "source_num": 50,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "To catch values placed in the wrong schema field, the pipeline appends \"now re-check your extraction for mistakes\" to the same request that produced it. The self-check almost never overturns a value, yet AP reviewers keep finding wrong-field placements in the output. Which change catches more of them?",
+      "options": [
+        "Send the document and the extraction to a second instance that has no view of the first one's reasoning.",
+        "Enable extended thinking on the extraction call so the model reasons longer before committing to values.",
+        "Have the same request produce the extraction twice under different field orderings and reconcile the pair.",
+        "Add a per-field confidence score to the schema and route the lowest-scoring fields to an AP reviewer."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Send the document and the extraction to a second instance that has no view of the first one's reasoning.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Correct. A model that just produced an extraction still holds the reasoning that produced it and is unlikely to question its own decision. An independent instance seeing only the document and the result evaluates it fresh, which is what surfaces the subtle placements.\n\nB. Extended thinking does improve the quality of the initial extraction and is worth having on a hard task. It deepens the same reasoning chain rather than challenging it, so the model arrives at its answer more thoroughly and remains just as committed to it during the self-check.\n\nC. Two passes do expose fields the model is unstable on, and a disagreement between them is a usable signal worth logging. Both passes run inside the request already committed to a reading, so a confident wrong placement is reproduced rather than challenged.\n\nD. Field-level scores are a sound way to aim scarce reviewer attention and cost one property in the schema. The score comes from the session that made the placement, and a value put confidently in the wrong field scores high, so these misplacements stay out of the queue.\n\nKey principle: A model retains its generation reasoning and is poor at questioning its own output in the same session. Independent review instances without that prior context catch subtle errors that self-review instructions miss."
+    },
+    {
+      "id": "ccaf-foundations-0051",
+      "source_num": 51,
+      "domain": "D4 - Prompt Engineering & Structured Output",
+      "q": "Invoices arrive throughout the day, and the AP ledger's service agreement requires each one posted within 30 hours of receipt. Extraction runs on the Message Batches API, whose processing window can reach 24 hours. The pipeline submits one batch at 02:00 covering everything received since the previous run. What submission schedule meets the agreement?",
+      "options": [
+        "Keep the nightly batch and flag the requests as high priority, so the queue returns the overnight submission sooner",
+        "Submit a batch every four hours, so the longest wait for a submission plus the processing window stays under 30 hours",
+        "Split the nightly run into six batches submitted together at 02:00, so each carries fewer documents and finishes sooner",
+        "Extract invoices received after 22:00 synchronously, so the arrivals closest to the cutoff are not held for the batch"
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Submit a batch every four hours, so the longest wait for a submission plus the processing window stays under 30 hours",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d4"
+      ],
+      "explanation": "A. Priority ordering would help if the API exposed one to raise; the batch window carries no guaranteed latency SLA. An invoice arriving at 02:05 still waits almost 24 hours before it is even submitted.\n\nB. Correct. A document waits at most four hours for the next submission and the batch itself may take 24, so the ceiling is 28 hours, inside the agreement with margin left for the posting step.\n\nC. Smaller batches carry less work each, and nothing in the API promises a faster completion for a smaller batch. Submitting all six at 02:00 leaves the arrival-to-submission wait exactly where it was.\n\nD. Synchronous calls return in seconds and are the right choice for genuinely blocking work. Applied to late arrivals alone it pays full price for part of the volume while the 02:05 arrivals still wait a full day.\n\nKey principle: Batch cadence is arithmetic: worst-case wait for the next submission plus the 24-hour window has to fit inside the SLA. Resizing or reordering batches does not change that wait; submitting more often does."
+    },
+    {
+      "id": "ccaf-foundations-0052",
+      "source_num": 52,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "For a three-issue dispute the coordinator concatenates the identity check, the order history and the billing findings into one long prompt, with billing in the middle. Identity and order details reach the customer reply; the billing findings are routinely missing from it. Which two changes address this positional effect?",
+      "options": [
+        "Place a key-findings summary at the beginning of the aggregated prompt",
+        "Re-order the three blocks by recency so the newest findings sit first",
+        "Drop the billing block and re-fetch those findings on demand instead",
+        "Organise the detail beneath an explicit section header for each block",
+        "Raise the reply's max token limit so all three issues fit in one message"
+      ],
+      "correct_indices": [
+        0,
+        3
+      ],
+      "a": "A. Place a key-findings summary at the beginning of the aggregated prompt; D. Organise the detail beneath an explicit section header for each block",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Correct. Long inputs are processed reliably at the beginning and the end, so a summary of all three blocks placed first puts the billing findings where they will be read.\n\nB. Keeps the freshest work near the front and is a sensible ordering rule in a long session, but it only moves which block occupies the middle; whichever one lands there is omitted next.\n\nC. Cuts the prompt down and would help if the failure were volumetric. It is positional, so re-fetching returns the same findings to the same weak position, at the cost of an extra call.\n\nD. Correct. Explicit section headers organising the detailed results are the guide's second mitigation for position effects, giving the middle material structure the model can locate.\n\nE. Prevents a long resolution message being cut off mid-sentence, a real failure elsewhere. Here the reply completes; it simply never contains the billing material in the first place.\n\nKey principle: Findings in the middle of a long input can be omitted while the beginning and end come through. The remedy is placement and structure, summary first, explicit section headers, not trimming."
+    },
+    {
+      "id": "ccaf-foundations-0053",
+      "source_num": 53,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "get_customer returns three accounts matching \"J. Alvarez\" in the same city. The agent currently selects the one with the most recent order and continues into the refund flow. What should it do instead?",
+      "options": [
+        "Escalate to a human at once, since ambiguous identity is a policy gap the agent cannot resolve alone",
+        "Read back the most recent order's details and let the customer correct the record if it looks wrong",
+        "Rank the candidate accounts by profile completeness and proceed with the highest-scoring match found",
+        "Ask the customer for one more identifier, such as an order number or the email on the account"
+      ],
+      "correct_indices": [
+        3
+      ],
+      "a": "D. Ask the customer for one more identifier, such as an order number or the email on the account",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Is the right instinct when policy is silent on a request, and it does prevent a wrong-account refund, but handing off a question the customer can answer in one turn spends human capacity needlessly.\n\nB. Involves the customer rather than guessing silently, which is better than the current behavior, but it anchors on a guess and invites a distracted customer to confirm someone else's order.\n\nC. Replaces one heuristic with a more defensible one, and completeness scoring is useful for ranking search results, but any heuristic still resolves identity without evidence from the customer.\n\nD. Correct. Multiple matches call for clarification, not selection. One additional identifier resolves the ambiguity from authoritative input and keeps the case in first-contact resolution.\n\nKey principle: When tool results return multiple matches, request an additional identifier rather than selecting heuristically. Escalation is for explicit customer requests, policy gaps, and genuine lack of progress, not for questions the customer can answer."
+    },
+    {
+      "id": "ccaf-foundations-0054",
+      "source_num": 54,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "The billing subagent's invoice query times out after two internal retries. It returns \"billing data unavailable\" to the coordinator, which then abandons the entire resolution, including the damaged-item claim it had already substantiated. What should the subagent return?",
+      "options": [
+        "An empty result marked successful, so the coordinator proceeds with the concerns it can still resolve",
+        "The same status plus a directive telling the coordinator to escalate this ticket to a human reviewer",
+        "The failure type, the query it attempted, any partial results, and the alternatives still available",
+        "A retry request asking the coordinator to re-delegate the identical query after a short backoff period"
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. The failure type, the query it attempted, any partial results, and the alternatives still available",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Keeps the workflow alive, which is the improvement being sought, but it disguises a failure as a valid empty result, so the coordinator reports \"no billing issues found\" for an issue it never saw.\n\nB. Ensures a human eventually sees the case and is appropriate once options are exhausted, but it escalates the whole ticket over one unavailable subquery instead of resolving what is already resolvable.\n\nC. Correct. Structured error context lets the coordinator decide intelligently: keep the substantiated claim, annotate the billing gap, and choose whether an alternative path is worth attempting.\n\nD. Delegates recovery upward, and backoff is the right response to a transient failure, but the subagent already retried twice, and the coordinator has no information to decide differently.\n\nKey principle: Generic failure statuses hide the context a coordinator needs, and both silent suppression and whole-workflow termination are anti-patterns. Propagate failure type, what was attempted, partial results, and alternatives."
+    },
+    {
+      "id": "ccaf-foundations-0055",
+      "source_num": 55,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "Three days into the HTTP client migration, the session has filled with verbose discovery output and answers about atlas's wrapper classes have started drifting toward typical adapter patterns. Select the TWO moves that address this.",
+      "options": [
+        "Run /memory to release the context that the discovery output has been consuming.",
+        "Run /compact to reduce context usage now that the window is full of discovery output.",
+        "Re-enter the work with --resume so the session reloads with a smaller footprint.",
+        "Keep a scratchpad file of key findings and consult it when answering later questions.",
+        "Set context: fork on the session so the verbose discovery output lands elsewhere."
+      ],
+      "correct_indices": [
+        1,
+        3
+      ],
+      "a": "B. Run /compact to reduce context usage now that the window is full of discovery output.; D. Keep a scratchpad file of key findings and consult it when answering later questions.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. /memory is a real command, and its name makes it sound like a context-pressure tool. What it actually does is report which memory files are loaded, for diagnosing inconsistent behaviour across sessions.\n\nB. Correct. /compact is named for exactly this state: reducing context usage during an extended exploration session once the window has filled with verbose discovery output.\n\nC. --resume does continue a named investigation across working sessions, which is useful here on other days. Resumption restores prior context rather than shrinking it, so it does not relieve a full window.\n\nD. Correct. A scratchpad file of key findings, referenced when answering later questions, is the named counter to context degradation, because the findings live outside the window.\n\nE. context: fork is real, but it is SKILL.md frontmatter that runs a skill in an isolated sub-agent context. It is set on a skill, not on a running session, so it cannot be applied to this one mid-migration.\n\nKey principle: Two named mechanisms cover this state: /compact for reducing context usage when an extended session fills with verbose discovery output, and scratchpad files that record key findings outside the window. /memory, --resume and context: fork are each named for a different job."
+    },
+    {
+      "id": "ccaf-foundations-0056",
+      "source_num": 56,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "Three days into the HTTP client migration, the session working packages/ingest has spent forty minutes on one transitive dependency conflict: three variations of the same fix, the same four files re-read, nothing new learned. The team's rule hands work back to a maintainer when the agent's self-reported confidence falls below a threshold, and it has not fired. What should trigger the handoff?",
+      "options": [
+        "Repeated attempts that surface no new information, the signal that the run cannot make further progress",
+        "A wall-clock cap on the session, returning any package that takes longer than thirty minutes to a maintainer",
+        "The agent's own commentary turning negative, escalating once its summaries start calling the work blocked",
+        "A raised iteration budget and one more attempt, since dependency conflicts here have cleared on a retry"
+      ],
+      "correct_indices": [
+        0
+      ],
+      "a": "A. Repeated attempts that surface no new information, the signal that the run cannot make further progress",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Correct. Inability to make meaningful progress is the escalation trigger, and it is observable: attempts that revisit the same files and produce the same failure are evidence the run has stopped moving, whatever it reports about itself.\n\nB. A timeout bounds the damage and is worth keeping as a backstop. It fires on slow work as readily as on stuck work, so it hands back sessions that are progressing and keeps ones that stalled in the first five minutes.\n\nC. Tone is easy to read off a transcript and does correlate loosely with trouble. Sentiment is not a measure of whether progress is possible, and a run can narrate confidently while looping on one unresolved conflict.\n\nD. Retrying is the right response to a transient failure and costs one iteration. Three attempts have already returned the same result, which is evidence the blocker is not transient and not inside what this run can resolve.\n\nKey principle: Escalate on an observable lack of progress, not on elapsed time or the model's own confidence: neither is a reliable proxy for whether the work can still move."
+    },
+    {
+      "id": "ccaf-foundations-0057",
+      "source_num": 57,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "The doc-analysis subagent returns each finding as its full reasoning chain plus the entire source excerpt, roughly 4,000 tokens apiece. With 30 findings passed in, the synthesis subagent's input is nearly full before it starts, and its drafts now omit whole middle sections. What is the most effective change?",
+      "options": [
+        "Have the coordinator summarize all 30 findings into a short brief before it spawns the synthesis subagent.",
+        "Pass the findings in relevance order, strongest first, so the most important material sits in early context.",
+        "Have doc-analysis return key facts, citations, and relevance scores instead of full excerpts and chains.",
+        "Split synthesis across three subagents of ten findings each, then merge their three drafts in a later pass."
+      ],
+      "correct_indices": [
+        2
+      ],
+      "a": "C. Have doc-analysis return key facts, citations, and relevance scores instead of full excerpts and chains.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. A coordinator-side summary does shrink the input and keeps synthesis focused, but compressing findings after the fact is where numbers, dates, and source attributions get flattened into vague prose.\n\nB. Ordering by relevance does put the strongest findings where a long input is read most reliably, and it costs nothing to try. It rearranges an input that is still far too large, so whatever lands in the middle is dropped just the same.\n\nC. Correct. When a downstream agent has a limited context budget, the fix is upstream: have the producing agent emit structured findings, facts, citations, relevance scores, rather than verbose content and reasoning.\n\nD. Sharding avoids the overflow and is a reasonable pattern for very large corpora, at the cost of a merge pass and of each shard synthesizing without sight of the others' findings.\n\nKey principle: Trim at the source. Verbose tool and subagent output consumes context disproportionately to its relevance, and reshaping what upstream agents return beats reorganizing or compressing it downstream."
+    },
+    {
+      "id": "ccaf-foundations-0058",
+      "source_num": 58,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "Two credible sources put the market at $4.2B and $6.8B, and doc-analysis escalates the pair to the coordinator as a contradiction. One figure is a full-year 2023 total; the other covers a single quarter of 2025. Neither finding records the period it measures. Which changes should the pipeline adopt?",
+      "options": [
+        "Require every finding to carry its source's publication date and the period the figure measures as structured fields.",
+        "Have doc-analysis keep the figure from the more recently published source and record the discarded value in a footnote.",
+        "Have synthesis average the two values and report the mean, citing both sources so the spread stays visible to readers.",
+        "Add a verify_fact call on each numeric claim and keep whichever value verification reports as the one currently in use.",
+        "Have synthesis compare those periods before it flags a conflict, so figures covering the same period are still escalated."
+      ],
+      "correct_indices": [
+        0,
+        4
+      ],
+      "a": "A. Require every finding to carry its source's publication date and the period the figure measures as structured fields.; E. Have synthesis compare those periods before it flags a conflict, so figures covering the same period are still escalated.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Correct. Dates in the structured output are what let a reader or a downstream agent see that an annual total and a quarterly total are not in conflict at all, and they cost one field per finding.\n\nB. Preferring the newer publication resolves the pair quickly and keeps a trace of the loser, but publication date is not measurement period, and a 2025 quarterly figure would silently displace a sound annual one.\n\nC. Averaging yields one tidy number with both citations attached, yet it publishes a figure neither source stands behind and blends two quantities that were never measuring the same span of time.\n\nD. Verification confirms that a claim really appears in its cited source and would catch a misread number, but it cannot judge which of two accurate figures from different periods belongs in the report.\n\nE. Correct. Dates only help if something reads them: comparing measurement periods first lets a timing difference be explained rather than escalated, while a genuine same-period disagreement still reaches the coordinator.\n\nKey principle: Numbers that disagree are not automatically contradictory. Carry publication and collection dates through the structured output and compare them before judging, so timing differences and real disagreements are told apart."
+    },
+    {
+      "id": "ccaf-foundations-0059",
+      "source_num": 59,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "Extraction accuracy measures 97% overall and the AP director wants human review dropped for high-confidence results. Shipping manifests are about a fifth of volume and were the most recent document type added to the pipeline. What must you establish before reducing review?",
+      "options": [
+        "Raise the confidence threshold for routing to review, so only the safest extractions skip a reviewer.",
+        "Break the accuracy measurement out by document type and by field, and confirm every segment holds.",
+        "Sample the lowest-confidence extractions weekly and measure how often a reviewer changes the value.",
+        "Track the ledger's downstream correction rate for a month and cut review if the rate stays flat."
+      ],
+      "correct_indices": [
+        1
+      ],
+      "a": "B. Break the accuracy measurement out by document type and by field, and confirm every segment holds.",
+      "multi": false,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. A higher threshold is a sensible lever once you know what confidence is worth, and it does shrink the automated population. Applied to an unvalidated aggregate it just moves an unknown line: if manifests are the weak segment, a stricter global threshold still automates whichever manifest extractions happen to score high.\n\nB. Correct. A 97% aggregate can conceal a much worse rate on a segment that is only a fifth of volume, and the newest document type is the likeliest place for it to hide. Accuracy has to hold per document type and per field before any of it is automated away.\n\nC. Sampling low-confidence extractions tells you whether the review queue is worth its cost, which is a fair question. It measures the population you are keeping under review rather than the population you are about to stop reviewing - the high-confidence results are where the risk of this change sits.\n\nD. Watching downstream corrections is a real production signal and worth instrumenting either way. It is also lagging and lossy: ledger errors surface late, only some are traced back, and a flat rate during a month of full human review says nothing about what happens once review is removed.\n\nKey principle: Aggregate accuracy can mask poor performance on a specific document type or field. Validate accuracy by segment - and especially on recently added types - before automating high-confidence extractions."
+    },
+    {
+      "id": "ccaf-foundations-0060",
+      "source_num": 60,
+      "domain": "D5 - Context Management & Reliability",
+      "q": "Per-document extractions pass through a per-vendor compaction step before a synthesis agent rolls them into the monthly spend report. An AP clerk questions one line and nobody can say which invoice or manifest produced the figure: compaction kept the numbers and discarded the rest. Which two changes restore traceability?",
+      "options": [
+        "Require each extraction to emit a mapping from every field it returns to the document and page behind it.",
+        "Have the synthesis agent reopen the underlying documents to locate the origin of any figure a clerk queries.",
+        "Define the compaction output schema so that a retained figure carries its source reference through to synthesis.",
+        "Send the full uncompacted extractions straight to synthesis so that nothing about a figure is dropped before the roll-up.",
+        "Have the report state that a line may aggregate several documents and link readers to that month's archive."
+      ],
+      "correct_indices": [
+        0,
+        2
+      ],
+      "a": "A. Require each extraction to emit a mapping from every field it returns to the document and page behind it.; C. Define the compaction output schema so that a retained figure carries its source reference through to synthesis.",
+      "multi": true,
+      "tags": [
+        "cca-f",
+        "foundations",
+        "d5"
+      ],
+      "explanation": "A. Correct. Attribution has to exist as structured data before anything downstream can preserve it. A field-to-document mapping produced at extraction time is the record that later steps carry forward.\n\nB. Reopening documents does answer the occasional one-off question and needs no pipeline change. It reconstructs attribution by searching for a matching number after the fact, which is guesswork once several vendors report similar totals in one month.\n\nC. Correct. Compression is where attribution is lost, so the compaction schema is what has to guarantee it survives. Requiring each retained figure to keep its source reference makes the mapping traverse the summarisation step intact.\n\nD. Skipping compaction does keep every detail available and would work for a small month. A month of nightly runs will not fit one synthesis step, and raw extraction text still leaves the agent inferring which document a figure came from rather than reading it.\n\nE. A caveat on the report is honest about the aggregation and costs nothing to add. It tells the clerk that the answer is unavailable rather than supplying it, and an archive link without a per-figure reference leaves the same manual search.\n\nKey principle: Source attribution is lost at summarisation steps unless claim-to-source mappings are produced upstream and required to survive every compression between extraction and synthesis."
+    }
+  ]
+}
